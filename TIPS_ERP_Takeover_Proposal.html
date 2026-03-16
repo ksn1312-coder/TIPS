@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>N2P Systems — ERP Takeover Proposal | TIPS Group</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy:      #00264d;
+  --navy-mid:  #003f7f;
+  --sky:       #0077cc;
+  --sky-light: #3399dd;
+  --accent:    #e8a020;
+  --bg:        #f4f6f9;
+  --card:      #ffffff;
+  --text:      #1a2533;
+  --muted:     #6b7b8d;
+  --border:    #d0d9e6;
+  --danger:    #c0392b;
+  --warn:      #d97706;
+  --success:   #059669;
+  --sidebar-w: 260px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+}
+
+/* ── SIDEBAR ─────────────────────────────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: var(--navy);
+  position: fixed;
+  top: 0; left: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.sidebar::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(0,119,204,0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.sidebar-logo {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.logo-n2p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 2px;
+}
+
+.logo-sub {
+  font-size: 10px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.sidebar-client {
+  padding: 14px 24px;
+  background: rgba(255,255,255,0.05);
+  margin: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.client-label { font-size: 9px; color: rgba(255,255,255,0.4); letter-spacing: 1.5px; text-transform: uppercase; }
+.client-name { font-size: 13px; color: #fff; font-weight: 600; margin-top: 3px; }
+.client-tag {
+  display: inline-block;
+  margin-top: 5px;
+  font-size: 9px;
+  background: rgba(232,160,32,0.2);
+  color: var(--accent);
+  border: 1px solid rgba(232,160,32,0.3);
+  padding: 2px 7px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+.nav { padding: 8px 0; flex: 1; overflow-y: auto; }
+
+.nav-section {
+  padding: 10px 24px 4px;
+  font-size: 9px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 2px solid transparent;
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+  font-weight: 400;
+}
+
+.nav-item:hover { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.9); }
+
+.nav-item.active {
+  background: rgba(0,119,204,0.18);
+  color: #fff;
+  border-left-color: var(--sky-light);
+  font-weight: 500;
+}
+
+.nav-item .icon {
+  width: 18px; height: 18px;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.nav-item.active .icon { opacity: 1; }
+
+.nav-num {
+  margin-left: auto;
+  font-size: 10px;
+  background: rgba(255,255,255,0.08);
+  padding: 1px 6px;
+  border-radius: 10px;
+  color: rgba(255,255,255,0.4);
+}
+
+.nav-item.active .nav-num {
+  background: rgba(0,119,204,0.3);
+  color: var(--sky-light);
+}
+
+.sidebar-footer {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  line-height: 1.6;
+}
+
+/* ── MAIN ──────────────────────────────────────────────────────────────────── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  min-height: 100vh;
+}
+
+.topbar {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.topbar-breadcrumb {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.topbar-breadcrumb span { color: var(--navy-mid); font-weight: 500; }
+
+.topbar-meta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.badge {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.badge-ref {
+  background: #e8f0fb;
+  color: var(--navy-mid);
+  font-family: 'DM Mono', monospace;
+}
+
+.badge-conf {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.content {
+  padding: 40px;
+  max-width: 1000px;
+}
+
+/* ── SECTIONS ─────────────────────────────────────────────────────────────── */
+.section { display: none; animation: fadeIn 0.35s ease; }
+.section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── HERO / COVER ──────────────────────────────────────────────────────────── */
+.hero {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #005599 100%);
+  border-radius: 16px;
+  padding: 56px 48px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(0,150,255,0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: 40px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(232,160,32,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 12px;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.hero-sub {
+  font-size: 16px;
+  color: rgba(255,255,255,0.65);
+  font-style: italic;
+  margin-bottom: 32px;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.hero-meta-item .key {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+
+.hero-meta-item .val {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  margin-top: 3px;
+}
+
+.hero-accent-line {
+  width: 48px; height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin-bottom: 24px;
+}
+
+/* ── STAT CARDS ────────────────────────────────────────────────────────────── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,38,77,0.1);
+}
+
+.stat-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--sky);
+  border-radius: 0 0 12px 12px;
+}
+
+.stat-card.accent::after { background: var(--accent); }
+.stat-card.success::after { background: var(--success); }
+.stat-card.navy::after { background: var(--navy); }
+
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* ── INFO TABLE ────────────────────────────────────────────────────────────── */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 28px;
+}
+
+.info-table tr { border-bottom: 1px solid var(--border); }
+.info-table tr:last-child { border-bottom: none; }
+
+.info-table td {
+  padding: 11px 16px;
+  font-size: 13.5px;
+  vertical-align: top;
+}
+
+.info-table td:first-child {
+  background: #eef4fb;
+  font-weight: 600;
+  color: var(--navy);
+  width: 32%;
+  font-size: 12.5px;
+}
+
+.info-table td:last-child {
+  color: var(--text);
+}
+
+.info-table tbody { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+
+/* ── SECTION HEADER ─────────────────────────────────────────────────────────── */
+.sec-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.sec-num {
+  width: 36px; height: 36px;
+  background: var(--navy);
+  color: #fff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.sec-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.2;
+}
+
+.sec-divider {
+  width: 100%; height: 1px;
+  background: linear-gradient(to right, var(--sky), transparent);
+  margin-bottom: 28px;
+}
+
+/* ── SUBSECTION ──────────────────────────────────────────────────────────────── */
+.sub-header {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sky);
+  margin: 24px 0 10px;
+  letter-spacing: 0.3px;
+}
+
+.body-text {
+  font-size: 13.5px;
+  color: #374151;
+  line-height: 1.75;
+  margin-bottom: 14px;
+}
+
+/* ── PHASE CARDS ─────────────────────────────────────────────────────────────── */
+.phase-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.phase-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 22px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+
+.phase-card:hover { box-shadow: 0 6px 20px rgba(0,38,77,0.08); }
+
+.phase-card-num {
+  position: absolute;
+  top: 16px; right: 16px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: rgba(0,63,127,0.06);
+  line-height: 1;
+}
+
+.phase-tag {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: #e0eef8;
+  color: var(--sky);
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+
+.phase-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+
+.phase-dur {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 12px;
+  font-family: 'DM Mono', monospace;
+}
+
+.phase-acts { list-style: none; }
+.phase-acts li {
+  font-size: 12.5px;
+  color: #4b5563;
+  padding: 3px 0 3px 14px;
+  position: relative;
+  line-height: 1.5;
+}
+.phase-acts li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 9px;
+  width: 5px; height: 5px;
+  background: var(--sky);
+  border-radius: 50%;
+}
+
+/* ── DATA TABLE ──────────────────────────────────────────────────────────────── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 24px;
+  background: var(--card);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.data-table thead tr {
+  background: var(--navy);
+  color: #fff;
+}
+
+.data-table thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 11.5px;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.data-table tbody tr { border-bottom: 1px solid var(--border); }
+.data-table tbody tr:last-child { border-bottom: none; }
+.data-table tbody tr:nth-child(even) { background: #f8fafc; }
+
+.data-table tbody td {
+  padding: 11px 16px;
+  vertical-align: top;
+  line-height: 1.55;
+  color: #374151;
+}
+
+.data-table tbody td:first-child {
+  font-family: 'DM Mono', monospace;
+  font-size: 11.5px;
+  color: var(--navy);
+  font-weight: 500;
+}
+
+.td-bold { font-weight: 600; color: var(--navy) !important; font-family: 'DM Sans', sans-serif !important; font-size: 13px !important; }
+
+/* ── RISK TABLE ──────────────────────────────────────────────────────────────── */
+.risk-badge {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 20px;
+}
+.risk-high   { background: #fee2e2; color: #991b1b; }
+.risk-medium { background: #fef3c7; color: #92400e; }
+.risk-low    { background: #d1fae5; color: #065f46; }
+
+/* ── PRICING ──────────────────────────────────────────────────────────────────── */
+.pricing-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.pricing-row {
+  display: flex;
+  align-items: center;
+  padding: 13px 20px;
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+  transition: background 0.15s;
+}
+.pricing-row:hover { background: #f8fafc; }
+.pricing-row:last-child { border-bottom: none; }
+
+.pricing-row.header {
+  background: var(--navy);
+  color: white;
+}
+
+.pricing-row.total {
+  background: #eef4fb;
+  border-top: 2px solid var(--sky);
+}
+
+.pricing-label { flex: 1; font-size: 13.5px; color: #374151; }
+.pricing-row.header .pricing-label { color: rgba(255,255,255,0.75); font-size: 11.5px; letter-spacing: 0.5px; font-weight: 500; }
+.pricing-row.total .pricing-label { font-weight: 700; color: var(--navy); }
+
+.pricing-amount {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--navy);
+  min-width: 130px;
+  text-align: right;
+}
+
+.pricing-row.header .pricing-amount { color: rgba(255,255,255,0.9); font-size: 11.5px; }
+.pricing-row.total .pricing-amount { color: var(--sky); font-size: 17px; font-weight: 700; }
+
+.pricing-remark {
+  font-size: 11.5px;
+  color: var(--muted);
+  min-width: 100px;
+  text-align: right;
+}
+
+.pricing-row.header .pricing-remark { color: rgba(255,255,255,0.5); font-size: 11px; }
+
+.payment-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.payment-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  border-top: 3px solid var(--sky);
+}
+
+.payment-pct {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.payment-amt {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--sky);
+  margin: 2px 0;
+}
+
+.payment-when { font-size: 11px; color: var(--muted); line-height: 1.4; margin-top: 6px; }
+
+/* ── TIMELINE ─────────────────────────────────────────────────────────────────── */
+.timeline { position: relative; padding-left: 32px; margin-bottom: 24px; }
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px; top: 6px; bottom: 6px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--sky), var(--navy));
+  border-radius: 2px;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  transition: box-shadow 0.2s;
+}
+
+.timeline-item:hover { box-shadow: 0 4px 16px rgba(0,38,77,0.08); }
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -27px; top: 16px;
+  width: 10px; height: 10px;
+  background: var(--sky);
+  border: 2px solid var(--card);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--sky);
+}
+
+.timeline-item.milestone::before {
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.timeline-week {
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  color: var(--sky);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.timeline-item.milestone .timeline-week { color: var(--accent); }
+
+.timeline-desc { font-size: 13px; color: #374151; line-height: 1.55; }
+
+/* ── DELIVERABLES ─────────────────────────────────────────────────────────────── */
+.deliverable-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.del-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  transition: box-shadow 0.2s;
+}
+
+.del-card:hover { box-shadow: 0 4px 16px rgba(0,38,77,0.08); }
+
+.del-id {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  background: var(--navy);
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.del-title { font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 3px; }
+.del-desc  { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+
+/* ── SIGN-OFF ─────────────────────────────────────────────────────────────────── */
+.signoff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.signoff-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.signoff-for { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.signoff-org { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 20px; }
+
+.signoff-line {
+  border-bottom: 1.5px solid var(--border);
+  margin-bottom: 8px;
+  padding-top: 36px;
+}
+
+.signoff-field { font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+.btn-accept {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 13px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  font-family: 'DM Sans', sans-serif;
+  margin-top: 8px;
+}
+
+.btn-accept:hover { background: var(--sky); transform: translateY(-1px); }
+
+/* ── PROGRESS BAR ─────────────────────────────────────────────────────────────── */
+.progress-wrap { margin-bottom: 28px; }
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.progress-bar-bg {
+  background: var(--border);
+  border-radius: 10px;
+  height: 6px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  background: linear-gradient(to right, var(--sky), var(--navy));
+  transition: width 1s ease;
+}
+
+/* ── BULLETS ──────────────────────────────────────────────────────────────────── */
+.blist { list-style: none; margin-bottom: 16px; }
+.blist li {
+  padding: 5px 0 5px 20px;
+  position: relative;
+  font-size: 13.5px;
+  color: #374151;
+  line-height: 1.6;
+}
+.blist li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 12px;
+  width: 6px; height: 6px;
+  background: var(--sky);
+  border-radius: 50%;
+}
+
+/* ── CALLOUT ──────────────────────────────────────────────────────────────────── */
+.callout {
+  background: #eef4fb;
+  border-left: 4px solid var(--sky);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.65;
+}
+
+.callout-warn {
+  background: #fffbeb;
+  border-left-color: var(--accent);
+}
+
+/* ── FOOTER ─────────────────────────────────────────────────────────────────── */
+.page-footer {
+  background: var(--navy);
+  color: rgba(255,255,255,0.5);
+  font-size: 11px;
+  padding: 16px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-footer strong { color: rgba(255,255,255,0.8); }
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ──────────────────────────────────────────────────────────────── -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-n2p">N2P</div>
+    <div class="logo-sub">Systems Pvt. Ltd.</div>
+  </div>
+
+  <div class="sidebar-client">
+    <div class="client-label">Proposal for</div>
+    <div class="client-name">TIPS Group</div>
+    <span class="client-tag">ERP Takeover 2026</span>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-section">Overview</div>
+    <div class="nav-item active" onclick="show('cover', this)">
+      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      Cover &amp; Summary
+      <span class="nav-num">1</span>
+    </div>
+    <div class="nav-item" onclick="show('context', this)">
+      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Context &amp; Objectives
+      <span class="nav-num">2</span>
+    </div>
+
+    <div class="nav-section">Engagement</div>
+    <div class="nav-item" onclick="show('scope', this)">
+      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      Scope of Work
+      <span class="nav-num">3</span>
+    </div>
+    <div class="nav-item" onclick="show('deliverables', this)">
+      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+      Deliverables
+      <span class="nav-num">4</span>
+    </div>
+    <div class="nav-item" onclick="show('approach', this)">
+      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+      N2P Credentials
+      <span class="nav-num">5</span>
+    </div>
+
+    <div class="nav-section">Risk &amp; Finance</div>
+    <div class="nav-item" onclick="show('risks', this)">
+      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      Risk Register
+      <span class="nav-num">6</span>
+    </div>
+    <div class="nav-item" onclick="show('commercial', this)">
+      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Commercial
+      <span class="nav-num">7</span>
+    </div>
+    <div class="nav-item" onclick="show('timeline', this)">
+      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      Timeline
+      <span class="nav-num">8</span>
+    </div>
+
+    <div class="nav-section">Closing</div>
+    <div class="nav-item" onclick="show('terms', this)">
+      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      Terms &amp; Validity
+      <span class="nav-num">9</span>
+    </div>
+    <div class="nav-item" onclick="show('signoff', this)">
+      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+      Acceptance
+      <span class="nav-num">10</span>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    Ref: N2P-ERP-TAKEOVER-TIPS-2026-001<br/>
+    Valid until: April 14, 2026
+  </div>
+</nav>
+
+<!-- ── MAIN ──────────────────────────────────────────────────────────────────── -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-breadcrumb">
+      N2P Systems
+      <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <span id="breadcrumb">Cover &amp; Summary</span>
+    </div>
+    <div class="topbar-meta">
+      <span class="badge badge-ref">N2P-ERP-TAKEOVER-TIPS-2026-001</span>
+      <span class="badge badge-conf">Confidential</span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ─────────────── SECTION 1: COVER ─────────────── -->
+    <div id="sec-cover" class="section active">
+      <div class="hero">
+        <div class="hero-label">Proposal · March 2026</div>
+        <div class="hero-title">ERP System Analysis<br/>&amp; Code Takeover</div>
+        <div class="hero-accent-line"></div>
+        <div class="hero-sub">Microsoft Dynamics ERP — Assessment, Transition &amp; Managed Ownership</div>
+        <div class="hero-meta">
+          <div class="hero-meta-item"><div class="key">Client</div><div class="val">TIPS Group</div></div>
+          <div class="hero-meta-item"><div class="key">Duration</div><div class="val">10–14 Weeks</div></div>
+          <div class="hero-meta-item"><div class="key">Investment</div><div class="val">₹10,00,000</div></div>
+          <div class="hero-meta-item"><div class="key">Start</div><div class="val">April 2026</div></div>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-num">4</div>
+          <div class="stat-label">Structured Phases</div>
+        </div>
+        <div class="stat-card accent">
+          <div class="stat-num">10</div>
+          <div class="stat-label">Formal Deliverables</div>
+        </div>
+        <div class="stat-card success">
+          <div class="stat-num">14W</div>
+          <div class="stat-label">Max Transition Period</div>
+        </div>
+        <div class="stat-card navy">
+          <div class="stat-num">0</div>
+          <div class="stat-label">Operational Disruptions</div>
+        </div>
+      </div>
+
+      <div class="sec-header">
+        <div class="sec-num">01</div>
+        <div class="sec-title">Executive Summary</div>
+      </div>
+      <div class="sec-divider"></div>
+
+      <p class="body-text">The Indian Public School (TIPS) Group currently operates a Microsoft-based ERP solution managed by an existing vendor. TIPS now seeks to transition full ownership of the ERP system — including source code, customisations, configurations, and technical documentation — to a new trusted technology partner.</p>
+      <p class="body-text">N2P Systems proposes a structured <strong>ERP Analysis and Code Takeover engagement</strong> to achieve this transition safely, thoroughly, and with zero disruption to daily school operations.</p>
+
+      <div class="callout">
+        <strong>Our commitment:</strong> TIPS will emerge from this engagement with complete ownership, full documentation, and a prioritised improvement roadmap for their Microsoft Dynamics ERP — with N2P Systems as the accountable technical partner.
+      </div>
+
+      <table class="info-table">
+        <tbody>
+          <tr><td>Client</td><td>The Indian Public School (TIPS) Group</td></tr>
+          <tr><td>ERP Platform</td><td>Microsoft Dynamics 365 / Business Central / Custom MS-based ERP</td></tr>
+          <tr><td>Engagement Type</td><td>ERP System Analysis, Code Audit &amp; Full Code Takeover</td></tr>
+          <tr><td>Proposal Reference</td><td style="font-family:'DM Mono',monospace;font-size:12.5px">N2P-ERP-TAKEOVER-TIPS-2026-001</td></tr>
+          <tr><td>Proposed Start Date</td><td>April 2026</td></tr>
+          <tr><td>Estimated Duration</td><td>10 – 14 Weeks (Assessment + Takeover + Stabilisation)</td></tr>
+          <tr><td>Post-Takeover Model</td><td>N2P Systems as Primary ERP Owner &amp; Managed Service Partner</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ─────────────── SECTION 2: CONTEXT ─────────────── -->
+    <div id="sec-context" class="section">
+      <div class="sec-header">
+        <div class="sec-num">02</div>
+        <div class="sec-title">Context &amp; Objectives</div>
+      </div>
+      <div class="sec-divider"></div>
+
+      <p class="body-text">TIPS Group has invested significantly in a Microsoft-based ERP tailored for educational administration — covering fee management, HR &amp; payroll, procurement, academic scheduling, and financial reporting across multiple campuses. The need to transition ERP ownership can arise from vendor relationship changes, lack of documentation, unresolved technical debt, or the desire for greater institutional control.</p>
+
+      <div class="sub-header">2.1 Engagement Objectives</div>
+      <ul class="blist">
+        <li>Conduct a comprehensive technical analysis of the existing ERP — architecture, codebase, customisations, integrations, and data model</li>
+        <li>Identify technical gaps, risks, undocumented logic, and areas requiring remediation</li>
+        <li>Formally acquire full ownership of source code, configurations, and deployment artefacts</li>
+        <li>Establish complete technical documentation and a knowledge base for the TIPS ERP environment</li>
+        <li>Transition all support and development responsibilities to N2P Systems with zero operational disruption</li>
+        <li>Provide TIPS management with full visibility and control over their ERP asset</li>
+      </ul>
+
+      <div class="sub-header">2.2 Key Challenges We Address</div>
+      <table class="info-table">
+        <tbody>
+          <tr><td>Undocumented Customisations</td><td>Mapping all bespoke code and configurations built on top of the Microsoft base product</td></tr>
+          <tr><td>Knowledge Gap</td><td>Capturing logic held only by the outgoing vendor or individual developers</td></tr>
+          <tr><td>Integration Complexity</td><td>Understanding all third-party connections (payment gateways, attendance, HRMS, etc.)</td></tr>
+          <tr><td>Data Integrity</td><td>Validating that production data is consistent, backed up, and recoverable</td></tr>
+          <tr><td>Licensing &amp; Access</td><td>Ensuring N2P obtains all necessary source access, credentials, and license artefacts</td></tr>
+          <tr><td>Business Continuity</td><td>Completing the transition without disrupting academic calendars, fee cycles, or payroll runs</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ─────────────── SECTION 3: SCOPE ─────────────── -->
+    <div id="sec-scope" class="section">
+      <div class="sec-header">
+        <div class="sec-num">03</div>
+        <div class="sec-title">Scope of Work</div>
+      </div>
+      <div class="sec-divider"></div>
+
+      <p class="body-text">The engagement is structured into four sequential phases. Each phase has defined entry and exit criteria — no phase is concluded without verifiable completeness.</p>
+
+      <div class="phase-grid">
+        <div class="phase-card">
+          <div class="phase-card-num">1</div>
+          <span class="phase-tag">Weeks 1–3</span>
+          <div class="phase-name">Discovery &amp; System Analysis</div>
+          <div class="phase-dur">3 Weeks · Fixed</div>
+          <ul class="phase-acts">
+            <li>Stakeholder kick-off workshops (IT, Finance, HR, Ops)</li>
+            <li>Architecture &amp; hosting environment review</li>
+            <li>Full module inventory across all campuses</li>
+            <li>Third-party integration mapping</li>
+            <li>Existing documentation review</li>
+            <li>IP ownership &amp; vendor contract assessment</li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-card-num">2</div>
+          <span class="phase-tag">Weeks 4–6</span>
+          <div class="phase-name">Code Audit &amp; Gap Assessment</div>
+          <div class="phase-dur">3 Weeks · Fixed</div>
+          <ul class="phase-acts">
+            <li>Full custom codebase walkthrough &amp; review</li>
+            <li>Undocumented business rules identification</li>
+            <li>Code quality &amp; maintainability assessment</li>
+            <li>Security audit (SQL injection, exposed creds)</li>
+            <li>Performance audit (slow queries, batch jobs)</li>
+            <li>Formal Code Audit Report with severity ratings</li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-card-num">3</div>
+          <span class="phase-tag">Weeks 7–10</span>
+          <div class="phase-name">Code Takeover &amp; Documentation</div>
+          <div class="phase-dur">4 Weeks · Fixed</div>
+          <ul class="phase-acts">
+            <li>Source code transfer to secure N2P repository (Azure DevOps)</li>
+            <li>Full system architecture documentation</li>
+            <li>Deployment runbooks &amp; rollback procedures</li>
+            <li>Credential &amp; API key secure handover</li>
+            <li>Change management &amp; branching strategy setup</li>
+            <li>Database backup validation &amp; DR baseline</li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-card-num">4</div>
+          <span class="phase-tag">Weeks 11–14</span>
+          <div class="phase-name">Stabilisation &amp; Handover</div>
+          <div class="phase-dur">4 Weeks · Fixed</div>
+          <ul class="phase-acts">
+            <li>Shadow support alongside outgoing vendor</li>
+            <li>Parallel running &amp; incident validation</li>
+            <li>Formal cut-over — N2P assumes primary ownership</li>
+            <li>SLA obligations commence</li>
+            <li>Post-takeover health review</li>
+            <li>Prioritised remediation backlog to management</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout callout-warn">
+        <strong>Out of scope:</strong> Full redevelopment of ERP modules, new feature development, end-user retraining, hardware procurement, and Microsoft licensing are excluded from this engagement and will be quoted separately if required.
+      </div>
+    </div>
+
+    <!-- ─────────────── SECTION 4: DELIVERABLES ─────────────── -->
+    <div id="sec-deliverables" class="section">
+      <div class="sec-header">
+        <div class="sec-num">04</div>
+        <div class="sec-title">Key Deliverables</div>
+      </div>
+      <div class="sec-divider"></div>
+      <p class="body-text">TIPS Group will receive 10 formal deliverables at the conclusion of this engagement, transferring complete technical ownership and knowledge.</p>
+
+      <div class="deliverable-grid">
+        <div class="del-card"><div class="del-id">D1</div><div><div class="del-title">System Architecture Document</div><div class="del-desc">Full technical overview of the ERP environment including hosting, modules, integrations, data flows, and technology stack</div></div></div>
+        <div class="del-card"><div class="del-id">D2</div><div><div class="del-title">ERP Module Inventory</div><div class="del-desc">Catalogue of all active modules, their business functions, user base, and interdependencies across campuses</div></div></div>
+        <div class="del-card"><div class="del-id">D3</div><div><div class="del-title">Integration Map</div><div class="del-desc">Documented map of all third-party integrations with connection types, data exchange formats, and owner details</div></div></div>
+        <div class="del-card"><div class="del-id">D4</div><div><div class="del-title">Code Audit Report</div><div class="del-desc">Comprehensive codebase review with findings by severity, technical debt summary, and recommended actions</div></div></div>
+        <div class="del-card"><div class="del-id">D5</div><div><div class="del-title">Source Code Repository</div><div class="del-desc">Complete codebase transferred to a secure versioned repository under joint N2P and TIPS access</div></div></div>
+        <div class="del-card"><div class="del-id">D6</div><div><div class="del-title">Configuration &amp; Customisation Log</div><div class="del-desc">Detailed record of all Microsoft Dynamics configurations and custom extensions made for TIPS</div></div></div>
+        <div class="del-card"><div class="del-id">D7</div><div><div class="del-title">Data Model &amp; ERD</div><div class="del-desc">Full database schema documentation, table descriptions, and key entity relationship diagrams</div></div></div>
+        <div class="del-card"><div class="del-id">D8</div><div><div class="del-title">Deployment &amp; Operations Runbook</div><div class="del-desc">Step-by-step guides for deployment, patching, backup, and recovery operations</div></div></div>
+        <div class="del-card"><div class="del-id">D9</div><div><div class="del-title">Credential &amp; Access Handover Pack</div><div class="del-desc">Securely transferred credentials, API tokens, license keys, and admin access for all environments</div></div></div>
+        <div class="del-card"><div class="del-id">D10</div><div><div class="del-title">Post-Takeover Health Report</div><div class="del-desc">ERP health summary post-transition with a prioritised backlog of recommended improvements and next steps</div></div></div>
+      </div>
+    </div>
+
+    <!-- ─────────────── SECTION 5: APPROACH ─────────────── -->
+    <div id="sec-approach" class="section">
+      <div class="sec-header">
+        <div class="sec-num">05</div>
+        <div class="sec-title">N2P Systems — Credentials &amp; Approach</div>
+      </div>
+      <div class="sec-divider"></div>
+
+      <p class="body-text">N2P Systems brings a structured, risk-aware approach to ERP code takeovers. We have executed similar transitions for clients across education, manufacturing, and services sectors — and understand that business continuity is always the primary objective.</p>
+
+      <div class="sub-header">5.1 Microsoft Expertise</div>
+      <ul class="blist">
+        <li>Certified Microsoft Partner with deep expertise in Dynamics 365, Business Central, and Finance &amp; Operations</li>
+        <li>Experienced in both standard Microsoft ERP configurations and heavily customised implementations</li>
+        <li>Proficient in X++ (Dynamics AX/F&amp;O), AL language (Business Central), .NET extensions, and Power Platform integrations</li>
+        <li>Strong Azure infrastructure competency for cloud-hosted Microsoft ERP environments</li>
+      </ul>
+
+      <div class="sub-header">5.2 Takeover Methodology</div>
+      <ul class="blist">
+        <li>Proven ITSM-aligned takeover framework with defined phase gates and sign-off criteria at each milestone</li>
+        <li>Non-disruptive shadow support model during the transition period — operations are never at risk</li>
+        <li>Dedicated technical lead as single point of contact throughout the engagement</li>
+        <li>Transparent weekly status reporting and issue logs shared directly with TIPS stakeholders</li>
+      </ul>
+
+      <div class="sub-header">5.3 Education Sector Understanding</div>
+      <ul class="blist">
+        <li>Deep experience with school ERP processes: fee collection cycles, term-end reporting, payroll runs, and academic calendars</li>
+        <li>Sensitivity to peak operational periods — academic year-start, exam seasons, and annual fee billing windows</li>
+        <li>Multi-campus architecture experience with centralised and distributed ERP deployment models</li>
+      </ul>
+
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Microsoft Dynamics Expertise</span><span>95%</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:95%"></div></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Education Sector ERP</span><span>88%</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:88%"></div></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Code Audit &amp; Takeover Engagements</span><span>90%</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:90%"></div></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Azure Cloud &amp; DevOps</span><span>85%</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:85%"></div></div>
+      </div>
+    </div>
+
+    <!-- ─────────────── SECTION 6: RISKS ─────────────── -->
+    <div id="sec-risks" class="section">
+      <div class="sec-header">
+        <div class="sec-num">06</div>
+        <div class="sec-title">Risk Register &amp; Mitigation</div>
+      </div>
+      <div class="sec-divider"></div>
+      <p class="body-text">N2P Systems has identified the following key risks and the corresponding mitigations built into our engagement methodology.</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:30%">Risk</th>
+            <th style="width:10%">Severity</th>
+            <th>Mitigation Strategy</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-bold">Incomplete source code handover by outgoing vendor</td>
+            <td><span class="risk-badge risk-high">High</span></td>
+            <td>Legal review of IP clauses in existing contracts; N2P can independently reconstruct missing components from running environment</td>
+          </tr>
+          <tr>
+            <td class="td-bold">Undocumented business logic or critical workarounds</td>
+            <td><span class="risk-badge risk-high">High</span></td>
+            <td>Structured interviews with power users and TIPS staff; testing against known business scenarios to validate all captured logic</td>
+          </tr>
+          <tr>
+            <td class="td-bold">Data integrity issues in production database</td>
+            <td><span class="risk-badge risk-high">High</span></td>
+            <td>Full database backup and validation before any takeover activity; restore tests performed in a dedicated staging environment</td>
+          </tr>
+          <tr>
+            <td class="td-bold">Disruption to live operations during transition</td>
+            <td><span class="risk-badge risk-medium">Medium</span></td>
+            <td>All takeover activities performed in non-production environments first; production changes scheduled during off-peak windows only</td>
+          </tr>
+          <tr>
+            <td class="td-bold">Security vulnerabilities in inherited codebase</td>
+            <td><span class="risk-badge risk-medium">Medium</span></td>
+            <td>Dedicated security audit in Phase 2; all critical vulnerabilities remediated before formal go-live as primary owner</td>
+          </tr>
+          <tr>
+            <td class="td-bold">Delayed cooperation from outgoing vendor</td>
+            <td><span class="risk-badge risk-medium">Medium</span></td>
+            <td>Parallel access strategy — N2P can independently analyse running environments without full outgoing vendor cooperation</td>
+          </tr>
+          <tr>
+            <td class="td-bold">Knowledge loss from key TIPS internal staff</td>
+            <td><span class="risk-badge risk-low">Low</span></td>
+            <td>Knowledge base built iteratively during Phase 1; all institutional knowledge captured in documentation before Phase 3</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ─────────────── SECTION 7: COMMERCIAL ─────────────── -->
+    <div id="sec-commercial" class="section">
+      <div class="sec-header">
+        <div class="sec-num">07</div>
+        <div class="sec-title">Commercial Proposal</div>
+      </div>
+      <div class="sec-divider"></div>
+      <p class="body-text">Fixed-price engagement covering all four phases as defined in this proposal. All activities performed by N2P Systems certified professionals.</p>
+
+      <div class="pricing-card">
+        <div class="pricing-row header">
+          <span class="pricing-label">Engagement Component</span>
+          <span class="pricing-amount">Cost (INR)</span>
+          <span class="pricing-remark">Type</span>
+        </div>
+        <div class="pricing-row"><span class="pricing-label">Phase 1 — Discovery &amp; System Analysis</span><span class="pricing-amount">₹ 1,50,000</span><span class="pricing-remark">Fixed</span></div>
+        <div class="pricing-row"><span class="pricing-label">Phase 2 — Code Audit &amp; Gap Assessment</span><span class="pricing-amount">₹ 2,50,000</span><span class="pricing-remark">Fixed</span></div>
+        <div class="pricing-row"><span class="pricing-label">Phase 3 — Code Takeover &amp; Documentation</span><span class="pricing-amount">₹ 3,00,000</span><span class="pricing-remark">Fixed</span></div>
+        <div class="pricing-row"><span class="pricing-label">Phase 4 — Stabilisation &amp; Handover</span><span class="pricing-amount">₹ 2,00,000</span><span class="pricing-remark">Fixed</span></div>
+        <div class="pricing-row"><span class="pricing-label">Tooling &amp; Repository Setup (Azure DevOps)</span><span class="pricing-amount">₹ 50,000</span><span class="pricing-remark">One-time</span></div>
+        <div class="pricing-row"><span class="pricing-label">Post-Takeover Health Report &amp; Roadmap</span><span class="pricing-amount">₹ 50,000</span><span class="pricing-remark">Included</span></div>
+        <div class="pricing-row total"><span class="pricing-label">Total Engagement Investment</span><span class="pricing-amount">₹ 10,00,000</span><span class="pricing-remark" style="color:#374151">Excl. GST</span></div>
+      </div>
+
+      <div class="sub-header">Payment Milestones</div>
+      <div class="payment-grid">
+        <div class="payment-card">
+          <div class="payment-pct">25%</div>
+          <div class="payment-amt">₹ 2,50,000</div>
+          <div class="payment-when">Contract signing &amp; project kick-off</div>
+        </div>
+        <div class="payment-card">
+          <div class="payment-pct">25%</div>
+          <div class="payment-amt">₹ 2,50,000</div>
+          <div class="payment-when">Code Audit Report delivered (Phase 2)</div>
+        </div>
+        <div class="payment-card">
+          <div class="payment-pct">30%</div>
+          <div class="payment-amt">₹ 3,00,000</div>
+          <div class="payment-when">Repository &amp; docs delivered (Phase 3)</div>
+        </div>
+        <div class="payment-card">
+          <div class="payment-pct">20%</div>
+          <div class="payment-amt">₹ 2,00,000</div>
+          <div class="payment-when">Successful go-live as primary owner</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Optional AMC:</strong> Post-takeover Annual Maintenance Contract available at ₹ 12,00,000/year — refer to Proposal N2P-ERP-MAINT-IPS-2026-001 for full scope and terms.
+      </div>
+    </div>
+
+    <!-- ─────────────── SECTION 8: TIMELINE ─────────────── -->
+    <div id="sec-timeline" class="section">
+      <div class="sec-header">
+        <div class="sec-num">08</div>
+        <div class="sec-title">Proposed Engagement Timeline</div>
+      </div>
+      <div class="sec-divider"></div>
+
+      <div class="timeline">
+        <div class="timeline-item milestone">
+          <div class="timeline-week">Week 1 · Milestone</div>
+          <div class="timeline-desc"><strong>Kick-off</strong> — Contract signing, access provisioning, stakeholder introductions, and project onboarding</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-week">Weeks 1–3 · Phase 1</div>
+          <div class="timeline-desc">Discovery and system analysis workshops, module inventory, integration mapping, and existing documentation review</div>
+        </div>
+        <div class="timeline-item milestone">
+          <div class="timeline-week">Week 3 · Phase 1 Exit</div>
+          <div class="timeline-desc"><strong>Deliverables:</strong> Architecture Document + Module Inventory delivered to TIPS management for review and sign-off</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-week">Weeks 4–6 · Phase 2</div>
+          <div class="timeline-desc">Full codebase walkthrough, code audit, security and performance review across all custom Dynamics components</div>
+        </div>
+        <div class="timeline-item milestone">
+          <div class="timeline-week">Week 6 · Phase 2 Exit</div>
+          <div class="timeline-desc"><strong>Deliverables:</strong> Code Audit Report delivered; findings prioritised jointly with TIPS IT and management team</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-week">Weeks 7–10 · Phase 3</div>
+          <div class="timeline-desc">Source code acquisition, Azure DevOps repository setup, full documentation authoring, credential and access handover</div>
+        </div>
+        <div class="timeline-item milestone">
+          <div class="timeline-week">Week 10 · Phase 3 Exit</div>
+          <div class="timeline-desc"><strong>Deliverables:</strong> Source code repository, runbooks, data model docs, configuration log, and credential pack handed to TIPS</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-week">Weeks 11–14 · Phase 4</div>
+          <div class="timeline-desc">Shadow support alongside outgoing vendor, parallel running validation, formal cut-over, SLA commencement</div>
+        </div>
+        <div class="timeline-item milestone">
+          <div class="timeline-week">Week 14 · Go-Live</div>
+          <div class="timeline-desc"><strong>N2P Systems assumes primary ERP ownership.</strong> Post-Takeover Health Report delivered. Transition to AMC (if contracted)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────────── SECTION 9: TERMS ─────────────── -->
+    <div id="sec-terms" class="section">
+      <div class="sec-header">
+        <div class="sec-num">09</div>
+        <div class="sec-title">Assumptions, Exclusions &amp; Terms</div>
+      </div>
+      <div class="sec-divider"></div>
+
+      <div class="sub-header">9.1 Assumptions</div>
+      <ul class="blist">
+        <li>TIPS Group holds or will obtain IP ownership rights to the existing ERP codebase prior to or during this engagement</li>
+        <li>TIPS will ensure N2P Systems receives read access to all production and non-production environments required for analysis</li>
+        <li>The outgoing vendor will be available for a minimum of 4 structured handover sessions during Phase 3</li>
+        <li>TIPS IT coordinator and functional leads from Finance, HR, and Operations will participate in Phase 1 workshops</li>
+        <li>Existing Microsoft Dynamics licenses and Azure subscriptions will be maintained by TIPS throughout and after the takeover</li>
+      </ul>
+
+      <div class="sub-header">9.2 Exclusions</div>
+      <ul class="blist">
+        <li>Renegotiation with the outgoing vendor or legal proceedings to obtain source code (legal support billed separately if required)</li>
+        <li>Full redevelopment or re-implementation of ERP modules (new SOW required post-audit if needed)</li>
+        <li>New module development or major functional enhancements (billable via CR process post-takeover)</li>
+        <li>Hardware or infrastructure procurement</li>
+        <li>End-user retraining programs</li>
+      </ul>
+
+      <div class="sub-header">9.3 Contract Terms</div>
+      <ul class="blist">
+        <li>Fixed-scope, fixed-price engagement — changes agreed via formal Change Request only</li>
+        <li>Either party may suspend with 14 days written notice in the event of a material breach</li>
+        <li>All client data and business logic are treated as strictly confidential throughout and after the engagement</li>
+        <li>Source code and documentation produced in Phase 3 are held with TIPS as the primary IP owner</li>
+      </ul>
+
+      <div class="callout">
+        <strong>Proposal validity:</strong> This proposal is valid for 30 days from March 15, 2026 (valid until <strong>April 14, 2026</strong>). Pricing and timelines are subject to revision based on system complexity discovered during Phase 1, if materially different from expectations.
+      </div>
+    </div>
+
+    <!-- ─────────────── SECTION 10: SIGN-OFF ─────────────── -->
+    <div id="sec-signoff" class="section">
+      <div class="sec-header">
+        <div class="sec-num">10</div>
+        <div class="sec-title">Acceptance &amp; Sign-Off</div>
+      </div>
+      <div class="sec-divider"></div>
+
+      <p class="body-text">To initiate this engagement, please sign and return a copy of this proposal along with a formal Purchase Order (PO) and the advance payment. N2P Systems will schedule the kick-off meeting within 5 business days of receiving the signed agreement.</p>
+
+      <div class="signoff-grid">
+        <div class="signoff-card">
+          <div class="signoff-for">For &amp; on behalf of</div>
+          <div class="signoff-org">N2P Systems Pvt. Ltd.</div>
+          <div class="signoff-line"></div>
+          <div class="signoff-field">Authorised Signatory</div>
+          <div class="signoff-field">Name &amp; Designation: ___________________________</div>
+          <div class="signoff-field">Date: ___________________________</div>
+        </div>
+        <div class="signoff-card">
+          <div class="signoff-for">For &amp; on behalf of</div>
+          <div class="signoff-org">The Indian Public School Group</div>
+          <div class="signoff-line"></div>
+          <div class="signoff-field">Authorised Signatory</div>
+          <div class="signoff-field">Name &amp; Designation: ___________________________</div>
+          <div class="signoff-field">Date: ___________________________</div>
+        </div>
+      </div>
+
+      <button class="btn-accept" onclick="acceptProposal()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Accept &amp; Proceed
+      </button>
+    </div>
+
+  </div><!-- /content -->
+
+  <div class="page-footer">
+    <span><strong>N2P Systems Pvt. Ltd.</strong> · Chennai, Tamil Nadu · www.n2psystems.com</span>
+    <span>Ref: N2P-ERP-TAKEOVER-TIPS-2026-001 · <strong>Confidential</strong></span>
+  </div>
+</div><!-- /main -->
+
+<script>
+const sections = {
+  cover:       { id: 'sec-cover',       label: 'Cover & Summary' },
+  context:     { id: 'sec-context',     label: 'Context & Objectives' },
+  scope:       { id: 'sec-scope',       label: 'Scope of Work' },
+  deliverables:{ id: 'sec-deliverables',label: 'Deliverables' },
+  approach:    { id: 'sec-approach',    label: 'N2P Credentials' },
+  risks:       { id: 'sec-risks',       label: 'Risk Register' },
+  commercial:  { id: 'sec-commercial',  label: 'Commercial' },
+  timeline:    { id: 'sec-timeline',    label: 'Timeline' },
+  terms:       { id: 'sec-terms',       label: 'Terms & Validity' },
+  signoff:     { id: 'sec-signoff',     label: 'Acceptance' },
+};
+
+function show(key, navEl) {
+  Object.values(sections).forEach(s => {
+    document.getElementById(s.id).classList.remove('active');
+  });
+  document.getElementById(sections[key].id).classList.add('active');
+
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  navEl.classList.add('active');
+
+  document.getElementById('breadcrumb').textContent = sections[key].label;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function acceptProposal() {
+  const btn = document.querySelector('.btn-accept');
+  btn.textContent = '✓  Proposal Accepted — N2P Team Will Be In Touch';
+  btn.style.background = '#059669';
+  btn.disabled = true;
+}
+</script>
+</body>
+</html>
