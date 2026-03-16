@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<title>TIPS Globeducate — ERP & Website Integration</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0a1d3b; --navy2:#122852; --navy3:#1b3770;
+  --gold:#c49a27; --gold2:#e8b84b; --goldbg:#fdf8ec;
+  --teal:#0097a7; --teal2:#00bcd4;
+  --green:#00897b; --red:#e53935; --amber:#f57c00; --purple:#6a1b9a;
+  --bg:#f0f3f7; --white:#fff; --border:#dde3ec;
+  --text:#0b1929; --text2:#4a5568; --text3:#9aa5b4;
+  --tab-h:62px; --hdr-h:58px; --r:14px;
+  --sh:0 2px 12px rgba(10,29,59,.08); --sh2:0 8px 28px rgba(10,29,59,.14);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;font-family:'Nunito',sans-serif;background:#0a1d3b;overflow:hidden}
+*{scrollbar-width:none} *::-webkit-scrollbar{display:none}
+
+/* ── FRAME ── */
+.app{max-width:430px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;background:var(--bg);position:relative;overflow:hidden;box-shadow:0 0 80px rgba(0,0,0,.45)}
+
+/* ── STATUS BAR ── */
+.sb{height:26px;background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0}
+.sb-t{font-size:11px;font-weight:700;color:#fff}
+.sb-r{font-size:10px;color:rgba(255,255,255,.6);display:flex;gap:6px}
+
+/* ── TOP BAR ── */
+.topbar{height:var(--hdr-h);background:var(--navy);display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0;position:relative;z-index:30}
+.tlogo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:var(--navy);flex-shrink:0;box-shadow:0 2px 8px rgba(196,154,39,.35)}
+.tinfo{flex:1;min-width:0}
+.tname{font-size:13px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tsub{font-size:9.5px;color:rgba(255,255,255,.4);margin-top:1px}
+.mode-sw{display:flex;background:rgba(255,255,255,.1);border-radius:20px;padding:3px;gap:2px}
+.msw{padding:5px 10px;border-radius:16px;font-size:10px;font-weight:700;cursor:pointer;border:none;font-family:'Nunito',sans-serif;transition:all .2s;color:rgba(255,255,255,.5);background:transparent}
+.msw.on{background:var(--gold);color:var(--navy)}
+.tbtn{width:34px;height:34px;background:rgba(255,255,255,.1);border:none;border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,.75);flex-shrink:0;position:relative;transition:background .2s}
+.tbtn:active{background:rgba(255,255,255,.2)}
+.ndot{position:absolute;top:6px;right:6px;width:7px;height:7px;background:var(--gold2);border-radius:50%;border:1.5px solid var(--navy)}
+
+/* ── VIEWS ── */
+.view{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;display:none;padding-bottom:calc(var(--tab-h)+10px)}
+.view.on{display:block}
+
+/* ── BOTTOM NAV ── */
+.bnav{height:var(--tab-h);background:var(--white);border-top:1px solid var(--border);display:flex;flex-shrink:0;position:relative;z-index:30}
+.bnav-bar{position:absolute;top:-1px;height:3px;width:20%;background:linear-gradient(to right,var(--navy),var(--teal));border-radius:0 0 4px 4px;transition:left .35s cubic-bezier(.4,0,.2,1)}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;border:none;background:none;font-family:'Nunito',sans-serif;font-size:9px;font-weight:700;color:var(--text3);transition:color .2s}
+.nb svg{width:21px;height:21px;stroke-width:1.8}
+.nb.on{color:var(--navy)}
+
+/* ── HERO SITE ── */
+.site-hero{background:linear-gradient(150deg,var(--navy) 0%,var(--navy2) 55%,#1c3a72 100%);padding:26px 18px 30px;position:relative;overflow:hidden}
+.site-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(196,154,39,.18) 0%,transparent 70%)}
+.site-hero::after{content:'';position:absolute;bottom:-40px;left:-20px;width:160px;height:160px;background:radial-gradient(circle,rgba(0,151,167,.12) 0%,transparent 70%)}
+.hbadge{display:inline-flex;align-items:center;gap:6px;background:rgba(196,154,39,.18);border:1px solid rgba(196,154,39,.3);color:var(--gold2);font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;margin-bottom:12px;letter-spacing:.5px}
+.hh1{font-family:'Libre Baskerville',serif;font-size:24px;font-weight:700;color:#fff;line-height:1.25;margin-bottom:6px}
+.hh1 em{color:var(--gold2);font-style:italic}
+.htag{font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.65;margin-bottom:18px}
+.hbtns{display:flex;gap:10px;flex-wrap:wrap}
+.btn-g{padding:11px 20px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy);border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;transition:transform .15s;box-shadow:0 3px 12px rgba(196,154,39,.3)}
+.btn-g:active{transform:scale(.97)}
+.btn-gh{padding:11px 20px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s}
+.btn-gh:active{background:rgba(255,255,255,.18)}
+.hstats{display:flex;gap:1px;background:rgba(255,255,255,.07);border-radius:12px;overflow:hidden;margin-top:18px;border:1px solid rgba(255,255,255,.09)}
+.hst{flex:1;padding:11px 6px;text-align:center}
+.hst-n{font-family:'Libre Baskerville',serif;font-size:19px;font-weight:700;color:#fff}
+.hst-l{font-size:9px;color:rgba(255,255,255,.4);margin-top:2px}
+
+/* ── ANNOUNCE TICKER ── */
+.ticker{background:linear-gradient(90deg,var(--gold),var(--gold2));padding:8px 0;overflow:hidden;white-space:nowrap}
+.tick-inner{display:inline-block;animation:tick 22s linear infinite;font-size:11px;font-weight:700;color:var(--navy);padding-left:100%}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+
+/* ── CARDS ── */
+.card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin:0 16px 14px}
+.ch{display:flex;align-items:center;gap:10px;padding:14px 16px 10px}
+.cico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ct{font-size:13.5px;font-weight:800;color:var(--text)}
+.cs{font-size:10.5px;color:var(--text3);margin-top:1px}
+
+/* ── SEC LABEL ── */
+.slbl{padding:14px 16px 6px;font-size:10.5px;font-weight:800;color:var(--text3);letter-spacing:1.2px;text-transform:uppercase}
+
+/* ── CAMPUS SCROLL ── */
+.camp-row{display:flex;gap:12px;padding:0 16px 16px;overflow-x:auto}
+.camp-c{flex-shrink:0;width:160px;background:var(--white);border-radius:12px;box-shadow:var(--sh);overflow:hidden;cursor:pointer;transition:transform .15s}
+.camp-c:active{transform:scale(.97)}
+.camp-img{height:72px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:8px 10px}
+.camp-city{font-size:11px;font-weight:800;color:#fff}
+.camp-info{padding:9px 11px 11px}
+.camp-name{font-size:12.5px;font-weight:800;color:var(--text)}
+.camp-cur{font-size:10px;color:var(--text3);margin-top:1px}
+.camp-tag{display:inline-block;margin-top:5px;font-size:9px;font-weight:700;letter-spacing:.5px;padding:2px 7px;border-radius:20px}
+
+/* ── PROGRAMME GRID ── */
+.prog-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 14px}
+.prog-c{background:var(--white);border-radius:12px;padding:14px;box-shadow:var(--sh);cursor:pointer;transition:transform .15s}
+.prog-c:active{transform:scale(.96)}
+.prog-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.prog-t{font-size:12.5px;font-weight:800;color:var(--text)}
+.prog-s{font-size:10.5px;color:var(--text3);margin-top:3px;line-height:1.4}
+
+/* ── ACHIEVEMENTS ── */
+.ach-row{display:flex;gap:10px;padding:0 16px 14px;overflow-x:auto}
+.ach-c{flex-shrink:0;width:140px;background:var(--white);border-radius:12px;padding:14px 12px;box-shadow:var(--sh);text-align:center}
+.ach-ico{font-size:28px;margin-bottom:8px}
+.ach-t{font-size:11.5px;font-weight:800;color:var(--text);line-height:1.35}
+.ach-s{font-size:10px;color:var(--text3);margin-top:4px;line-height:1.4}
+
+/* ── FACILITIES ── */
+.fac-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px 14px}
+.fac-c{background:var(--white);border-radius:10px;padding:10px 8px;box-shadow:var(--sh);text-align:center}
+.fac-ico{font-size:20px;margin-bottom:4px}
+.fac-t{font-size:10px;font-weight:700;color:var(--text2);line-height:1.3}
+
+/* ── NEWS ── */
+.news-c{margin:0 16px 12px;background:var(--white);border-radius:12px;box-shadow:var(--sh);overflow:hidden;display:flex;cursor:pointer;transition:box-shadow .2s}
+.news-c:active{box-shadow:var(--sh2)}
+.news-thumb{width:85px;flex-shrink:0;position:relative;min-height:88px;display:flex;align-items:center;justify-content:center;font-size:26px}
+.news-body{padding:11px 13px;flex:1}
+.news-cat{font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.news-t{font-size:12.5px;font-weight:700;color:var(--text);line-height:1.4}
+.news-d{font-size:10px;color:var(--text3);margin-top:5px}
+
+/* ── CONTACT ── */
+.contact-c{margin:0 16px 14px;background:var(--white);border-radius:12px;box-shadow:var(--sh)}
+.ct-row{display:flex;align-items:flex-start;gap:11px;padding:12px 16px;border-bottom:1px solid var(--border)}
+.ct-row:last-child{border-bottom:none}
+.ct-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.ct-l{font-size:10px;color:var(--text3)}
+.ct-v{font-size:12.5px;font-weight:700;color:var(--text);margin-top:1px;line-height:1.4}
+
+/* ── ADMISSION FORM ── */
+.adm-c{margin:0 16px 14px;background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden}
+.adm-hdr{background:linear-gradient(135deg,var(--navy),var(--navy2));padding:16px 18px;color:#fff}
+.adm-ht{font-size:15px;font-weight:800;margin-bottom:2px}
+.adm-hs{font-size:11px;color:rgba(255,255,255,.5)}
+.fg{padding:10px 16px 0}
+.fl{font-size:11px;font-weight:700;color:var(--text2);margin-bottom:4px}
+.fi{width:100%;padding:11px 13px;background:#f7f9fc;border:1.5px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border .2s;-webkit-appearance:none}
+.fi:focus{border-color:var(--teal);background:#fff}
+.fs{width:100%;padding:11px 13px;background:#f7f9fc;border:1.5px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;color:var(--text);outline:none;-webkit-appearance:none}
+.btn-p{display:flex;align-items:center;justify-content:center;gap:8px;width:calc(100% - 32px);margin:14px 16px 0;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all .2s}
+.btn-p:active{background:var(--teal);transform:scale(.98)}
+.btn-o{display:flex;align-items:center;justify-content:center;gap:8px;width:calc(100% - 32px);margin:10px 16px 0;padding:13px;background:transparent;color:var(--navy);border:1.5px solid var(--navy);border-radius:12px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-o:active{background:#f0f3f7}
+
+/* ── ERP HERO ── */
+.erp-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 55%,#1d3f6e 100%);padding:18px 18px 22px;position:relative;overflow:hidden}
+.erp-hero::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:radial-gradient(circle,rgba(0,151,167,.22) 0%,transparent 65%)}
+.erp-hero::after{content:'';position:absolute;bottom:-30px;left:10px;width:120px;height:120px;background:radial-gradient(circle,rgba(196,154,39,.12) 0%,transparent 65%)}
+.eg{font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.5px}
+.en{font-size:18px;font-weight:800;color:#fff;margin-top:1px}
+.er{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px}
+.ekpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.ekpi{background:rgba(255,255,255,.1);border-radius:10px;padding:10px 8px;text-align:center;border:1px solid rgba(255,255,255,.08)}
+.kn{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:#fff}
+.kl{font-size:9.5px;color:rgba(255,255,255,.4);margin-top:1px}
+
+/* ── SYNC BANNER ── */
+.sync-b{margin:14px 16px;background:linear-gradient(135deg,#e6fff8,#ccfff2);border:1px solid #99f0dd;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:transform .15s}
+.sync-b:active{transform:scale(.98)}
+.sync-ico{width:36px;height:36px;background:var(--green);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sync-tt{font-size:13px;font-weight:800;color:#065f46}
+.sync-ss{font-size:11px;color:#047857;margin-top:1px}
+.sync-arr{margin-left:auto;color:var(--green)}
+
+/* ── QUICK GRID ── */
+.qgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 16px 14px}
+.qb{display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 4px;background:var(--white);border-radius:12px;box-shadow:var(--sh);cursor:pointer;border:none;transition:transform .15s}
+.qb:active{transform:scale(.92)}
+.qi{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.ql{font-size:9px;font-weight:700;color:var(--text2);text-align:center;line-height:1.3}
+
+/* ── LIST ROW ── */
+.lrow{display:flex;align-items:center;padding:11px 16px;gap:11px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.lrow:last-child{border-bottom:none}
+.lrow:active{background:#f7f9fc}
+.av{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.rn{font-size:13px;font-weight:700;color:var(--text)}
+.rs{font-size:10.5px;color:var(--text3);margin-top:2px}
+.rv{font-size:13px;font-weight:700;text-align:right}
+.rd{font-size:10px;color:var(--text3);margin-top:2px;text-align:right}
+
+/* ── PILL ── */
+.pill{display:inline-flex;align-items:center;font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px}
+.pg{background:#d1fae5;color:#065f46}
+.pr{background:#fee2e2;color:#991b1b}
+.py{background:#fef3c7;color:#92400e}
+.pb2{background:#dbeafe;color:#1e40af}
+
+/* ── PROGRESS ── */
+.prow{margin-bottom:10px}
+.ptop{display:flex;justify-content:space-between;margin-bottom:5px}
+.pn{font-size:12px;font-weight:700;color:var(--text)}
+.pv{font-size:12px;font-weight:800}
+.pbg{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.pf{height:100%;border-radius:10px;transition:width 1.2s ease}
+
+/* ── FEE HERO ── */
+.fee-h{margin:0 16px 14px;background:linear-gradient(135deg,#0d47a1,#1565c0);border-radius:var(--r);padding:18px;color:#fff;position:relative;overflow:hidden}
+.fee-h::after{content:'₹';position:absolute;right:10px;top:6px;font-size:80px;font-weight:700;color:rgba(255,255,255,.05);font-family:'Libre Baskerville',serif;line-height:1}
+.fhl{font-size:11px;color:rgba(255,255,255,.55)}
+.fha{font-family:'Libre Baskerville',serif;font-size:30px;font-weight:700;margin-top:2px}
+.fhr{display:flex;justify-content:space-between;margin-top:14px}
+.fhil{font-size:10px;color:rgba(255,255,255,.5)}
+.fhiv{font-size:14px;font-weight:800;margin-top:1px}
+
+/* ── BARS ── */
+.bars{display:flex;align-items:flex-end;gap:8px;height:70px;padding:0 16px 6px}
+.bc{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.bf{width:100%;border-radius:5px 5px 0 0;transition:height 1.2s ease}
+.bl{font-size:9px;color:var(--text3);font-weight:600}
+
+/* ── SEG CONTROL ── */
+.seg{display:flex;background:#eef1f5;border:1px solid var(--border);border-radius:10px;margin:0 16px 14px;padding:3px}
+.sb2{flex:1;padding:7px;border:none;background:transparent;border-radius:8px;font-family:'Nunito',sans-serif;font-size:11.5px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .2s}
+.sb2.on{background:var(--white);color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+
+/* ── RING ── */
+.rw{display:flex;align-items:center;justify-content:center;padding:14px 0 6px}
+.ring{position:relative;width:100px;height:100px}
+.ring svg{transform:rotate(-90deg)}
+.rl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.rp{font-family:'Libre Baskerville',serif;font-size:24px;font-weight:700;color:var(--text)}
+.rs2{font-size:10px;color:var(--text3);font-weight:600}
+.rleg{display:flex;justify-content:space-around;padding:6px 16px 14px}
+.ri{display:flex;align-items:center;gap:5px}
+.rd2{width:7px;height:7px;border-radius:50%}
+.rll{font-size:11px;color:var(--text2)}
+.rlv{font-size:12px;font-weight:800;color:var(--text)}
+
+/* ── TIMETABLE ── */
+.per{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border)}
+.per:last-child{border-bottom:none}
+.pt{font-size:10px;color:var(--text3);font-family:monospace;width:62px;flex-shrink:0;line-height:1.4}
+.pb3{width:3px;align-self:stretch;border-radius:3px;flex-shrink:0}
+.ps{font-size:10.5px;color:var(--text3);margin-top:2px}
+.cur-per{background:linear-gradient(90deg,#eff8ff,#f7fbff);border-radius:10px;margin:0 8px}
+
+/* ── DAY SCROLL ── */
+.dayrow{display:flex;gap:8px;padding:0 16px 14px;overflow-x:auto}
+.dp{display:flex;flex-direction:column;align-items:center;padding:7px 10px;border-radius:12px;cursor:pointer;flex-shrink:0;background:var(--white);border:1.5px solid var(--border);transition:all .2s;min-width:44px}
+.dp.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.dd{font-size:15px;font-weight:800}
+.dn{font-size:9px;font-weight:700;color:var(--text3);margin-top:1px}
+.dp.on .dn{color:rgba(255,255,255,.55)}
+
+/* ── PROFILE ── */
+.ph{background:linear-gradient(150deg,var(--navy),var(--navy2));padding:22px 20px 26px;text-align:center;color:#fff}
+.pav{width:70px;height:70px;border-radius:18px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;color:var(--navy);margin:0 auto 10px;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.pname{font-size:17px;font-weight:800}
+.prole{font-size:11.5px;color:rgba(255,255,255,.5);margin-top:3px}
+.pid{font-size:10.5px;color:rgba(255,255,255,.3);margin-top:2px;font-family:monospace}
+.mi{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;color:var(--text)}
+.mi:last-child{border-bottom:none}
+.mi:active{background:#f7f9fc}
+.mico{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mt{flex:1;font-size:13px;font-weight:600}
+.ma{color:var(--text3)}
+
+/* ── MODAL ── */
+.ov{position:absolute;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:flex-end;backdrop-filter:blur(4px)}
+.ov.open{display:flex}
+.modal{background:var(--white);border-radius:20px 20px 0 0;width:100%;max-height:84dvh;overflow-y:auto;padding-bottom:28px;animation:up .3s cubic-bezier(.4,0,.2,1)}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.mhandle{width:38px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 14px}
+.mtitle{padding:0 18px 14px;font-size:16px;font-weight:800;color:var(--text);border-bottom:1px solid var(--border);margin-bottom:8px}
+
+/* ── TOAST ── */
+.toast{position:absolute;bottom:calc(var(--tab-h)+16px);left:16px;right:16px;background:var(--text);color:#fff;padding:12px 16px;border-radius:12px;font-size:13px;font-weight:600;display:none;z-index:300;animation:tin .3s ease;box-shadow:var(--sh2)}
+.toast.show{display:block}
+@keyframes tin{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- STATUS BAR -->
+  <div class="sb">
+    <span class="sb-t" id="clk">09:41</span>
+    <div class="sb-r"><span>●●●●</span><span>WiFi</span><span>🔋 92%</span></div>
+  </div>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="tlogo">T</div>
+    <div class="tinfo">
+      <div class="tname" id="tname">TIPS Globeducate</div>
+      <div class="tsub" id="tsub">tipsglobeducate.com</div>
+    </div>
+    <div class="mode-sw">
+      <button class="msw on" id="bweb" onclick="setMode('web')">Website</button>
+      <button class="msw" id="berp" onclick="setMode('erp')">ERP</button>
+    </div>
+    <button class="tbtn" onclick="openM('mo-notif')">
+      <svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+      <span class="ndot"></span>
+    </button>
+  </div>
+
+  <!-- ═══ WEBSITE VIEWS ═══ -->
+
+  <!-- SITE HOME -->
+  <div id="v-home" class="view on">
+    <div class="ticker"><span class="tick-inner">🏆 Trailblazer of Tamil Nadu Award &nbsp;·&nbsp; 🎓 Admissions Open 2026–27 Pre-KG to Grade XI &nbsp;·&nbsp; 🌍 IB · Cambridge IGCSE · CBSE &nbsp;·&nbsp; 8 Campuses: Coimbatore · Chennai · Bengaluru · Hyderabad · Karur · Kochi · Tirupur · Madurai &nbsp;·&nbsp; 🏀 U-17 Girls Basketball Champions — All Kerala Cambridge Tournament</span></div>
+
+    <div class="site-hero">
+      <div class="hbadge">⭐ Part of Globeducate Network · Est. 2004</div>
+      <div class="hh1">Empowering Young Minds to<br/><em>Think, Share & Lead</em></div>
+      <div class="htag">IB · Cambridge IGCSE · CBSE · Kindercare · Inclusive Programme<br/>World-Class Campuses Across South India</div>
+      <div class="hbtns">
+        <button class="btn-g" onclick="openM('mo-admit')">Apply Now →</button>
+        <button class="btn-gh" onclick="switchSite('campuses')">Our Campuses</button>
+      </div>
+      <div class="hstats">
+        <div class="hst"><div class="hst-n">8</div><div class="hst-l">Campuses</div></div>
+        <div class="hst"><div class="hst-n">5</div><div class="hst-l">Programmes</div></div>
+        <div class="hst"><div class="hst-n">20+</div><div class="hst-l">Years</div></div>
+        <div class="hst"><div class="hst-n">IVY</div><div class="hst-l">Alumni</div></div>
+      </div>
+    </div>
+
+    <div class="slbl">Our Programmes</div>
+    <div class="prog-grid">
+      <div class="prog-c" onclick="showToast('IB/IBDP — University preparatory programme')">
+        <div class="prog-ico" style="background:#dbeafe"><svg width="20" height="20" fill="none" stroke="#1d4ed8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+        <div class="prog-t">IB / IBDP</div>
+        <div class="prog-s">International Baccalaureate · Global university preparation</div>
+      </div>
+      <div class="prog-c" onclick="showToast('Cambridge IGCSE — Global benchmarked assessments')">
+        <div class="prog-ico" style="background:#fef3c7"><svg width="20" height="20" fill="none" stroke="#b45309" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+        <div class="prog-t">Cambridge IGCSE</div>
+        <div class="prog-s">Flexible subjects · Internationally benchmarked</div>
+      </div>
+      <div class="prog-c" onclick="showToast('CBSE — National curriculum Pre-KG to Grade XII')">
+        <div class="prog-ico" style="background:#d1fae5"><svg width="20" height="20" fill="none" stroke="#065f46" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg></div>
+        <div class="prog-t">CBSE</div>
+        <div class="prog-s">Pre-KG to Grade XII · Admissions Open 2026–27</div>
+      </div>
+      <div class="prog-c" onclick="showToast('Kindercare & Inclusive Programme')">
+        <div class="prog-ico" style="background:#fce7f3"><svg width="20" height="20" fill="none" stroke="#9d174d" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div>
+        <div class="prog-t">Kindercare</div>
+        <div class="prog-s">Holistic early years · Inclusive programme</div>
+      </div>
+    </div>
+
+    <div class="slbl">Key Achievements</div>
+    <div class="ach-row">
+      <div class="ach-c"><div class="ach-ico">🏆</div><div class="ach-t">Trailblazer of Tamil Nadu</div><div class="ach-s">Transformative change in education award</div></div>
+      <div class="ach-c"><div class="ach-ico">🌍</div><div class="ach-t">Globeducate Debates 2025</div><div class="ach-s">Students on the global stage</div></div>
+      <div class="ach-c"><div class="ach-ico">✍️</div><div class="ach-t">Young Achiever</div><div class="ach-s">Youngest national award-winning author</div></div>
+      <div class="ach-c"><div class="ach-ico">🏀</div><div class="ach-t">Champions</div><div class="ach-s">U-17 Girls Basketball, All Kerala Cambridge</div></div>
+    </div>
+
+    <div class="slbl">World-Class Infrastructure</div>
+    <div class="fac-grid">
+      <div class="fac-c"><div class="fac-ico">🔬</div><div class="fac-t">Specialised Laboratories</div></div>
+      <div class="fac-c"><div class="fac-ico">🎨</div><div class="fac-t">Music & Art Rooms</div></div>
+      <div class="fac-c"><div class="fac-ico">💻</div><div class="fac-t">Modern Classrooms</div></div>
+      <div class="fac-c"><div class="fac-ico">🏊</div><div class="fac-t">Swimming Pools</div></div>
+      <div class="fac-c"><div class="fac-ico">🍽️</div><div class="fac-t">Hygienic Dining Halls</div></div>
+      <div class="fac-c"><div class="fac-ico">🏃</div><div class="fac-t">Athletic Race Tracks</div></div>
+      <div class="fac-c"><div class="fac-ico">🚌</div><div class="fac-t">AC Transport</div></div>
+      <div class="fac-c"><div class="fac-ico">🏸</div><div class="fac-t">Sports Courts</div></div>
+      <div class="fac-c"><div class="fac-ico">📚</div><div class="fac-t">Digital Libraries</div></div>
+    </div>
+
+    <button class="btn-p" onclick="openM('mo-admit')">Apply for Admission 2026–27</button>
+    <button class="btn-o" onclick="setMode('erp')" style="margin-bottom:6px">🔒 Parent / Staff Login (ERP Portal)</button>
+    <div style="height:6px"></div>
+  </div>
+
+  <!-- SITE CAMPUSES -->
+  <div id="v-campuses" class="view">
+    <div class="slbl" style="padding-top:16px">Our 8 Campuses</div>
+    <div class="camp-row">
+      <div class="camp-c" onclick="showToast('TIPS Globeducate Coimbatore — HQ')">
+        <div class="camp-img" style="background:linear-gradient(135deg,#0a1d3b,#1b3770)"><div class="camp-city">Coimbatore</div></div>
+        <div class="camp-info"><div class="camp-name">TIPS Globeducate CBE</div><div class="camp-cur">IB · IGCSE · CBSE</div><span class="camp-tag" style="background:#dbeafe;color:#1d4ed8">HQ · Sathy Road</span></div>
+      </div>
+      <div class="camp-c" onclick="showToast('TIPS Globeducate Chennai — Perungudi')">
+        <div class="camp-img" style="background:linear-gradient(135deg,#1b3770,#0d47a1)"><div class="camp-city">Chennai</div></div>
+        <div class="camp-info"><div class="camp-name">TIPS Globeducate Chennai</div><div class="camp-cur">IB · IGCSE · CBSE</div><span class="camp-tag" style="background:#d1fae5;color:#065f46">Perungudi</span></div>
+      </div>
+      <div class="camp-c" onclick="showToast('TIPS Globeducate Bengaluru')">
+        <div class="camp-img" style="background:linear-gradient(135deg,#064e3b,#00897b)"><div class="camp-city">Bengaluru</div></div>
+        <div class="camp-info"><div class="camp-name">TIPS Globeducate BLR</div><div class="camp-cur">IB · IGCSE · CBSE</div><span class="camp-tag" style="background:#fef3c7;color:#92400e">Karnataka</span></div>
+      </div>
+      <div class="camp-c" onclick="showToast('TIPS Globeducate Hyderabad')">
+        <div class="camp-img" style="background:linear-gradient(135deg,#4c1d95,#6d28d9)"><div class="camp-city">Hyderabad</div></div>
+        <div class="camp-info"><div class="camp-name">TIPS Globeducate HYD</div><div class="camp-cur">IB · IGCSE · CBSE</div><span class="camp-tag" style="background:#ede9fe;color:#5b21b6">Telangana</span></div>
+      </div>
+      <div class="camp-c" onclick="showToast('TIPS Globeducate Kochi')">
+        <div class="camp-img" style="background:linear-gradient(135deg,#7c2d12,#c2410c)"><div class="camp-city">Kochi</div></div>
+        <div class="camp-info"><div class="camp-name">TIPS Globeducate Kochi</div><div class="camp-cur">IGCSE · CBSE</div><span class="camp-tag" style="background:#fee2e2;color:#991b1b">Kerala</span></div>
+      </div>
+      <div class="camp-c" onclick="showToast('TIPS Globeducate Tirupur')">
+        <div class="camp-img" style="background:linear-gradient(135deg,#065f46,#10b981)"><div class="camp-city">Tirupur</div></div>
+        <div class="camp-info"><div class="camp-name">TIPS Globeducate TRP</div><div class="camp-cur">IGCSE · CBSE</div><span class="camp-tag" style="background:#d1fae5;color:#065f46">Tamil Nadu</span></div>
+      </div>
+      <div class="camp-c" onclick="showToast('TIPS Globeducate Karur')">
+        <div class="camp-img" style="background:linear-gradient(135deg,#7e1d4e,#be185d)"><div class="camp-city">Karur</div></div>
+        <div class="camp-info"><div class="camp-name">TIPS Globeducate Karur</div><div class="camp-cur">IGCSE · CBSE</div><span class="camp-tag" style="background:#fce7f3;color:#9d174d">Tamil Nadu</span></div>
+      </div>
+      <div class="camp-c" onclick="showToast('TIPS Globeducate Madurai')">
+        <div class="camp-img" style="background:linear-gradient(135deg,#1e3a5f,#0077cc)"><div class="camp-city">Madurai</div></div>
+        <div class="camp-info"><div class="camp-name">TIPS Globeducate MDU</div><div class="camp-cur">IGCSE · CBSE</div><span class="camp-tag" style="background:#dbeafe;color:#1e40af">Tamil Nadu</span></div>
+      </div>
+    </div>
+
+    <div class="slbl">Contact & Addresses</div>
+    <div class="contact-c">
+      <div class="ct-row"><div class="ct-ico" style="background:#dbeafe"><svg width="16" height="16" fill="none" stroke="#1d4ed8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><div><div class="ct-l">Coimbatore (HQ)</div><div class="ct-v">193, Sathy Road, S.S.Kulam (P.O.), Coimbatore – 641 107, Tamil Nadu</div></div></div>
+      <div class="ct-row"><div class="ct-ico" style="background:#d1fae5"><svg width="16" height="16" fill="none" stroke="#065f46" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><div><div class="ct-l">Chennai</div><div class="ct-v">No. 50/51, First Main Road, Perungudi Industrial Estate, Chennai – 600 096</div></div></div>
+      <div class="ct-row"><div class="ct-ico" style="background:#fef3c7"><svg width="16" height="16" fill="none" stroke="#92400e" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg></div><div><div class="ct-l">Website</div><div class="ct-v">tipsglobeducate.com</div></div></div>
+      <div class="ct-row"><div class="ct-ico" style="background:#ede9fe"><svg width="16" height="16" fill="none" stroke="#6d28d9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div><div><div class="ct-l">Parent Portals</div><div class="ct-v">tipsgcoimbatore.onlinevidyalaya.net &nbsp;·&nbsp; tipsgchennai.onlinevidyalaya.net (+ 6 more campuses)</div></div></div>
+    </div>
+    <button class="btn-p" onclick="openM('mo-admit')">Enquire / Apply for Admission</button>
+    <div style="height:10px"></div>
+  </div>
+
+  <!-- SITE NEWS -->
+  <div id="v-news" class="view">
+    <div class="slbl" style="padding-top:16px">News & Events</div>
+    <div class="news-c" onclick="showToast('IIT Madras Data Science Certificate — TIPS Globeducate Erode')"><div class="news-thumb" style="background:linear-gradient(135deg,#0a1d3b,#1b3770)">🎓</div><div class="news-body"><div class="news-cat" style="color:#1d4ed8">Achievement</div><div class="news-t">Students complete IIT Madras Certificate in Data Science & Electronic Systems</div><div class="news-d">March 2026 · TIPS Globeducate</div></div></div>
+    <div class="news-c" onclick="showToast('Globeducate Debates 2025 — Global Stage')"><div class="news-thumb" style="background:linear-gradient(135deg,#4c1d95,#7c3aed)">🌍</div><div class="news-body"><div class="news-cat" style="color:#6d28d9">Global</div><div class="news-t">TIPS Globeducate students shine at Globeducate Debates 2025 on the world stage</div><div class="news-d">February 2026</div></div></div>
+    <div class="news-c" onclick="showToast('Trailblazer of Tamil Nadu Award')"><div class="news-thumb" style="background:linear-gradient(135deg,#c49a27,#e8b84b)">🏆</div><div class="news-body"><div class="news-cat" style="color:#92400e">Award</div><div class="news-t">TIPS Globeducate honoured as Trailblazer of Tamil Nadu for driving transformative change</div><div class="news-d">January 2026</div></div></div>
+    <div class="news-c" onclick="showToast('Young Author — Aariyan Bhosle')"><div class="news-thumb" style="background:linear-gradient(135deg,#065f46,#10b981)">✍️</div><div class="news-body"><div class="news-cat" style="color:#065f46">Student</div><div class="news-t">Aariyan Bhosle becomes youngest national award-winning author from TIPS Globeducate</div><div class="news-d">December 2025</div></div></div>
+    <div class="news-c" onclick="showToast('Basketball Champions!')"><div class="news-thumb" style="background:linear-gradient(135deg,#7c2d12,#f97316)">🏀</div><div class="news-body"><div class="news-cat" style="color:#c2410c">Sports</div><div class="news-t">U-17 Girls Basketball crowned winners at All Kerala Cambridge Tournament</div><div class="news-d">November 2025</div></div></div>
+    <div style="height:10px"></div>
+  </div>
+
+  <!-- ═══ ERP VIEWS ═══ -->
+
+  <!-- ERP DASHBOARD -->
+  <div id="v-erp-home" class="view">
+    <div class="erp-hero">
+      <div class="eg">Good Morning, Welcome Back</div>
+      <div class="en">Karthik Rajan</div>
+      <div class="er">ERP Administrator · TIPS Globeducate — All Campuses</div>
+      <div class="ekpis">
+        <div class="ekpi"><div class="kn">8</div><div class="kl">Campuses</div></div>
+        <div class="ekpi"><div class="kn">3,840</div><div class="kl">Students</div></div>
+        <div class="ekpi"><div class="kn">93%</div><div class="kl">Attendance</div></div>
+      </div>
+    </div>
+
+    <div class="sync-b" onclick="showToast('✓ ERP ↔ tipsglobeducate.com — Live sync active · Last sync 90 seconds ago · 3 new admission leads captured')">
+      <div class="sync-ico"><svg width="18" height="18" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></div>
+      <div><div class="sync-tt">Live Integration: tipsglobeducate.com ↔ ERP</div><div class="sync-ss">3 new admission leads · 2 fee payments reconciled · Events feed synced</div></div>
+      <svg class="sync-arr" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    </div>
+
+    <div class="slbl">Quick Access</div>
+    <div class="qgrid">
+      <button class="qb" onclick="switchErp('fees')"><div class="qi" style="background:#dbeafe"><svg width="18" height="18" fill="none" stroke="#1d4ed8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><span class="ql">Fee Mgmt</span></button>
+      <button class="qb" onclick="switchErp('attend')"><div class="qi" style="background:#d1fae5"><svg width="18" height="18" fill="none" stroke="#065f46" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg></div><span class="ql">Attend.</span></button>
+      <button class="qb" onclick="openM('mo-admit-erp')"><div class="qi" style="background:#ede9fe"><svg width="18" height="18" fill="none" stroke="#6d28d9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg></div><span class="ql">Admissions</span></button>
+      <button class="qb" onclick="openM('mo-circular')"><div class="qi" style="background:#fce7f3"><svg width="18" height="18" fill="none" stroke="#9d174d" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg></div><span class="ql">Circular</span></button>
+      <button class="qb" onclick="openM('mo-exam')"><div class="qi" style="background:#fef3c7"><svg width="18" height="18" fill="none" stroke="#92400e" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><span class="ql">Results</span></button>
+      <button class="qb" onclick="openM('mo-leave')"><div class="qi" style="background:#fee2e2"><svg width="18" height="18" fill="none" stroke="#991b1b" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div><span class="ql">Leave</span></button>
+      <button class="qb" onclick="openM('mo-campus')"><div class="qi" style="background:#e0f2fe"><svg width="18" height="18" fill="none" stroke="#0369a1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><span class="ql">Campuses</span></button>
+      <button class="qb" onclick="setMode('web')"><div class="qi" style="background:#f0fdf4"><svg width="18" height="18" fill="none" stroke="#15803d" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg></div><span class="ql">Website</span></button>
+    </div>
+
+    <div class="slbl">Integration Alerts</div>
+    <div class="card">
+      <div style="padding:11px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start"><div style="width:7px;height:7px;border-radius:50%;background:var(--teal);margin-top:5px;flex-shrink:0"></div><div><div style="font-size:13px;font-weight:700;color:var(--text)">3 New Admission Enquiries — tipsglobeducate.com</div><div style="font-size:11px;color:var(--text3);margin-top:2px">Coimbatore (2) · Chennai (1) · Auto-created in ERP Admissions Module</div></div><span class="pill pb2" style="margin-left:auto;flex-shrink:0">New</span></div>
+      <div style="padding:11px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start"><div style="width:7px;height:7px;border-radius:50%;background:var(--green);margin-top:5px;flex-shrink:0"></div><div><div style="font-size:13px;font-weight:700;color:var(--text)">2 Fee Payments Reconciled via Website Gateway</div><div style="font-size:11px;color:var(--text3);margin-top:2px">Tirupur campus · Auto-matched to student fee ledger in ERP</div></div><span class="pill pg" style="margin-left:auto;flex-shrink:0">Synced</span></div>
+      <div style="padding:11px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start"><div style="width:7px;height:7px;border-radius:50%;background:var(--amber);margin-top:5px;flex-shrink:0"></div><div><div style="font-size:13px;font-weight:700;color:var(--text)">Annual Day Circular Published to Website</div><div style="font-size:11px;color:var(--text3);margin-top:2px">ERP circular pushed to tipsglobeducate.com/news — All 8 campuses</div></div><span class="pill py" style="margin-left:auto;flex-shrink:0">Live</span></div>
+      <div style="padding:11px 16px;display:flex;gap:10px;align-items:flex-start"><div style="width:7px;height:7px;border-radius:50%;background:var(--red);margin-top:5px;flex-shrink:0"></div><div><div style="font-size:13px;font-weight:700;color:var(--text)">4 Students — Attendance Alert Triggered</div><div style="font-size:11px;color:var(--text3);margin-top:2px">Parent notifications sent via ERP · Karur (2) · Madurai (2)</div></div><span class="pill pr" style="margin-left:auto;flex-shrink:0">Alert</span></div>
+    </div>
+
+    <div class="slbl">Campus Fee Overview</div>
+    <div class="fee-h">
+      <div class="fhl">Total Collected — March 2026 · All 8 Campuses</div>
+      <div class="fha">₹ 3.24 Cr</div>
+      <div class="fhr">
+        <div><div class="fhil">Pending</div><div class="fhiv">₹ 48.2L</div></div>
+        <div><div class="fhil">Overdue</div><div class="fhiv">₹ 9.8L</div></div>
+        <div><div class="fhil">Students Paid</div><div class="fhiv">3,412 / 3,840</div></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:0">
+      <div class="ch"><div class="cico" style="background:#f0fdf4"><svg width="18" height="18" fill="none" stroke="#16a34a" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div><div><div class="ct">Monthly Collection Trend</div><div class="cs">Oct 2025 – Mar 2026 · All Campuses</div></div></div>
+      <div class="bars" id="bars"></div>
+      <div style="display:flex;justify-content:space-between;padding:0 16px 14px"><span style="font-size:9px;color:var(--text3)">Oct</span><span style="font-size:9px;color:var(--text3)">Nov</span><span style="font-size:9px;color:var(--text3)">Dec</span><span style="font-size:9px;color:var(--text3)">Jan</span><span style="font-size:9px;color:var(--text3)">Feb</span><span style="font-size:9px;color:var(--text3)">Mar</span></div>
+    </div>
+  </div>
+
+  <!-- ERP FEES -->
+  <div id="v-erp-fees" class="view">
+    <div class="slbl" style="padding-top:16px">Fee Management</div>
+    <div class="seg">
+      <button class="sb2 on" onclick="seg(this,'fd')">Due</button>
+      <button class="sb2" onclick="seg(this,'fp')">Paid</button>
+      <button class="sb2" onclick="seg(this,'fo')">Overdue</button>
+    </div>
+    <div id="fd">
+      <div class="card">
+        <div class="lrow" onclick="openM('mo-fee-detail')"><div class="av" style="background:#1565c0">AM</div><div><div class="rn">Anika Gupta</div><div class="rs">TIPS CBE · IGCSE Grade 10</div></div><div style="margin-left:auto"><div class="rv">₹ 24,500</div><div class="rd">Due 31 Mar</div></div></div>
+        <div class="lrow"><div class="av" style="background:#7c3aed">VV</div><div><div class="rn">Varsha Vishwanath</div><div class="rs">TIPS CBE · IGCSE Grade 10</div></div><div style="margin-left:auto"><div class="rv">₹ 24,500</div><div class="rd">Due 31 Mar</div></div></div>
+        <div class="lrow"><div class="av" style="background:#0097a7">CN</div><div><div class="rn">Chaitanya Vikamsey</div><div class="rs">TIPS CBE · IB Grade 9</div></div><div style="margin-left:auto"><div class="rv">₹ 38,000</div><div class="rd">Due 31 Mar</div></div></div>
+        <div class="lrow"><div class="av" style="background:#f97316">RK</div><div><div class="rn">Ravi Krishnamurthy</div><div class="rs">TIPS Chennai · CBSE Grade 8</div></div><div style="margin-left:auto"><div class="rv">₹ 18,200</div><div class="rd">Due 31 Mar</div></div></div>
+      </div>
+    </div>
+    <div id="fp" style="display:none">
+      <div class="card">
+        <div class="lrow"><div class="av" style="background:#10b981">AJ</div><div><div class="rn">Aditi Jaganmohan</div><div class="rs">TIPS Chennai · IGCSE Grade 11</div></div><div style="margin-left:auto"><div class="rv" style="color:var(--green)">₹ 26,400</div><span class="pill pg">Paid</span></div></div>
+        <div class="lrow"><div class="av" style="background:#0097a7">FR</div><div><div class="rn">Fawaz Reyas Mohideen</div><div class="rs">TIPS Chennai · IGCSE Grade 10</div></div><div style="margin-left:auto"><div class="rv" style="color:var(--green)">₹ 24,500</div><span class="pill pg">Paid</span></div></div>
+        <div class="lrow"><div class="av" style="background:#8b5cf6">AB</div><div><div class="rn">Aariyan Bhosle</div><div class="rs">TIPS Coimbatore · IB Grade 9</div></div><div style="margin-left:auto"><div class="rv" style="color:var(--green)">₹ 38,000</div><span class="pill pg">Online</span></div></div>
+      </div>
+    </div>
+    <div id="fo" style="display:none">
+      <div class="card">
+        <div class="lrow" onclick="openM('mo-fee-detail')"><div class="av" style="background:#e53935">MK</div><div><div class="rn">Meera Karunakaran</div><div class="rs">TIPS Madurai · CBSE Grade 7</div></div><div style="margin-left:auto"><div class="rv" style="color:var(--red)">₹ 16,800</div><span class="pill pr">48 days</span></div></div>
+        <div class="lrow"><div class="av" style="background:#f57c00">RP</div><div><div class="rn">Rohit Pillai</div><div class="rs">TIPS Karur · IGCSE Grade 8</div></div><div style="margin-left:auto"><div class="rv" style="color:var(--red)">₹ 22,100</div><span class="pill py">35 days</span></div></div>
+      </div>
+    </div>
+    <button class="btn-p" onclick="openM('mo-fee-entry')"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Record Fee Payment</button>
+  </div>
+
+  <!-- ERP ATTENDANCE -->
+  <div id="v-erp-attend" class="view">
+    <div class="slbl" style="padding-top:16px">Attendance</div>
+    <div class="dayrow" id="dayrow"></div>
+    <div class="card">
+      <div class="rw">
+        <div class="ring">
+          <svg width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="#e2e8f0" stroke-width="9"/><circle cx="50" cy="50" r="40" fill="none" stroke="#00897b" stroke-width="9" stroke-dasharray="251.33" stroke-dashoffset="15.08" stroke-linecap="round"/></svg>
+          <div class="rl"><div class="rp">94%</div><div class="rs2">Present</div></div>
+        </div>
+      </div>
+      <div class="rleg">
+        <div class="ri"><div class="rd2" style="background:#00897b"></div><div><div class="rll">Present</div><div class="rlv">3,610</div></div></div>
+        <div class="ri"><div class="rd2" style="background:#e53935"></div><div><div class="rll">Absent</div><div class="rlv">168</div></div></div>
+        <div class="ri"><div class="rd2" style="background:#f57c00"></div><div><div class="rll">Late</div><div class="rlv">62</div></div></div>
+      </div>
+    </div>
+    <div class="seg">
+      <button class="sb2 on" onclick="seg(this,'ac')">By Campus</button>
+      <button class="sb2" onclick="seg(this,'as')">Students</button>
+    </div>
+    <div id="ac">
+      <div class="card"><div style="padding:14px 16px">
+        <div class="prow"><div class="ptop"><span class="pn">TIPS Coimbatore</span><span class="pv" style="color:var(--green)">97%</span></div><div class="pbg"><div class="pf" style="width:97%;background:#00897b"></div></div></div>
+        <div class="prow"><div class="ptop"><span class="pn">TIPS Chennai</span><span class="pv" style="color:var(--green)">96%</span></div><div class="pbg"><div class="pf" style="width:96%;background:#00897b"></div></div></div>
+        <div class="prow"><div class="ptop"><span class="pn">TIPS Bengaluru</span><span class="pv" style="color:var(--teal)">94%</span></div><div class="pbg"><div class="pf" style="width:94%;background:#0097a7"></div></div></div>
+        <div class="prow"><div class="ptop"><span class="pn">TIPS Hyderabad</span><span class="pv" style="color:var(--teal)">93%</span></div><div class="pbg"><div class="pf" style="width:93%;background:#0097a7"></div></div></div>
+        <div class="prow"><div class="ptop"><span class="pn">TIPS Kochi</span><span class="pv" style="color:var(--amber)">91%</span></div><div class="pbg"><div class="pf" style="width:91%;background:#f57c00"></div></div></div>
+        <div class="prow"><div class="ptop"><span class="pn">TIPS Tirupur</span><span class="pv" style="color:var(--amber)">89%</span></div><div class="pbg"><div class="pf" style="width:89%;background:#f57c00"></div></div></div>
+        <div class="prow"><div class="ptop"><span class="pn">TIPS Karur</span><span class="pv" style="color:var(--amber)">88%</span></div><div class="pbg"><div class="pf" style="width:88%;background:#f57c00"></div></div></div>
+        <div class="prow"><div class="ptop"><span class="pn">TIPS Madurai</span><span class="pv" style="color:var(--red)">84%</span></div><div class="pbg"><div class="pf" style="width:84%;background:#e53935"></div></div></div>
+      </div></div>
+    </div>
+    <div id="as" style="display:none">
+      <div class="card">
+        <div class="lrow" onclick="openM('mo-att-detail')"><div class="av" style="background:#e53935">MK</div><div><div class="rn">Meera Karunakaran</div><div class="rs">TIPS Madurai · 42 days absent</div></div><div style="margin-left:auto"><span class="pill pr">71%</span></div></div>
+        <div class="lrow"><div class="av" style="background:#f57c00">RP</div><div><div class="rn">Rohit Pillai</div><div class="rs">TIPS Karur · 28 days absent</div></div><div style="margin-left:auto"><span class="pill py">79%</span></div></div>
+        <div class="lrow"><div class="av" style="background:#10b981">AJ</div><div><div class="rn">Aditi Jaganmohan</div><div class="rs">TIPS Chennai · 3 days absent</div></div><div style="margin-left:auto"><span class="pill pg">98%</span></div></div>
+        <div class="lrow"><div class="av" style="background:#1565c0">AB</div><div><div class="rn">Aariyan Bhosle</div><div class="rs">TIPS Coimbatore · 1 day absent</div></div><div style="margin-left:auto"><span class="pill pg">99%</span></div></div>
+      </div>
+    </div>
+    <button class="btn-p" onclick="openM('mo-mark-att')"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>Mark Today's Attendance</button>
+  </div>
+
+  <!-- ERP ACADEMICS -->
+  <div id="v-erp-acad" class="view">
+    <div class="slbl" style="padding-top:16px">Academics</div>
+    <div class="seg">
+      <button class="sb2 on" onclick="seg(this,'att')">Timetable</button>
+      <button class="sb2" onclick="seg(this,'aex')">Exams</button>
+      <button class="sb2" onclick="seg(this,'ares')">Results</button>
+    </div>
+    <div id="att">
+      <div style="padding:0 16px 6px;font-size:11px;font-weight:700;color:var(--text2)">TIPS Coimbatore · Grade 10 · Today</div>
+      <div class="card">
+        <div class="per cur-per"><div class="pt">08:00<br/>08:45</div><div class="pb3" style="background:#1d4ed8"></div><div style="flex:1"><div class="rn">Mathematics</div><div class="ps">Mrs. Meenakshi · Room 204</div></div><span class="pill pb2">Now</span></div>
+        <div class="per"><div class="pt">08:45<br/>09:30</div><div class="pb3" style="background:#00897b"></div><div style="flex:1"><div class="rn">English Language</div><div class="ps">Mr. Anand · Room 204</div></div><span class="pill pg" style="color:#065f46;background:#d1fae5">Next</span></div>
+        <div class="per"><div class="pt">09:30<br/>10:15</div><div class="pb3" style="background:#7c3aed"></div><div style="flex:1"><div class="rn">Physics (IGCSE)</div><div class="ps">Dr. Ramesh · Science Lab</div></div></div>
+        <div class="per"><div class="pt">10:15<br/>10:30</div><div class="pb3" style="background:var(--text3)"></div><div style="flex:1"><div class="rn">Short Break</div></div></div>
+        <div class="per"><div class="pt">10:30<br/>11:15</div><div class="pb3" style="background:#f57c00"></div><div style="flex:1"><div class="rn">Chemistry (IGCSE)</div><div class="ps">Mrs. Priya · Chem Lab</div></div></div>
+        <div class="per"><div class="pt">11:15<br/>12:00</div><div class="pb3" style="background:#0097a7"></div><div style="flex:1"><div class="rn">Global Perspectives</div><div class="ps">Ms. Kavya · Room 204</div></div></div>
+        <div class="per"><div class="pt">12:00<br/>12:45</div><div class="pb3" style="background:var(--text3)"></div><div style="flex:1"><div class="rn">Lunch Break</div></div></div>
+        <div class="per"><div class="pt">12:45<br/>01:30</div><div class="pb3" style="background:#c49a27"></div><div style="flex:1"><div class="rn">Tamil / Second Language</div><div class="ps">Mrs. Kavitha · Room 204</div></div></div>
+      </div>
+    </div>
+    <div id="aex" style="display:none">
+      <div class="card">
+        <div class="ch"><div class="cico" style="background:#ede9fe"><svg width="18" height="18" fill="none" stroke="#6d28d9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div><div><div class="ct">IGCSE May/June 2026 Series</div><div class="cs">All IGCSE Campuses · CIE</div></div></div>
+        <div style="height:1px;background:var(--border)"></div>
+        <div class="lrow"><div style="width:30px;text-align:center;font-size:12px;font-weight:800;color:var(--navy);flex-shrink:0">12<br/><span style="font-size:9px;color:var(--text3)">May</span></div><div><div class="rn">Mathematics — 0580</div><div class="rs">IGCSE · 9:00 AM – 12:00 PM</div></div><span class="pill pb2">56 days</span></div>
+        <div class="lrow"><div style="width:30px;text-align:center;font-size:12px;font-weight:800;color:var(--navy);flex-shrink:0">14<br/><span style="font-size:9px;color:var(--text3)">May</span></div><div><div class="rn">English Language — 0500</div><div class="rs">IGCSE · 9:00 AM – 11:00 AM</div></div><span class="pill py">58 days</span></div>
+        <div class="lrow"><div style="width:30px;text-align:center;font-size:12px;font-weight:800;color:var(--navy);flex-shrink:0">16<br/><span style="font-size:9px;color:var(--text3)">May</span></div><div><div class="rn">Physics — 0625</div><div class="rs">IGCSE · 9:00 AM – 12:00 PM</div></div><span class="pill py">60 days</span></div>
+      </div>
+    </div>
+    <div id="ares" style="display:none">
+      <div class="card">
+        <div class="ch"><div class="cico" style="background:#d1fae5"><svg width="18" height="18" fill="none" stroke="#065f46" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div><div><div class="ct">IGCSE Nov 2025 Results</div><div class="cs">TIPS Coimbatore · Grade 10</div></div></div>
+        <div style="height:1px;background:var(--border)"></div>
+        <div class="lrow"><div class="av" style="background:#10b981;font-size:11px">1st</div><div><div class="rn">Anika Gupta</div><div class="rs">6 A* — All Subjects</div></div><div style="margin-left:auto"><div class="rv">6 A*</div><span class="pill pg">Top</span></div></div>
+        <div class="lrow"><div class="av" style="background:#1565c0;font-size:11px">2nd</div><div><div class="rn">Varsha Vishwanath</div><div class="rs">6 A* — All Subjects</div></div><div style="margin-left:auto"><div class="rv">6 A*</div><span class="pill pg">Top</span></div></div>
+        <div class="lrow"><div class="av" style="background:#7c3aed;font-size:11px">3rd</div><div><div class="rn">Chaitanya Vikamsey</div><div class="rs">5 A* — All Subjects</div></div><div style="margin-left:auto"><div class="rv">5 A*</div><span class="pill pg">Dist.</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ERP PROFILE -->
+  <div id="v-erp-profile" class="view">
+    <div class="ph">
+      <div class="pav">KR</div>
+      <div class="pname">Karthik Rajan</div>
+      <div class="prole">ERP Administrator — All Campuses</div>
+      <div class="pid">EMP-TIPSG-ADM-0001 · Coimbatore HQ</div>
+    </div>
+    <div style="height:10px;background:var(--bg)"></div>
+    <div class="card">
+      <div class="mi" onclick="showToast('Opening My Profile…')"><div class="mico" style="background:#dbeafe"><svg width="16" height="16" fill="none" stroke="#1d4ed8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div><span class="mt">My Profile</span><svg class="ma" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+      <div class="mi" onclick="openM('mo-campus')"><div class="mico" style="background:#d1fae5"><svg width="16" height="16" fill="none" stroke="#065f46" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><span class="mt">Manage 8 Campuses</span><svg class="ma" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+      <div class="mi" onclick="openM('mo-leave')"><div class="mico" style="background:#fef3c7"><svg width="16" height="16" fill="none" stroke="#92400e" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div><span class="mt">Leave Requests</span><span class="pill py" style="margin-right:8px">1 Pending</span><svg class="ma" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+      <div class="mi" onclick="showToast('Opening My Payslips…')"><div class="mico" style="background:#ede9fe"><svg width="16" height="16" fill="none" stroke="#6d28d9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg></div><span class="mt">My Payslips</span><svg class="ma" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+    </div>
+    <div style="padding:14px 16px 4px;font-size:10.5px;font-weight:800;color:var(--text3);letter-spacing:1px;text-transform:uppercase">Integration & System</div>
+    <div class="card">
+      <div class="mi" onclick="showToast('Integration Status: tipsglobeducate.com ↔ ERP — All 7 data flows LIVE')"><div class="mico" style="background:#d1fae5"><svg width="16" height="16" fill="none" stroke="#065f46" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></div><span class="mt">tipsglobeducate.com Integration</span><span class="pill pg" style="margin-right:8px">Live</span><svg class="ma" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+      <div class="mi" onclick="showToast('ERP: Microsoft Dynamics Business Central 2025.3 — Managed by N2P Systems')"><div class="mico" style="background:#dbeafe"><svg width="16" height="16" fill="none" stroke="#1d4ed8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg></div><span class="mt">ERP Version</span><span style="font-size:11px;color:var(--text3);margin-right:6px">BC 2025.3</span><svg class="ma" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+      <div class="mi" onclick="showToast('N2P Systems — Primary ERP & Integration Partner for TIPS Globeducate')"><div class="mico" style="background:#f7f8fa"><svg width="16" height="16" fill="none" stroke="#475569" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg></div><span class="mt">Support Partner</span><span style="font-size:11px;color:var(--text3);margin-right:6px">N2P Systems</span><svg class="ma" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+      <div class="mi" onclick="showToast('Logging out…')" style="color:#e53935"><div class="mico" style="background:#fee2e2"><svg width="16" height="16" fill="none" stroke="#e53935" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></div><span class="mt" style="color:#e53935">Sign Out</span></div>
+    </div>
+    <div style="padding:18px;text-align:center;font-size:11px;color:var(--text3);line-height:1.7">TIPS Globeducate ERP · tipsglobeducate.com<br/>Microsoft Dynamics Business Central 2025.3<br/>Maintained by <strong style="color:var(--teal)">N2P Systems Pvt. Ltd.</strong></div>
+  </div>
+
+  <!-- ═══ BOTTOM NAV ═══ -->
+  <div class="bnav">
+    <div class="bnav-bar" id="bbar" style="left:10%"></div>
+    <button class="nb on" id="nb0" onclick="navClick(0)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Home</button>
+    <button class="nb" id="nb1" onclick="navClick(1)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>Campuses</button>
+    <button class="nb" id="nb2" onclick="navClick(2)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>News</button>
+    <button class="nb" id="nb3" onclick="navClick(3)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Fees</button>
+    <button class="nb" id="nb4" onclick="navClick(4)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>Profile</button>
+  </div>
+
+  <!-- ═══ MODALS ═══ -->
+
+  <!-- Admission Modal -->
+  <div class="ov" id="mo-admit" onclick="closeOv(event,'mo-admit')"><div class="modal"><div class="mhandle"></div><div class="mtitle">Apply for Admission 2026–27</div>
+    <div class="adm-hdr"><div class="adm-ht">TIPS Globeducate — Enquire Now</div><div class="adm-hs">Pre-KG to Grade XI · IB · IGCSE · CBSE</div></div>
+    <div class="fg"><div class="fl">Child's Name</div><input class="fi" placeholder="Full name…" type="text"/></div>
+    <div class="fg"><div class="fl">Preferred Campus</div><select class="fs"><option>Coimbatore</option><option>Chennai</option><option>Bengaluru</option><option>Hyderabad</option><option>Karur</option><option>Kochi</option><option>Tirupur</option><option>Madurai</option></select></div>
+    <div class="fg"><div class="fl">Programme</div><select class="fs"><option>IB / IBDP</option><option>Cambridge IGCSE</option><option>CBSE</option><option>Kindercare</option><option>Inclusive Programme</option></select></div>
+    <div class="fg"><div class="fl">Grade Applying For</div><select class="fs"><option>Pre-KG</option><option>KG</option><option>Grade 1</option><option>Grade 2</option><option>Grade 3</option><option>Grade 4</option><option>Grade 5</option><option>Grade 6</option><option>Grade 7</option><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option><option>Grade 11</option></select></div>
+    <div class="fg"><div class="fl">Parent / Guardian Name</div><input class="fi" placeholder="Your name…" type="text"/></div>
+    <div class="fg" style="padding-bottom:4px"><div class="fl">Mobile Number</div><input class="fi" placeholder="+91 …" type="tel"/></div>
+    <button class="btn-p" onclick="submit('mo-admit','✓ Enquiry submitted! Our admissions team will contact you within 24 hours.')">Submit Enquiry</button>
+    <button class="btn-o" onclick="closeM('mo-admit')">Cancel</button>
+    <div style="height:8px"></div>
+  </div></div>
+
+  <!-- ERP Admission Modal -->
+  <div class="ov" id="mo-admit-erp" onclick="closeOv(event,'mo-admit-erp')"><div class="modal"><div class="mhandle"></div><div class="mtitle">New Admission — ERP Entry</div>
+    <div style="padding:4px 16px 8px;font-size:12px;color:var(--teal);font-weight:700;display:flex;align-items:center;gap:6px"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>3 pending leads synced from tipsglobeducate.com</div>
+    <div class="fg"><div class="fl">Student Name</div><input class="fi" placeholder="Full name…" type="text"/></div>
+    <div class="fg"><div class="fl">Campus</div><select class="fs"><option>Coimbatore</option><option>Chennai</option><option>Bengaluru</option><option>Hyderabad</option><option>Karur</option><option>Kochi</option><option>Tirupur</option><option>Madurai</option></select></div>
+    <div class="fg"><div class="fl">Programme</div><select class="fs"><option>IB/IBDP</option><option>Cambridge IGCSE</option><option>CBSE</option><option>Kindercare</option></select></div>
+    <div class="fg"><div class="fl">Grade</div><select class="fs"><option>Pre-KG</option><option>KG</option><option>Grade 1</option><option>Grade 2</option><option>Grade 3</option><option>Grade 4</option><option>Grade 5</option><option>Grade 6</option><option>Grade 7</option><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option><option>Grade 11</option></select></div>
+    <div class="fg" style="padding-bottom:4px"><div class="fl">Source</div><select class="fs"><option>tipsglobeducate.com — Website Form</option><option>Walk-in</option><option>Phone Enquiry</option><option>Referral</option></select></div>
+    <button class="btn-p" onclick="submit('mo-admit-erp','✓ Admission record created in ERP · Student profile initialised')">Create Admission Record</button>
+    <button class="btn-o" onclick="closeM('mo-admit-erp')">Cancel</button>
+    <div style="height:8px"></div>
+  </div></div>
+
+  <!-- Circular Modal -->
+  <div class="ov" id="mo-circular" onclick="closeOv(event,'mo-circular')"><div class="modal"><div class="mhandle"></div><div class="mtitle">Issue Circular & Publish to Website</div>
+    <div style="padding:4px 16px 8px;font-size:12px;color:var(--teal);font-weight:700;display:flex;align-items:center;gap:6px"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>Will auto-publish to tipsglobeducate.com/news</div>
+    <div class="fg"><div class="fl">Subject</div><input class="fi" placeholder="Circular subject…" type="text"/></div>
+    <div class="fg"><div class="fl">Campus(es)</div><select class="fs"><option>All 8 Campuses</option><option>Coimbatore only</option><option>Chennai only</option><option>Select campuses…</option></select></div>
+    <div class="fg"><div class="fl">Audience</div><select class="fs"><option>All (Students + Parents + Staff)</option><option>Parents Only</option><option>Staff Only</option><option>Students Only</option></select></div>
+    <div class="fg" style="padding-bottom:4px"><div class="fl">Circular Content</div><textarea class="fi" rows="4" placeholder="Type the circular content here…" style="resize:none"></textarea></div>
+    <button class="btn-p" onclick="submit('mo-circular','✓ Circular issued · Auto-published to tipsglobeducate.com/news · Parent notifications sent')">Issue & Publish</button>
+    <button class="btn-o" onclick="closeM('mo-circular')">Cancel</button>
+    <div style="height:8px"></div>
+  </div></div>
+
+  <!-- Leave Modal -->
+  <div class="ov" id="mo-leave" onclick="closeOv(event,'mo-leave')"><div class="modal"><div class="mhandle"></div><div class="mtitle">Apply for Leave</div>
+    <div class="fg"><div class="fl">Leave Type</div><select class="fs"><option>Casual Leave</option><option>Medical Leave</option><option>Emergency Leave</option><option>Earned Leave</option></select></div>
+    <div class="fg"><div class="fl">From Date</div><input class="fi" type="date"/></div>
+    <div class="fg" style="padding-bottom:4px"><div class="fl">To Date</div><input class="fi" type="date"/></div>
+    <button class="btn-p" onclick="submit('mo-leave','✓ Leave request submitted successfully!')">Submit Request</button>
+    <button class="btn-o" onclick="closeM('mo-leave')">Cancel</button>
+    <div style="height:8px"></div>
+  </div></div>
+
+  <!-- Exam Modal -->
+  <div class="ov" id="mo-exam" onclick="closeOv(event,'mo-exam')"><div class="modal"><div class="mhandle"></div><div class="mtitle">Upload Exam Results</div>
+    <div style="padding:4px 16px 8px;font-size:12px;color:var(--teal);font-weight:700;display:flex;align-items:center;gap:6px"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>Results publish to parent portal after approval</div>
+    <div class="fg"><div class="fl">Campus</div><select class="fs"><option>Coimbatore</option><option>Chennai</option><option>Bengaluru</option><option>All Campuses</option></select></div>
+    <div class="fg"><div class="fl">Programme</div><select class="fs"><option>IGCSE</option><option>IB/IBDP</option><option>CBSE</option></select></div>
+    <div class="fg"><div class="fl">Grade & Subject</div><select class="fs"><option>Grade 10 — Mathematics</option><option>Grade 10 — English</option><option>Grade 10 — Physics</option><option>Grade 12 — IB HL Mathematics</option></select></div>
+    <div class="fg" style="padding-bottom:4px"><div class="fl">Upload Marks CSV</div><input class="fi" type="file" style="padding:8px 13px;font-size:12px"/></div>
+    <button class="btn-p" onclick="submit('mo-exam','✓ Results uploaded · Pending approval · Parent portal publish scheduled')">Upload & Schedule Publish</button>
+    <button class="btn-o" onclick="closeM('mo-exam')">Cancel</button>
+    <div style="height:8px"></div>
+  </div></div>
+
+  <!-- Mark Attendance -->
+  <div class="ov" id="mo-mark-att" onclick="closeOv(event,'mo-mark-att')"><div class="modal"><div class="mhandle"></div><div class="mtitle">Mark Today's Attendance</div>
+    <div class="fg"><div class="fl">Campus</div><select class="fs"><option>Coimbatore</option><option>Chennai</option><option>Bengaluru</option><option>Hyderabad</option><option>Karur</option><option>Kochi</option><option>Tirupur</option><option>Madurai</option></select></div>
+    <div class="fg"><div class="fl">Class / Section</div><select class="fs"><option>Grade 10 — IGCSE</option><option>Grade 11 — IB</option><option>Grade 12 — IBDP</option><option>Grade 9 — CBSE</option></select></div>
+    <div class="fg" style="padding-bottom:4px"><div class="fl">Date</div><input class="fi" type="date" id="attd"/></div>
+    <div style="padding:12px 16px 4px;display:flex;gap:8px">
+      <button onclick="showToast('✓ All students marked Present')" style="flex:1;padding:10px;border:1.5px solid var(--green);border-radius:10px;background:#d1fae5;color:#065f46;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer">✓ All Present</button>
+      <button onclick="showToast('Mark individual absences below')" style="flex:1;padding:10px;border:1.5px solid var(--red);border-radius:10px;background:#fee2e2;color:#991b1b;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer">Mark Absent</button>
+    </div>
+    <button class="btn-p" onclick="submit('mo-mark-att','✓ Attendance submitted · Low-attendance alerts queued for parent notification')" style="margin-top:14px">Submit Attendance</button>
+    <button class="btn-o" onclick="closeM('mo-mark-att')">Cancel</button>
+    <div style="height:8px"></div>
+  </div></div>
+
+  <!-- Fee Entry -->
+  <div class="ov" id="mo-fee-entry" onclick="closeOv(event,'mo-fee-entry')"><div class="modal"><div class="mhandle"></div><div class="mtitle">Record Fee Payment</div>
+    <div class="fg"><div class="fl">Student Name / ID</div><input class="fi" placeholder="Search student…" type="text"/></div>
+    <div class="fg"><div class="fl">Campus</div><select class="fs"><option>Coimbatore</option><option>Chennai</option><option>Bengaluru</option><option>Hyderabad</option><option>Karur</option><option>Kochi</option><option>Tirupur</option><option>Madurai</option></select></div>
+    <div class="fg"><div class="fl">Fee Head</div><select class="fs"><option>Tuition Fee</option><option>Transport Fee</option><option>Lab Fee</option><option>Sports Fee</option><option>Annual Charges</option></select></div>
+    <div class="fg"><div class="fl">Amount (INR)</div><input class="fi" placeholder="0.00" type="number"/></div>
+    <div class="fg" style="padding-bottom:4px"><div class="fl">Payment Mode</div><select class="fs"><option>Online — tipsglobeducate.com Gateway</option><option>Cash</option><option>Cheque / DD</option><option>NEFT / RTGS</option></select></div>
+    <button class="btn-p" onclick="submit('mo-fee-entry','✓ Payment recorded · Reconciled to ERP fee ledger · Receipt generated')">Record Payment</button>
+    <button class="btn-o" onclick="closeM('mo-fee-entry')">Cancel</button>
+    <div style="height:8px"></div>
+  </div></div>
+
+  <!-- Fee Detail -->
+  <div class="ov" id="mo-fee-detail" onclick="closeOv(event,'mo-fee-detail')"><div class="modal"><div class="mhandle"></div><div class="mtitle">Fee Details — Meera Karunakaran</div>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--border)"><div class="av" style="background:#e53935;width:46px;height:46px;border-radius:14px;font-size:15px">MK</div><div><div style="font-size:15px;font-weight:800">Meera Karunakaran</div><div style="font-size:12px;color:var(--text3)">TIPS Madurai · CBSE Grade 7</div></div><span class="pill pr" style="margin-left:auto">Overdue</span></div>
+    <div style="padding:14px 18px">
+      <div class="prow"><div class="ptop"><span class="pn">Tuition Fee</span><span class="pv" style="color:var(--red)">₹ 12,000 due</span></div><div class="pbg"><div class="pf" style="width:0%;background:#e53935"></div></div></div>
+      <div class="prow"><div class="ptop"><span class="pn">Transport Fee</span><span class="pv" style="color:var(--red)">₹ 4,800 due</span></div><div class="pbg"><div class="pf" style="width:0%;background:#e53935"></div></div></div>
+      <div class="prow"><div class="ptop"><span class="pn">Activity Fee</span><span class="pv" style="color:var(--green)">Paid</span></div><div class="pbg"><div class="pf" style="width:100%;background:#10b981"></div></div></div>
+    </div>
+    <div style="padding:0 18px 14px;font-size:13px;color:var(--text2)">Total Outstanding: <strong style="color:var(--red)">₹ 16,800</strong> · Overdue since Feb 01, 2026</div>
+    <button class="btn-p" onclick="submit('mo-fee-detail','✓ Payment reminder sent to parent via email & SMS')">Send Payment Reminder</button>
+    <button class="btn-o" onclick="closeM('mo-fee-detail')">Record Payment</button>
+    <div style="height:8px"></div>
+  </div></div>
+
+  <!-- Att Detail -->
+  <div class="ov" id="mo-att-detail" onclick="closeOv(event,'mo-att-detail')"><div class="modal"><div class="mhandle"></div><div class="mtitle">Attendance Details</div>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--border)"><div class="av" style="background:#e53935;width:46px;height:46px;border-radius:14px;font-size:15px">MK</div><div><div style="font-size:15px;font-weight:800">Meera Karunakaran</div><div style="font-size:12px;color:var(--text3)">TIPS Madurai · CBSE Grade 7</div></div><span class="pill pr" style="margin-left:auto;font-size:13px;padding:5px 12px">71%</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border)">
+      <div style="background:var(--white);padding:14px;text-align:center"><div style="font-size:22px;font-weight:800">145</div><div style="font-size:11px;color:var(--text3)">Working Days</div></div>
+      <div style="background:var(--white);padding:14px;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--green)">103</div><div style="font-size:11px;color:var(--text3)">Present</div></div>
+      <div style="background:var(--white);padding:14px;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--red)">42</div><div style="font-size:11px;color:var(--text3)">Absent</div></div>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;color:var(--text2);line-height:1.6;border-top:1px solid var(--border)">⚠️ Attendance below 75% threshold. Parent notification will be sent automatically via ERP ↔ website communication module.</div>
+    <button class="btn-p" onclick="submit('mo-att-detail','✓ Parent alert sent via ERP notification module')">Send Parent Alert</button>
+    <button class="btn-o" onclick="closeM('mo-att-detail')">Close</button>
+    <div style="height:8px"></div>
+  </div></div>
+
+  <!-- Campus Modal -->
+  <div class="ov" id="mo-campus" onclick="closeOv(event,'mo-campus')"><div class="modal"><div class="mhandle"></div><div class="mtitle">Campus Management — All 8</div>
+    <div class="lrow"><div class="av" style="background:#0a1d3b;font-size:10px">CBE</div><div><div class="rn">TIPS Globeducate Coimbatore</div><div class="rs">IB · IGCSE · CBSE · 1,240 students</div></div><span class="pill pg">Active</span></div>
+    <div class="lrow"><div class="av" style="background:#1565c0;font-size:10px">MAS</div><div><div class="rn">TIPS Globeducate Chennai</div><div class="rs">IB · IGCSE · CBSE · 820 students</div></div><span class="pill pg">Active</span></div>
+    <div class="lrow"><div class="av" style="background:#065f46;font-size:10px">BLR</div><div><div class="rn">TIPS Globeducate Bengaluru</div><div class="rs">IB · IGCSE · CBSE · 490 students</div></div><span class="pill pg">Active</span></div>
+    <div class="lrow"><div class="av" style="background:#6d28d9;font-size:10px">HYD</div><div><div class="rn">TIPS Globeducate Hyderabad</div><div class="rs">IB · IGCSE · CBSE · 380 students</div></div><span class="pill pg">Active</span></div>
+    <div class="lrow"><div class="av" style="background:#c2410c;font-size:10px">KCH</div><div><div class="rn">TIPS Globeducate Kochi</div><div class="rs">IGCSE · CBSE · 220 students</div></div><span class="pill pg">Active</span></div>
+    <div class="lrow"><div class="av" style="background:#10b981;font-size:10px">TRP</div><div><div class="rn">TIPS Globeducate Tirupur</div><div class="rs">IGCSE · CBSE · 310 students</div></div><span class="pill pg">Active</span></div>
+    <div class="lrow"><div class="av" style="background:#be185d;font-size:10px">KRR</div><div><div class="rn">TIPS Globeducate Karur</div><div class="rs">IGCSE · CBSE · 240 students</div></div><span class="pill pg">Active</span></div>
+    <div class="lrow"><div class="av" style="background:#0097a7;font-size:10px">MDU</div><div><div class="rn">TIPS Globeducate Madurai</div><div class="rs">IGCSE · CBSE · 140 students</div></div><span class="pill py">Onboarding</span></div>
+    <div style="height:16px"></div>
+  </div></div>
+
+  <!-- Notifications -->
+  <div class="ov" id="mo-notif" onclick="closeOv(event,'mo-notif')"><div class="modal"><div class="mhandle"></div><div class="mtitle">Notifications</div>
+    <div style="padding:11px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start"><div style="width:7px;height:7px;border-radius:50%;background:var(--teal);margin-top:5px;flex-shrink:0"></div><div><div style="font-size:13px;font-weight:700">3 New Admission Leads — tipsglobeducate.com</div><div style="font-size:11px;color:var(--text3);margin-top:2px">Auto-synced to ERP Admissions Module · Coimbatore (2) · Chennai (1)</div><div style="font-size:10px;color:var(--text3);margin-top:3px">Today · 09:30 AM</div></div></div>
+    <div style="padding:11px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start"><div style="width:7px;height:7px;border-radius:50%;background:var(--green);margin-top:5px;flex-shrink:0"></div><div><div style="font-size:13px;font-weight:700">Fee Payment — Online Gateway Reconciled</div><div style="font-size:11px;color:var(--text3);margin-top:2px">2 payments via tipsglobeducate.com auto-matched in ERP fee ledger</div><div style="font-size:10px;color:var(--text3);margin-top:3px">Today · 08:45 AM</div></div></div>
+    <div style="padding:11px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start"><div style="width:7px;height:7px;border-radius:50%;background:var(--amber);margin-top:5px;flex-shrink:0"></div><div><div style="font-size:13px;font-weight:700">4 Students — Low Attendance Alert</div><div style="font-size:11px;color:var(--text3);margin-top:2px">Karur (2) · Madurai (2) · Parent notifications queued</div><div style="font-size:10px;color:var(--text3);margin-top:3px">Today · 08:00 AM</div></div></div>
+    <div style="padding:11px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start"><div style="width:7px;height:7px;border-radius:50%;background:var(--navy3);margin-top:5px;flex-shrink:0"></div><div><div style="font-size:13px;font-weight:700">ERP Patch Deployed — BC 2025.3.14</div><div style="font-size:11px;color:var(--text3);margin-top:2px">Deployed by N2P Systems · All systems normal · Zero downtime</div><div style="font-size:10px;color:var(--text3);margin-top:3px">Yesterday · 11:00 PM</div></div></div>
+    <div style="height:16px"></div>
+  </div></div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+// Mode state
+var mode = 'web';
+var erpTab = 'erp-home';
+var webTab = 'home';
+
+// Tab config per mode
+var webTabs = {
+  0: { view:'v-home',      label:'Home' },
+  1: { view:'v-campuses',  label:'Campuses' },
+  2: { view:'v-news',      label:'News' },
+  3: { view:'v-campuses',  label:'Fees' }, // redirects
+  4: { view:'v-campuses',  label:'Profile' } // redirects
+};
+
+var erpTabs = {
+  0: { view:'v-erp-home',    label:'Dashboard' },
+  1: { view:'v-erp-fees',    label:'Fees' },
+  2: { view:'v-erp-attend',  label:'Attend.' },
+  3: { view:'v-erp-acad',    label:'Academics' },
+  4: { view:'v-erp-profile', label:'Profile' }
+};
+
+var erpNavLabels = ['Dashboard','Fees','Attend.','Academics','Profile'];
+var erpNavIcons = [
+  '<path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>',
+  '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+  '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>',
+  '<path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>',
+  '<path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>'
+];
+
+var webNavLabels = ['Home','Campuses','News','Enquire','Login'];
+var webNavIcons = [
+  '<path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>',
+  '<path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>',
+  '<path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>',
+  '<path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>',
+  '<path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>'
+];
+
+function setMode(m) {
+  mode = m;
+  var isErp = m === 'erp';
+  document.getElementById('bweb').classList.toggle('on', !isErp);
+  document.getElementById('berp').classList.toggle('on', isErp);
+  document.getElementById('tname').textContent = isErp ? 'TIPS Globeducate ERP' : 'TIPS Globeducate';
+  document.getElementById('tsub').textContent = isErp ? 'Microsoft Dynamics — Powered by N2P Systems' : 'tipsglobeducate.com';
+
+  // Update nav
+  var labels = isErp ? erpNavLabels : webNavLabels;
+  var icons  = isErp ? erpNavIcons  : webNavIcons;
+  for (var i = 0; i < 5; i++) {
+    var btn = document.getElementById('nb' + i);
+    btn.querySelector('svg').innerHTML = icons[i];
+    btn.lastChild.textContent = labels[i];
+  }
+
+  // Show correct views
+  hideAllViews();
+  if (isErp) {
+    document.getElementById('v-erp-home').classList.add('on');
+    activateNav(0);
+  } else {
+    document.getElementById('v-home').classList.add('on');
+    activateNav(0);
+  }
+}
+
+function hideAllViews() {
+  document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('on'); });
+}
+
+function activateNav(idx) {
+  document.querySelectorAll('.nb').forEach(function(b){ b.classList.remove('on'); });
+  document.getElementById('nb' + idx).classList.add('on');
+  document.getElementById('bbar').style.left = 'calc(' + (idx * 20 + 10) + '% - 16px)';
+}
+
+function navClick(idx) {
+  if (mode === 'erp') {
+    var tabs = erpTabs;
+    if (tabs[idx]) {
+      hideAllViews();
+      document.getElementById(tabs[idx].view).classList.add('on');
+      activateNav(idx);
+    }
+  } else {
+    if (idx === 3) { openM('mo-admit'); return; }
+    if (idx === 4) { setMode('erp'); return; }
+    var wmap = { 0:'v-home', 1:'v-campuses', 2:'v-news' };
+    if (wmap[idx]) {
+      hideAllViews();
+      document.getElementById(wmap[idx]).classList.add('on');
+      activateNav(idx);
+    }
+  }
+}
+
+function switchSite(key) {
+  var map = { home:'v-home', campuses:'v-campuses', news:'v-news' };
+  if (map[key]) {
+    hideAllViews();
+    document.getElementById(map[key]).classList.add('on');
+    var idx = key === 'home' ? 0 : key === 'campuses' ? 1 : 2;
+    activateNav(idx);
+  }
+}
+
+function switchErp(key) {
+  var map = { 'erp-home':'v-erp-home', fees:'v-erp-fees', attend:'v-erp-attend', acad:'v-erp-acad', profile:'v-erp-profile' };
+  var idx = { 'erp-home':0, fees:1, attend:2, acad:3, profile:4 };
+  if (map[key]) {
+    hideAllViews();
+    document.getElementById(map[key]).classList.add('on');
+    activateNav(idx[key]);
+  }
+}
+
+function seg(btn, id) {
+  var parent = btn.closest('.seg');
+  parent.querySelectorAll('.sb2').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+  var groups = ['fd','fp','fo','ac','as','att','aex','ares'];
+  groups.forEach(function(g){ var el = document.getElementById(g); if(el) el.style.display = 'none'; });
+  var t = document.getElementById(id);
+  if (t) t.style.display = 'block';
+}
+
+// Modals
+function openM(id) { document.getElementById(id).classList.add('open'); }
+function closeM(id) { document.getElementById(id).classList.remove('open'); }
+function closeOv(e, id) { if(e.target.classList.contains('ov')) closeM(id); }
+function submit(id, msg) { closeM(id); setTimeout(function(){ showToast(msg); }, 200); }
+
+// Toast
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 3000);
+}
+
+// Bar chart
+var barData = [{h:48,c:'#0097a7'},{h:42,c:'#0097a7'},{h:34,c:'#0097a7'},{h:56,c:'#0097a7'},{h:50,c:'#0097a7'},{h:70,c:'#00897b'}];
+var bc = document.getElementById('bars');
+barData.forEach(function(d){
+  var col = document.createElement('div'); col.className='bc';
+  var bar = document.createElement('div'); bar.className='bf'; bar.style.height='0'; bar.style.background=d.c;
+  col.appendChild(bar); bc.appendChild(col);
+  setTimeout(function(){ bar.style.height = d.h + 'px'; }, 500);
+});
+
+// Day row
+var days=['Mon','Tue','Wed','Thu','Fri','Sat'], dates=[11,12,13,14,15,16];
+var dr = document.getElementById('dayrow');
+days.forEach(function(d,i){
+  var p = document.createElement('div'); p.className='dp' + (i===2?' on':'');
+  p.innerHTML = '<div class="dd">' + dates[i] + '</div><div class="dn">' + d + '</div>';
+  p.onclick = function(){
+    dr.querySelectorAll('.dp').forEach(function(x){ x.classList.remove('on'); });
+    p.classList.add('on'); showToast('Viewing attendance: ' + d + ' Mar ' + dates[i]);
+  };
+  dr.appendChild(p);
+});
+
+// Clock
+function tick(){ var n=new Date(); var h=n.getHours(), m=n.getMinutes(); document.getElementById('clk').textContent=(h<10?'0':'')+h+':'+(m<10?'0':'')+m; }
+tick(); setInterval(tick, 30000);
+
+// Att date
+var attd = document.getElementById('attd');
+if(attd) attd.valueAsDate = new Date();
+</script>
+</body>
+</html>
