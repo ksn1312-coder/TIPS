@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>N2P Systems · TIPS Globeducate ERP Proposal · N2P-ERP-TAKEOVER-TIPSG-2026-001</title>
+<style>
+  :root {
+    --navy:#0D2A4E; --sky:#1A6EB5; --sky2:#E8F2FB; --sky3:#B8D6F2;
+    --amber:#E8930A; --amber2:#FEF6E7; --amber3:#FDDFA0;
+    --green:#1E7E44; --green2:#EAFAF1; --red:#C0392B; --red2:#FDEDEC;
+    --gray1:#F5F6FA; --gray2:#ECEFF4; --gray3:#C8D0DC;
+    --gray4:#8899AA; --gray5:#3D4B5C; --gray6:#1A1A2E;
+    --white:#FFFFFF;
+    --font:'Segoe UI',system-ui,-apple-system,sans-serif;
+    --mono:'DM Mono','Courier New',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:15px;font-family:var(--font);background:var(--gray1);color:var(--gray6)}
+  body{display:flex;min-height:100vh}
+
+  /* ── Layout ── */
+  #sidebar{width:230px;min-width:230px;background:var(--navy);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+  #main{flex:1;display:flex;flex-direction:column;min-width:0}
+  #topbar{background:var(--white);border-bottom:1px solid var(--gray3);padding:10px 32px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10}
+  #content{flex:1;padding:40px 48px 80px;max-width:960px}
+
+  /* ── Sidebar ── */
+  .sidebar-brand{padding:24px 20px 16px;border-bottom:1px solid rgba(255,255,255,.1)}
+  .brand-name{font-size:13px;font-weight:700;color:var(--white);letter-spacing:.04em}
+  .brand-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:2px}
+  .sidebar-ref{margin:14px 20px;background:rgba(255,255,255,.06);border-radius:6px;padding:8px 10px}
+  .ref-label{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+  .ref-val{font-size:10px;color:rgba(255,255,255,.75);font-family:var(--mono)}
+  .nav-section{padding:6px 20px 2px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:10px}
+  .nav-item{display:flex;align-items:center;gap:9px;padding:9px 20px;cursor:pointer;color:rgba(255,255,255,.6);font-size:12.5px;transition:all .15s;border-left:3px solid transparent;user-select:none}
+  .nav-item:hover{background:rgba(255,255,255,.06);color:var(--white)}
+  .nav-item.active{background:rgba(26,110,181,.25);color:var(--white);border-left-color:var(--sky);font-weight:600}
+  .nav-badge{margin-left:auto;font-size:9px;background:var(--amber);color:var(--white);border-radius:10px;padding:1px 6px;font-weight:700}
+  .nav-badge.new{background:var(--green)}
+  .sidebar-footer{margin-top:auto;padding:16px 20px;border-top:1px solid rgba(255,255,255,.08);font-size:10px;color:rgba(255,255,255,.3)}
+
+  /* ── Topbar ── */
+  .breadcrumb{font-size:12px;color:var(--gray4)}
+  .breadcrumb span{color:var(--gray5);font-weight:600}
+  .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .chip{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600}
+  .chip-sky{background:var(--sky2);color:var(--sky)}
+  .chip-amber{background:var(--amber2);color:var(--amber)}
+
+  /* ── Sections ── */
+  .section{display:none}.section.active{display:block}
+
+  /* ── Typography ── */
+  .page-title{font-size:26px;font-weight:700;color:var(--navy);margin-bottom:4px;line-height:1.2}
+  .page-sub{font-size:14px;color:var(--gray4);margin-bottom:24px}
+  .rule{height:2px;background:linear-gradient(90deg,var(--sky),transparent);border:none;margin-bottom:28px}
+  h2{font-size:16px;font-weight:700;color:var(--navy);margin:32px 0 12px;display:flex;align-items:center;gap:8px}
+  h2 .h2-num{width:22px;height:22px;background:var(--navy);color:var(--white);border-radius:50%;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  h3{font-size:13px;font-weight:700;color:var(--sky);margin:20px 0 8px;text-transform:uppercase;letter-spacing:.04em}
+  p.body{font-size:13.5px;line-height:1.75;color:var(--gray5);margin-bottom:12px}
+
+  /* ── Cards & Callouts ── */
+  .card{background:var(--white);border:1px solid var(--gray3);border-radius:10px;padding:20px 24px;margin-bottom:16px}
+  .card-sky{border-left:4px solid var(--sky);background:var(--sky2)}
+  .card-amber{border-left:4px solid var(--amber);background:var(--amber2)}
+  .card-red{border-left:4px solid var(--red);background:var(--red2)}
+  .card-green{border-left:4px solid var(--green);background:var(--green2)}
+  .card-navy{background:var(--navy);color:var(--white)}
+  .card-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:6px}
+  .card-sky .card-title,.card-amber .card-title,.card-red .card-title,.card-green .card-title{color:inherit}
+  .card-sky .card-title{color:var(--sky)}
+  .card-amber .card-title{color:var(--amber)}
+  .card-red .card-title{color:var(--red)}
+  .card-green .card-title{color:var(--green)}
+  .card-body{font-size:13px;line-height:1.65;color:var(--gray5)}
+  .card-sky .card-body,.card-amber .card-body,.card-red .card-body,.card-green .card-body{color:var(--gray5)}
+
+  /* ── Metric grid ── */
+  .metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+  .metric{background:var(--white);border:1px solid var(--gray3);border-radius:8px;padding:14px 16px}
+  .metric-val{font-size:22px;font-weight:700;color:var(--navy);line-height:1}
+  .metric-lbl{font-size:11px;color:var(--gray4);margin-top:4px}
+  .metric-sub{font-size:10px;color:var(--gray4);margin-top:3px;font-style:italic}
+  .metric.accent{border-top:3px solid var(--sky)}
+  .metric.warn{border-top:3px solid var(--amber)}
+  .metric.danger{border-top:3px solid var(--red)}
+  .metric.ok{border-top:3px solid var(--green)}
+
+  /* ── Tables ── */
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:16px}
+  thead tr{background:var(--navy);color:var(--white)}
+  thead th{padding:9px 12px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.03em}
+  tbody tr:nth-child(even){background:var(--gray1)}
+  tbody tr:nth-child(odd){background:var(--white)}
+  tbody td{padding:9px 12px;color:var(--gray5);vertical-align:top;border-bottom:1px solid var(--gray2)}
+  .td-label{font-weight:600;color:var(--navy)}
+  .td-mono{font-family:var(--mono);font-size:11px;color:var(--gray4)}
+  .tr-total{background:var(--sky2)!important}
+  .tr-total td{font-weight:700;color:var(--navy);border-top:2px solid var(--sky)}
+
+  /* ── Badges ── */
+  .badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+  .badge-sky{background:var(--sky2);color:var(--sky)}
+  .badge-amber{background:var(--amber2);color:var(--amber)}
+  .badge-red{background:var(--red2);color:var(--red)}
+  .badge-green{background:var(--green2);color:var(--green)}
+  .badge-gray{background:var(--gray2);color:var(--gray4)}
+  .badge-navy{background:var(--navy);color:var(--white)}
+
+  /* ── Stack diagram ── */
+  .stack{display:flex;flex-direction:column;gap:0;border:1px solid var(--gray3);border-radius:10px;overflow:hidden;margin-bottom:20px}
+  .stack-row{display:flex;align-items:stretch;border-bottom:1px solid var(--gray2)}
+  .stack-row:last-child{border-bottom:none}
+  .stack-layer{width:130px;min-width:130px;background:var(--navy);color:var(--white);font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;padding:10px 8px;text-align:center;line-height:1.3}
+  .stack-items{flex:1;display:flex;flex-wrap:wrap;gap:8px;padding:12px 16px;background:var(--white)}
+  .stack-chip{font-size:11.5px;padding:4px 10px;border-radius:5px;background:var(--gray1);border:1px solid var(--gray3);color:var(--gray5)}
+  .stack-chip.known{background:var(--sky2);border-color:var(--sky3);color:var(--sky)}
+  .stack-chip.gap{background:var(--red2);border-color:#F5B7B1;color:var(--red)}
+
+  /* ── Gap table rows ── */
+  .gap-sev{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px}
+  .gap-crit{background:var(--red2);color:var(--red)}
+  .gap-high{background:var(--amber2);color:var(--amber)}
+  .gap-med{background:var(--sky2);color:var(--sky)}
+
+  /* ── Phase timeline ── */
+  .phases{display:flex;flex-direction:column;gap:14px;margin-bottom:24px}
+  .phase{background:var(--white);border:1px solid var(--gray3);border-radius:10px;overflow:hidden}
+  .phase-head{display:flex;align-items:center;gap:12px;padding:12px 18px;background:var(--navy);color:var(--white)}
+  .phase-num{width:28px;height:28px;border-radius:50%;background:var(--sky);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .phase-title{font-size:14px;font-weight:700;flex:1}
+  .phase-dur{font-size:11px;color:rgba(255,255,255,.55)}
+  .phase-body{padding:14px 18px}
+  .phase-desc{font-size:13px;color:var(--gray4);margin-bottom:10px}
+  .phase-items{display:flex;flex-direction:column;gap:5px}
+  .phase-item{font-size:12.5px;color:var(--gray5);padding-left:14px;position:relative}
+  .phase-item::before{content:'→';position:absolute;left:0;color:var(--sky);font-size:11px}
+
+  /* ── Hero cover ── */
+  .hero{background:var(--navy);border-radius:12px;padding:40px 40px 36px;margin-bottom:28px;position:relative;overflow:hidden}
+  .hero::after{content:'';position:absolute;bottom:0;right:0;width:320px;height:320px;background:radial-gradient(circle at 80% 80%,rgba(26,110,181,.35),transparent 70%);pointer-events:none}
+  .hero-eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:12px;font-weight:600}
+  .hero-title{font-size:34px;font-weight:700;color:var(--white);line-height:1.1;margin-bottom:8px}
+  .hero-rule{width:60px;height:3px;background:var(--sky);border-radius:2px;margin:16px 0}
+  .hero-sub{font-size:14px;color:rgba(255,255,255,.6);margin-bottom:28px}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:20px}
+  .hero-kv .key{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:2px}
+  .hero-kv .val{font-size:13.5px;font-weight:600;color:var(--white)}
+
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px}
+  .stat{background:var(--white);border:1px solid var(--gray3);border-radius:8px;padding:16px;text-align:center}
+  .stat-n{font-size:28px;font-weight:700;color:var(--navy)}
+  .stat-l{font-size:11px;color:var(--gray4);margin-top:3px}
+  .stat.accent .stat-n{color:var(--amber)}
+  .stat.sky .stat-n{color:var(--sky)}
+  .stat.ok .stat-n{color:var(--green)}
+
+  /* ── Info table ── */
+  .info-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px;border:1px solid var(--gray3);border-radius:8px;overflow:hidden}
+  .info-table tr:nth-child(even){background:var(--gray1)}
+  .info-table tr:nth-child(odd){background:var(--white)}
+  .info-table td{padding:9px 14px;color:var(--gray5);border-bottom:1px solid var(--gray2)}
+  .info-table tr:last-child td{border-bottom:none}
+  .info-table td:first-child{font-weight:600;color:var(--navy);width:38%}
+
+  /* ── Commercial ── */
+  .price-hi{color:var(--navy);font-weight:700}
+  .price-tbd{color:var(--amber);font-weight:600;font-style:italic}
+
+  /* ── Risk ── */
+  .risk-h{background:var(--red2)!important}
+  .risk-h td{color:var(--red)!important}
+  .risk-m{background:var(--amber2)!important}
+  .risk-m td{color:var(--gray5)!important}
+
+  /* ── Signoff ── */
+  .sign-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+  .sign-box{background:var(--white);border:1px solid var(--gray3);border-radius:8px;padding:20px 24px}
+  .sign-label{font-size:11px;color:var(--gray4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
+  .sign-line{border-bottom:1px solid var(--gray3);height:40px;margin-bottom:8px}
+  .sign-name{font-size:12px;color:var(--gray4)}
+  .btn-accept{background:var(--sky);color:var(--white);border:none;border-radius:7px;padding:13px 28px;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;display:block;margin:24px auto 0;width:100%;max-width:380px}
+  .btn-accept:hover{background:var(--navy)}
+
+  /* ── NEW: As-Is section specific ── */
+  .asis-intro{background:var(--navy);border-radius:10px;padding:20px 24px;margin-bottom:24px;display:flex;gap:20px;align-items:flex-start}
+  .asis-intro-icon{font-size:28px;flex-shrink:0;margin-top:2px}
+  .asis-intro-text{color:rgba(255,255,255,.75);font-size:13px;line-height:1.7}
+  .asis-intro-text strong{color:var(--white)}
+  .silo-banner{background:var(--red2);border:1px solid #F5B7B1;border-radius:8px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+  .silo-icon{font-size:22px}
+  .silo-text{font-size:13px;color:var(--red);font-weight:600}
+  .silo-sub{font-size:12px;color:var(--gray5);font-weight:400;margin-top:2px}
+  .campus-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-bottom:20px}
+  .campus-card{background:var(--white);border:1px solid var(--gray3);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:10px}
+  .campus-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .campus-dot.live{background:var(--green)}
+  .campus-dot.tbc{background:var(--amber)}
+  .campus-name{font-size:13px;font-weight:600;color:var(--navy)}
+  .campus-url{font-size:10px;color:var(--gray4);font-family:var(--mono);margin-top:1px}
+  .campus-state{margin-left:auto;font-size:10px;color:var(--gray4)}
+  .cost-bar-wrap{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .cost-bar-label{font-size:12px;color:var(--gray5);width:160px;flex-shrink:0}
+  .cost-bar-track{flex:1;background:var(--gray2);border-radius:4px;height:8px;overflow:hidden}
+  .cost-bar-fill{height:100%;border-radius:4px;background:var(--sky)}
+  .cost-bar-val{font-size:11px;color:var(--gray4);width:80px;text-align:right;flex-shrink:0}
+  .opportunity-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+  .opp-card{background:var(--white);border:1px solid var(--gray3);border-radius:8px;padding:14px 16px;border-top:3px solid var(--sky)}
+  .opp-card.amber{border-top-color:var(--amber)}
+  .opp-card.red{border-top-color:var(--red)}
+  .opp-card.green{border-top-color:var(--green)}
+  .opp-title{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:5px}
+  .opp-body{font-size:11.5px;color:var(--gray4);line-height:1.55}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ SIDEBAR ═══════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-name">N2P SYSTEMS PVT. LTD.</div>
+    <div class="brand-sub">n2psystems.com</div>
+  </div>
+  <div class="sidebar-ref">
+    <div class="ref-label">Proposal Ref</div>
+    <div class="ref-val">N2P-ERP-TAKEOVER-TIPSG-2026-001</div>
+  </div>
+
+  <div class="nav-section">Proposal</div>
+  <div class="nav-item active" onclick="show('cover',this)">&#9679; Cover &amp; Summary</div>
+  <div class="nav-item" onclick="show('context',this)">&#9679; Context &amp; Objectives</div>
+  <div class="nav-item" onclick="show('asis',this)">&#9679; As-Is IT Landscape <span class="nav-badge new">NEW</span></div>
+  <div class="nav-item" onclick="show('gaps',this)">&#9679; Gaps &amp; Opportunities</div>
+  <div class="nav-item" onclick="show('scope',this)">&#9679; Scope of Services</div>
+  <div class="nav-item" onclick="show('phases',this)">&#9679; Delivery Phases</div>
+  <div class="nav-section">Evaluation</div>
+  <div class="nav-item" onclick="show('credentials',this)">&#9679; N2P Credentials</div>
+  <div class="nav-item" onclick="show('commercial',this)">&#9679; Pricing &amp; Terms <span class="nav-badge">TBD</span></div>
+  <div class="nav-item" onclick="show('risks',this)">&#9679; Risk Register</div>
+  <div class="nav-item" onclick="show('signoff',this)">&#9679; Acceptance</div>
+
+  <div class="sidebar-footer">Version 3.0 · March 2026<br/>Confidential &amp; Proprietary</div>
+</nav>
+
+<!-- ═══════════════════════════════ MAIN ═══════════════════════════════ -->
+<div id="main">
+  <div id="topbar">
+    <div class="breadcrumb">TIPS Globeducate &nbsp;/&nbsp; <span id="breadcrumb">Cover &amp; Summary</span></div>
+    <div class="topbar-right">
+      <span class="chip chip-sky">ERP Transformation</span>
+      <span class="chip chip-amber">Pricing TBD post Phase 1</span>
+    </div>
+  </div>
+
+  <div id="content">
+
+  <!-- ══════════════════ COVER ══════════════════ -->
+  <div id="sec-cover" class="section active">
+    <div class="hero">
+      <div class="hero-eyebrow">Proposal · March 2026 · Ref: N2P-ERP-TAKEOVER-TIPSG-2026-001</div>
+      <div class="hero-title">ERP Transformation<br/>&amp; Digital Integration</div>
+      <div class="hero-rule"></div>
+      <div class="hero-sub">TIPS Microsoft Custom ERP Solution · 8-Campus Consolidation · Website Integration</div>
+      <div class="hero-meta">
+        <div class="hero-kv"><div class="key">Client</div><div class="val">TIPS Globeducate India</div></div>
+        <div class="hero-kv"><div class="key">Campuses</div><div class="val">8 across 4 states</div></div>
+        <div class="hero-kv"><div class="key">Investment</div><div class="val">TBD post Phase 1</div></div>
+        <div class="hero-kv"><div class="key">Start</div><div class="val">April 2026</div></div>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-n">5</div><div class="stat-l">Delivery Phases</div></div>
+      <div class="stat accent"><div class="stat-n">8</div><div class="stat-l">Campuses Covered</div></div>
+      <div class="stat sky"><div class="stat-n">₹38–62L</div><div class="stat-l">Current IT Spend (est.)</div></div>
+      <div class="stat ok"><div class="stat-n">0</div><div class="stat-l">Operational Disruptions</div></div>
+    </div>
+
+    <h2><span class="h2-num">01</span> Executive Summary</h2>
+    <hr class="rule"/>
+    <p class="body">TIPS Globeducate currently operates a fragmented digital infrastructure — six standalone Vidyalaya School ERP portals, a WordPress website with no ERP integration, and no group-level reporting across its eight campuses. N2P Systems proposes a structured five-phase <strong>ERP Transformation and Digital Integration engagement</strong> to consolidate, connect, and future-proof TIPS Globeducate's technology estate under TIPS Microsoft Custom ERP Solution.</p>
+    <p class="body">Our pre-engagement infrastructure analysis has already identified the specific gaps, technology components, and annual IT cost baseline — giving TIPS Globeducate a clear picture of the starting point before any commercial commitment is made.</p>
+
+    <table class="info-table">
+      <tr><td>Client</td><td>The Indian Public School (TIPS) Globeducate India</td></tr>
+      <tr><td>ERP Platform</td><td>TIPS Microsoft Custom ERP Solution (proposed)</td></tr>
+      <tr><td>Current ERP</td><td>Vidyalaya School ERP (Sapphire Software Solutions) · 6 campus instances</td></tr>
+      <tr><td>Engagement Type</td><td>ERP Implementation, Website Integration &amp; Managed Service</td></tr>
+      <tr><td>Proposal Reference</td><td style="font-family:var(--mono);font-size:12px">N2P-ERP-TAKEOVER-TIPSG-2026-001</td></tr>
+      <tr><td>Proposed Start</td><td>April 2026</td></tr>
+      <tr><td>Commercial Model</td><td>Phase 1 fixed · Phases 2–5 TBD post discovery scoping workshop</td></tr>
+    </table>
+
+    <div class="card card-sky">
+      <div class="card-title">Our commitment to TIPS Globeducate</div>
+      <div class="card-body">TIPS Globeducate will emerge from this engagement with a single TIPS Microsoft Custom ERP Solution spanning all eight campuses, a live integration with tipsglobeducate.com, a unified group dashboard for leadership, and N2P Systems as the accountable long-term technology partner.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ CONTEXT ══════════════════ -->
+  <div id="sec-context" class="section">
+    <div class="page-title">Context &amp; Objectives</div>
+    <div class="page-sub">Why this engagement, and what it is designed to achieve</div>
+    <hr class="rule"/>
+
+    <p class="body">TIPS Globeducate has built a strong multi-campus presence across Tamil Nadu, Kerala, Karnataka, and Telangana — offering IB/IBDP, Cambridge IGCSE, CBSE, Kindercare, and Inclusive programmes. As the group scales under the Globeducate international network, the limitations of the current technology estate are becoming a structural constraint on growth, reporting, and the parent experience.</p>
+
+    <h2><span class="h2-num">2.1</span> Engagement Objectives</h2>
+    <div class="card">
+      <div class="card-body">
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px">
+          <li style="padding-left:20px;position:relative"><span style="position:absolute;left:0;color:var(--sky)">→</span> Replace six fragmented Vidyalaya ERP instances with a single TIPS Microsoft Custom ERP Solution implementation serving all campuses</li>
+          <li style="padding-left:20px;position:relative"><span style="position:absolute;left:0;color:var(--sky)">→</span> Integrate the group website (tipsglobeducate.com) with the ERP — enabling enquiry capture, admissions funnelling, and event data flow</li>
+          <li style="padding-left:20px;position:relative"><span style="position:absolute;left:0;color:var(--sky)">→</span> Deliver a consolidated group leadership dashboard across all eight campuses</li>
+          <li style="padding-left:20px;position:relative"><span style="position:absolute;left:0;color:var(--sky)">→</span> Migrate all student, fee, and academic data from existing Vidyalaya instances into TIPS ERP with zero data loss</li>
+          <li style="padding-left:20px;position:relative"><span style="position:absolute;left:0;color:var(--sky)">→</span> Establish N2P Systems as the primary managed service partner for all ERP and digital infrastructure needs post-go-live</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2><span class="h2-num">2.2</span> Key Challenges We Address</h2>
+    <table>
+      <thead><tr><th>Challenge</th><th>N2P Systems Response</th></tr></thead>
+      <tbody>
+        <tr><td class="td-label">6 siloed ERP instances, no group view</td><td>Single TIPS ERP implementation with multi-entity architecture and a consolidated leadership dashboard</td></tr>
+        <tr><td class="td-label">Website &amp; ERP completely disconnected</td><td>Phase 5 integration layer connecting tipsglobeducate.com enquiry flows directly into TIPS ERP CRM module</td></tr>
+        <tr><td class="td-label">No SMS / notification consolidation</td><td>Unified communications module within TIPS ERP — one platform, one audit trail</td></tr>
+        <tr><td class="td-label">Data migration risk across 6 instances</td><td>Structured Phase 1 data audit followed by phased migration with full rollback capability</td></tr>
+        <tr><td class="td-label">IB / IGCSE / CBSE curriculum complexity</td><td>Education-sector TIPS ERP templates with curriculum-specific academic calendar and timetable modules</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════ AS-IS IT LANDSCAPE (NEW) ══════════════════ -->
+  <div id="sec-asis" class="section">
+    <div class="page-title">As-Is IT Landscape</div>
+    <div class="page-sub">Current technology estate · Pre-engagement infrastructure analysis · March 2026</div>
+    <hr class="rule"/>
+
+    <div class="asis-intro">
+      <div class="asis-intro-icon">🔍</div>
+      <div class="asis-intro-text">
+        N2P Systems conducted a <strong>pre-engagement infrastructure analysis</strong> of TIPS Globeducate's publicly observable digital footprint prior to submitting this proposal. The findings below are based on live website analysis, portal enumeration, and published market data — giving both parties a shared, evidence-based view of the current state before any commercial commitment is made.
+      </div>
+    </div>
+
+    <!-- Spend summary metrics -->
+    <div class="metric-grid">
+      <div class="metric accent">
+        <div class="metric-val">₹38–62L</div>
+        <div class="metric-lbl">Estimated annual IT spend</div>
+        <div class="metric-sub">All 8 campuses · FY 2025–26</div>
+      </div>
+      <div class="metric warn">
+        <div class="metric-val">75%+</div>
+        <div class="metric-lbl">Spend on ERP alone</div>
+        <div class="metric-sub">Vidyalaya licences + AMC + SMS</div>
+      </div>
+      <div class="metric danger">
+        <div class="metric-val">0</div>
+        <div class="metric-lbl">Integrations between systems</div>
+        <div class="metric-sub">Website and ERP completely siloed</div>
+      </div>
+      <div class="metric ok">
+        <div class="metric-val">6 of 8</div>
+        <div class="metric-lbl">Campuses on Vidyalaya</div>
+        <div class="metric-sub">Confirmed via portal enumeration</div>
+      </div>
+    </div>
+
+    <!-- Silo warning -->
+    <div class="silo-banner">
+      <div class="silo-icon">⚠</div>
+      <div>
+        <div class="silo-text">Critical gap: website and ERP are completely disconnected</div>
+        <div class="silo-sub">Admissions enquiries, event sign-ups, and parent leads captured on tipsglobeducate.com do not flow into any ERP or CRM system. Every lead is manual, every follow-up is ad hoc.</div>
+      </div>
+    </div>
+
+    <!-- Current tech stack -->
+    <h2><span class="h2-num">3.1</span> Current Technology Stack</h2>
+    <div class="stack">
+      <div class="stack-row">
+        <div class="stack-layer">Public Website</div>
+        <div class="stack-items">
+          <span class="stack-chip known">WordPress CMS</span>
+          <span class="stack-chip known">tipsglobeducate.com</span>
+          <span class="stack-chip known">Managed hosting</span>
+          <span class="stack-chip known">CDN</span>
+          <span class="stack-chip gap">No enquiry-to-ERP link</span>
+          <span class="stack-chip gap">No analytics integration</span>
+        </div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-layer">School ERP / Portal</div>
+        <div class="stack-items">
+          <span class="stack-chip known">Vidyalaya School ERP</span>
+          <span class="stack-chip known">onlinevidyalaya.net (SaaS)</span>
+          <span class="stack-chip known">6 campus instances</span>
+          <span class="stack-chip gap">No group dashboard</span>
+          <span class="stack-chip gap">No cross-campus reporting</span>
+          <span class="stack-chip gap">No SSO / unified login</span>
+        </div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-layer">Communications</div>
+        <div class="stack-items">
+          <span class="stack-chip known">Bulk SMS gateway</span>
+          <span class="stack-chip known">Staff email (M365 / G Suite)</span>
+          <span class="stack-chip gap">No unified parent comms platform</span>
+          <span class="stack-chip gap">No WhatsApp automation</span>
+        </div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-layer">Payments</div>
+        <div class="stack-items">
+          <span class="stack-chip known">Online fee collection via Vidyalaya</span>
+          <span class="stack-chip known">Razorpay / PayU (likely)</span>
+          <span class="stack-chip gap">No consolidated fee reporting</span>
+        </div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-layer">Enterprise / BI</div>
+        <div class="stack-items">
+          <span class="stack-chip gap">No TIPS Microsoft Custom ERP Solution presence</span>
+          <span class="stack-chip gap">No BI / analytics layer</span>
+          <span class="stack-chip gap">No group-level data warehouse</span>
+          <span class="stack-chip gap">No admissions CRM</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:11px;color:var(--gray4);margin-bottom:20px"><span class="badge badge-sky">Blue</span> = confirmed &nbsp; <span class="badge badge-red">Red</span> = identified gap</p>
+
+    <!-- Cost breakdown bars -->
+    <h2><span class="h2-num">3.2</span> Estimated Annual IT Cost Breakdown</h2>
+    <div class="card" style="padding:20px 24px">
+      <div class="cost-bar-wrap"><div class="cost-bar-label">Vidyalaya ERP licences</div><div class="cost-bar-track"><div class="cost-bar-fill" style="width:78%;background:var(--navy)"></div></div><div class="cost-bar-val">₹29–48 L</div></div>
+      <div class="cost-bar-wrap"><div class="cost-bar-label">SMS / notifications</div><div class="cost-bar-track"><div class="cost-bar-fill" style="width:14%;background:var(--sky)"></div></div><div class="cost-bar-val">₹4.3–8.6 L</div></div>
+      <div class="cost-bar-wrap"><div class="cost-bar-label">Staff email (M365/GSuite)</div><div class="cost-bar-track"><div class="cost-bar-fill" style="width:8%;background:var(--sky)"></div></div><div class="cost-bar-val">₹2.4–4.8 L</div></div>
+      <div class="cost-bar-wrap"><div class="cost-bar-label">IT support / AMC</div><div class="cost-bar-track"><div class="cost-bar-fill" style="width:6%;background:var(--gray3)"></div></div><div class="cost-bar-val">₹2–4 L</div></div>
+      <div class="cost-bar-wrap"><div class="cost-bar-label">Website hosting</div><div class="cost-bar-track"><div class="cost-bar-fill" style="width:3%;background:var(--gray3)"></div></div><div class="cost-bar-val">₹0.8–1.8 L</div></div>
+      <div class="cost-bar-wrap"><div class="cost-bar-label">Hardware / GPS / domain</div><div class="cost-bar-track"><div class="cost-bar-fill" style="width:2%;background:var(--gray3)"></div></div><div class="cost-bar-val">₹0.8–2.5 L</div></div>
+      <div style="border-top:1px solid var(--gray2);margin-top:12px;padding-top:12px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:12px;color:var(--gray4)">Total estimated annual IT spend</span>
+        <span style="font-size:16px;font-weight:700;color:var(--navy)">₹38–62 Lakhs / year</span>
+      </div>
+    </div>
+    <p style="font-size:11px;color:var(--gray4);margin-bottom:20px">Based on published market rates for Vidyalaya ERP (₹100–500/student/year), estimated 600–800 students/campus avg., and standard SaaS pricing for ancillary tools. A detailed cost confirmation will be conducted in Phase 1.</p>
+
+    <!-- Campus portal inventory -->
+    <h2><span class="h2-num">3.3</span> Campus Portal Inventory</h2>
+    <div class="campus-grid">
+      <div class="campus-card"><div class="campus-dot live"></div><div><div class="campus-name">Coimbatore</div><div class="campus-url">tipsgcoimbatore.onlinevidyalaya.net</div></div><div class="campus-state">TN</div></div>
+      <div class="campus-card"><div class="campus-dot live"></div><div><div class="campus-name">Chennai</div><div class="campus-url">tipsgchennai.onlinevidyalaya.net</div></div><div class="campus-state">TN</div></div>
+      <div class="campus-card"><div class="campus-dot live"></div><div><div class="campus-name">Tirupur</div><div class="campus-url">tipsgtirupur.onlinevidyalaya.net</div></div><div class="campus-state">TN</div></div>
+      <div class="campus-card"><div class="campus-dot live"></div><div><div class="campus-name">Karur</div><div class="campus-url">tipsgkarur.onlinevidyalaya.net</div></div><div class="campus-state">TN</div></div>
+      <div class="campus-card"><div class="campus-dot live"></div><div><div class="campus-name">Kochi</div><div class="campus-url">tipsgkochi.onlinevidyalaya.net</div></div><div class="campus-state">KL</div></div>
+      <div class="campus-card"><div class="campus-dot live"></div><div><div class="campus-name">Madurai</div><div class="campus-url">tipsgmadurai.onlinevidyalaya.net</div></div><div class="campus-state">TN</div></div>
+      <div class="campus-card"><div class="campus-dot tbc"></div><div><div class="campus-name">Bengaluru</div><div class="campus-url">Portal not linked on homepage</div></div><div class="campus-state">KA</div></div>
+      <div class="campus-card"><div class="campus-dot tbc"></div><div><div class="campus-name">Hyderabad</div><div class="campus-url">Portal not linked on homepage</div></div><div class="campus-state">TS</div></div>
+    </div>
+    <p style="font-size:11px;color:var(--gray4);margin-bottom:20px"><span style="display:inline-flex;align-items:center;gap:5px"><span class="campus-dot live" style="display:inline-block"></span> Live &amp; confirmed</span> &nbsp;&nbsp; <span style="display:inline-flex;align-items:center;gap:5px"><span class="campus-dot tbc" style="display:inline-block"></span> Requires verification in Phase 1</span></p>
+
+    <!-- Why this matters -->
+    <h2><span class="h2-num">3.4</span> Why This As-Is State Makes the Case for TIPS ERP</h2>
+    <div class="opportunity-grid">
+      <div class="opp-card">
+        <div class="opp-title">Vidyalaya is a displacement candidate</div>
+        <div class="opp-body">Vidyalaya is a mid-market Gujarat SaaS ERP built for standalone schools, not multi-campus international school groups. As TIPS Globeducate scales under Globeducate network, it will outgrow Vidyalaya's architectural ceiling within 2–3 years.</div>
+      </div>
+      <div class="opp-card amber">
+        <div class="opp-title">The silo gap is a boardroom problem</div>
+        <div class="opp-body">TIPS leadership currently has no consolidated view of group enrolment, fee collection, staff headcount, or academic KPIs. Six independent Vidyalaya portals generate six independent reports with no roll-up — a problem TIPS ERP solves on day one of go-live.</div>
+      </div>
+      <div class="opp-card red">
+        <div class="opp-title">Every admissions lead is leaking</div>
+        <div class="opp-body">Enquiry forms on tipsglobeducate.com have no downstream system. Every parent who fills an enquiry form on the website goes into a manual process — or is lost. A TIPS ERP CRM module integration captures and qualifies every lead automatically.</div>
+      </div>
+      <div class="opp-card green">
+        <div class="opp-title">Current spend funds the ROI argument</div>
+        <div class="opp-body">At ₹38–62 L/year on fragmented, siloed tools, a TIPS ERP implementation that consolidates ERP, comms, and website integration can be positioned as cost-neutral at scale — especially as Vidyalaya licences are phased out post-migration.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ GAPS ══════════════════ -->
+  <div id="sec-gaps" class="section">
+    <div class="page-title">Gaps &amp; Opportunities</div>
+    <div class="page-sub">Specific technology gaps identified in the pre-engagement analysis</div>
+    <hr class="rule"/>
+    <table>
+      <thead><tr><th>Gap</th><th>Severity</th><th>Business Impact</th><th>N2P Resolution</th></tr></thead>
+      <tbody>
+        <tr class="risk-h"><td class="td-label">No website-to-ERP data flow</td><td><span class="gap-sev gap-crit">CRITICAL</span></td><td>All online enquiries and admissions leads are lost or handled manually</td><td>Phase 5 integration layer</td></tr>
+        <tr class="risk-h"><td class="td-label">6 isolated ERP instances, no group view</td><td><span class="gap-sev gap-crit">CRITICAL</span></td><td>Leadership has no consolidated reporting across campuses</td><td>Single TIPS ERP multi-entity implementation</td></tr>
+        <tr class="risk-m"><td class="td-label">No SSO / unified parent login</td><td><span class="gap-sev gap-high">HIGH</span></td><td>Parents with children at multiple campuses need separate credentials</td><td>Azure AD B2C SSO in Phase 2</td></tr>
+        <tr class="risk-m"><td class="td-label">No admissions CRM</td><td><span class="gap-sev gap-high">HIGH</span></td><td>No pipeline visibility; no nurturing of prospective families</td><td>TIPS ERP CRM module module in Phase 2</td></tr>
+        <tr><td class="td-label">No BI / analytics layer</td><td><span class="gap-sev gap-med">MEDIUM</span></td><td>No data-driven decision support for management</td><td>Power BI dashboards in Phase 3</td></tr>
+        <tr><td class="td-label">No WhatsApp / digital comms platform</td><td><span class="gap-sev gap-med">MEDIUM</span></td><td>Bulk SMS is costly and one-way; parents expect richer engagement</td><td>WhatsApp Business API integration in Phase 3</td></tr>
+        <tr><td class="td-label">Bengaluru &amp; Hyderabad portal status unknown</td><td><span class="gap-sev gap-med">MEDIUM</span></td><td>2 campuses may be on different or legacy systems</td><td>Phase 1 discovery will confirm</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════ SCOPE ══════════════════ -->
+  <div id="sec-scope" class="section">
+    <div class="page-title">Scope of Services</div>
+    <div class="page-sub">What N2P Systems will deliver across the five-phase engagement</div>
+    <hr class="rule"/>
+    <table>
+      <thead><tr><th>#</th><th>Module</th><th>Key Deliverables</th><th>Phase</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="td-label">ERP Discovery &amp; As-Is Audit</td><td>Current state documentation, data inventory, gap register, Phase 2–5 scoping</td><td><span class="badge badge-navy">Phase 1</span></td></tr>
+        <tr><td>2</td><td class="td-label">TIPS Microsoft Custom ERP Solution Implementation</td><td>Multi-campus ERP, fee management, HR/payroll, academic scheduling, parent portal</td><td><span class="badge badge-navy">Phase 2</span></td></tr>
+        <tr><td>3</td><td class="td-label">Data Migration</td><td>All student, fee, and academic data migrated from 6+ Vidyalaya instances to TIPS ERP</td><td><span class="badge badge-navy">Phase 2–3</span></td></tr>
+        <tr><td>4</td><td class="td-label">Group Leadership Dashboard</td><td>Power BI dashboards with real-time KPIs across all 8 campuses</td><td><span class="badge badge-navy">Phase 3</span></td></tr>
+        <tr><td>5</td><td class="td-label">Website Integration</td><td>tipsglobeducate.com enquiry forms, event sign-ups, and admissions flows connected to TIPS ERP CRM module</td><td><span class="badge badge-navy">Phase 5</span></td></tr>
+        <tr><td>6</td><td class="td-label">Training &amp; Handover</td><td>Role-based training for admin, teaching, and finance staff across all campuses</td><td><span class="badge badge-navy">Phase 4</span></td></tr>
+        <tr><td>7</td><td class="td-label">Managed Service</td><td>Post-go-live support, SLA-backed incident management, quarterly reviews</td><td><span class="badge badge-navy">Ongoing</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════ PHASES ══════════════════ -->
+  <div id="sec-phases" class="section">
+    <div class="page-title">Delivery Phases</div>
+    <div class="page-sub">Five structured phases from discovery through to managed service</div>
+    <hr class="rule"/>
+    <div class="phases">
+      <div class="phase">
+        <div class="phase-head"><div class="phase-num">1</div><div class="phase-title">Discovery &amp; As-Is Audit</div><div class="phase-dur">Weeks 1–4 · Fixed scope</div></div>
+        <div class="phase-body">
+          <div class="phase-desc">Confirm the current state — validate the infrastructure analysis, complete the campus inventory, and produce the detailed scoping brief that drives all subsequent commercial commitments.</div>
+          <div class="phase-items">
+            <div class="phase-item">Confirm student headcount and ERP usage across all 8 campuses</div>
+            <div class="phase-item">Validate Bengaluru and Hyderabad portal and system status</div>
+            <div class="phase-item">Extract and catalogue all Vidyalaya data schemas and reports in use</div>
+            <div class="phase-item">Document all business processes: fee cycles, admissions, academic calendars</div>
+            <div class="phase-item">Define integration requirements for tipsglobeducate.com (Phase 5 scoping)</div>
+            <div class="phase-item">Produce detailed SOW, data migration plan, and confirmed pricing for Phases 2–5</div>
+          </div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-head"><div class="phase-num">2</div><div class="phase-title">TIPS Microsoft Custom ERP Solution Implementation</div><div class="phase-dur">Months 2–6 · Scope TBD post Phase 1</div></div>
+        <div class="phase-body">
+          <div class="phase-desc">Deploy the TIPS Microsoft Custom ERP Solution multi-entity ERP covering all eight campuses — the structural backbone of the transformation.</div>
+          <div class="phase-items">
+            <div class="phase-item">Multi-campus TIPS ERP environment configuration</div>
+            <div class="phase-item">Fee management, HR/payroll, and procurement modules</div>
+            <div class="phase-item">Academic scheduling and timetable configuration (IB / IGCSE / CBSE)</div>
+            <div class="phase-item">Parent portal with unified SSO via Azure AD B2C</div>
+            <div class="phase-item">Cybersecurity baseline: endpoint protection, email security</div>
+          </div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-head"><div class="phase-num">3</div><div class="phase-title">Data Migration &amp; Analytics</div><div class="phase-dur">Months 4–8 · Scope TBD post Phase 1</div></div>
+        <div class="phase-body">
+          <div class="phase-desc">Migrate all historical data from six Vidyalaya instances into TIPS ERP, and deliver the group-level Power BI dashboard for leadership.</div>
+          <div class="phase-items">
+            <div class="phase-item">Phased data migration: student records, fee history, HR data, academic records</div>
+            <div class="phase-item">Data validation and reconciliation against Vidyalaya source</div>
+            <div class="phase-item">Power BI group dashboard — enrolment, fee collection, headcount, academic KPIs</div>
+            <div class="phase-item">WhatsApp Business API integration for parent communications</div>
+          </div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-head"><div class="phase-num">4</div><div class="phase-title">Training, UAT &amp; Go-Live</div><div class="phase-dur">Months 7–9 · Scope TBD post Phase 1</div></div>
+        <div class="phase-body">
+          <div class="phase-desc">Train all stakeholders, validate the system against real business scenarios, and go live — Vidyalaya decommissioned, TIPS ERP primary.</div>
+          <div class="phase-items">
+            <div class="phase-item">Role-based training: admin staff, finance, teaching, campus principals</div>
+            <div class="phase-item">User acceptance testing against all documented business processes</div>
+            <div class="phase-item">Parallel run period (TIPS ERP + Vidyalaya) for fee cycle validation</div>
+            <div class="phase-item">Phased go-live: Coimbatore and Chennai first, then remaining campuses</div>
+            <div class="phase-item">Vidyalaya decommission sign-off and licence cancellation planning</div>
+          </div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-head"><div class="phase-num">5</div><div class="phase-title">Website Integration</div><div class="phase-dur">Months 8–10 · Scope TBD post Phase 1</div></div>
+        <div class="phase-body">
+          <div class="phase-desc">Connect tipsglobeducate.com to TIPS ERP — closing the largest single gap in the current estate: the complete absence of any enquiry-to-ERP data flow.</div>
+          <div class="phase-items">
+            <div class="phase-item">Admissions enquiry form → TIPS ERP CRM module lead capture (all campuses)</div>
+            <div class="phase-item">Event registrations on website → TIPS ERP event module</div>
+            <div class="phase-item">News and gallery content → automated ERP content sync</div>
+            <div class="phase-item">Campus page data (fees, curriculum, calendar) → live from TIPS ERP</div>
+            <div class="phase-item">Real-time admissions funnel dashboard for marketing and campus heads</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ CREDENTIALS ══════════════════ -->
+  <div id="sec-credentials" class="section">
+    <div class="page-title">N2P Systems — Credentials</div>
+    <div class="page-sub">Why N2P Systems is the right partner for this engagement</div>
+    <hr class="rule"/>
+
+    <div class="card card-navy" style="margin-bottom:20px">
+      <div style="font-size:13px;color:rgba(255,255,255,.75);line-height:1.7">N2P Systems Pvt. Ltd. is a Chennai-based IT solutions and consulting firm with a proven track record in enterprise ERP implementation, TIPS Microsoft Custom ERP Solution deployments, and managed IT services for education and enterprise clients across South India.</div>
+    </div>
+
+    <h2><span class="h2-num">6.1</span> Microsoft Expertise</h2>
+    <div class="card"><div class="card-body"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px">
+      <li style="padding-left:18px;position:relative"><span style="position:absolute;left:0;color:var(--sky)">✓</span> Certified Microsoft Partner with deep expertise in TIPS Microsoft Custom ERP Solution and Business Central</li>
+      <li style="padding-left:18px;position:relative"><span style="position:absolute;left:0;color:var(--sky)">✓</span> Experienced in multi-campus, multi-entity ERP implementations for education sector clients</li>
+      <li style="padding-left:18px;position:relative"><span style="position:absolute;left:0;color:var(--sky)">✓</span> Azure AD B2C for SSO, Power BI for analytics, Power Automate for workflow integration</li>
+      <li style="padding-left:18px;position:relative"><span style="position:absolute;left:0;color:var(--sky)">✓</span> WordPress-to-TIPS ERP API integration experience (directly relevant to Phase 5)</li>
+    </ul></div></div>
+
+    <h2><span class="h2-num">6.2</span> Education Sector Understanding</h2>
+    <div class="card"><div class="card-body"><ul style="list-style:none;display:flex;flex-direction:column;gap:6px">
+      <li style="padding-left:18px;position:relative"><span style="position:absolute;left:0;color:var(--sky)">✓</span> Deep familiarity with IB, IGCSE, and CBSE academic calendars and fee structures</li>
+      <li style="padding-left:18px;position:relative"><span style="position:absolute;left:0;color:var(--sky)">✓</span> Experience with school ERP migration projects from legacy SaaS platforms</li>
+      <li style="padding-left:18px;position:relative"><span style="position:absolute;left:0;color:var(--sky)">✓</span> Understanding of parent portal UX expectations in the premium school segment</li>
+    </ul></div></div>
+
+    <h2><span class="h2-num">6.3</span> Pre-Engagement Initiative</h2>
+    <div class="card card-sky">
+      <div class="card-title">We did the homework before the meeting</div>
+      <div class="card-body">N2P Systems conducted a full infrastructure analysis of tipsglobeducate.com prior to this proposal — identifying the ERP platform, all six campus portal URLs, the estimated annual IT cost (₹38–62 L), and the critical integration gap between the website and the ERP. This As-Is analysis (Section 3) was produced entirely as a pre-engagement investment, at no cost to TIPS Globeducate, to demonstrate our commitment and accelerate the scoping conversation.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ COMMERCIAL ══════════════════ -->
+  <div id="sec-commercial" class="section">
+    <div class="page-title">Pricing &amp; Commercial Terms</div>
+    <div class="page-sub">Milestone-based framework · Full pricing confirmed post Phase 1 scoping</div>
+    <hr class="rule"/>
+
+    <div class="card card-amber">
+      <div class="card-title">Commercial approach</div>
+      <div class="card-body">Given the multi-campus complexity and the range of variables that Phase 1 will confirm (student headcount, data migration complexity, Bengaluru/Hyderabad scope), N2P Systems proposes a <strong>two-stage commercial model</strong>: Phase 1 at a fixed price, with Phases 2–5 scoped and priced definitively upon delivery of the Phase 1 output. This protects both parties from under-scoping a multi-crore programme.</div>
+    </div>
+
+    <table>
+      <thead><tr><th>Phase</th><th>Scope</th><th>Pricing</th><th>Type</th></tr></thead>
+      <tbody>
+        <tr><td class="td-label">Phase 1 — Discovery &amp; Audit</td><td>Full As-Is audit, data inventory, scoping brief, confirmed SOW for Phases 2–5</td><td class="price-hi">To be confirmed</td><td><span class="badge badge-sky">Fixed price</span></td></tr>
+        <tr><td class="td-label">Phase 2 — TIPS ERP Implementation</td><td>Multi-campus ERP deployment, parent portal, SSO</td><td class="price-tbd">TBD post Phase 1</td><td><span class="badge badge-amber">Milestone</span></td></tr>
+        <tr><td class="td-label">Phase 3 — Data Migration &amp; Analytics</td><td>Full data migration from 6+ Vidyalaya instances, Power BI dashboards</td><td class="price-tbd">TBD post Phase 1</td><td><span class="badge badge-amber">Milestone</span></td></tr>
+        <tr><td class="td-label">Phase 4 — Training &amp; Go-Live</td><td>UAT, role-based training, parallel run, Vidyalaya decommission</td><td class="price-tbd">TBD post Phase 1</td><td><span class="badge badge-amber">Milestone</span></td></tr>
+        <tr><td class="td-label">Phase 5 — Website Integration</td><td>tipsglobeducate.com ↔ TIPS ERP CRM module integration, admissions funnel</td><td class="price-tbd">TBD post Phase 1</td><td><span class="badge badge-amber">Milestone</span></td></tr>
+        <tr class="tr-total"><td>Managed Service (post go-live)</td><td>SLA-backed support, quarterly reviews, continuous improvement</td><td class="price-tbd">TBD post Phase 1</td><td><span class="badge badge-green">Annual</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="card card-sky" style="margin-top:8px">
+      <div class="card-title">ROI framing</div>
+      <div class="card-body">TIPS Globeducate currently spends an estimated ₹38–62 L/year on fragmented, siloed IT tools. A TIPS ERP implementation that consolidates ERP, comms, analytics, and website integration — and phases out Vidyalaya licences — is expected to be cost-neutral at scale within 2–3 years of go-live, before accounting for revenue uplift from improved admissions conversion.</div>
+    </div>
+    <p style="font-size:11px;color:var(--gray4);margin-top:8px">All prices exclusive of GST. Third-party software licences (TIPS Microsoft Custom ERP Solution, Power BI Premium) billed at cost. Travel and on-site expenses billed at actuals with prior written approval.</p>
+  </div>
+
+  <!-- ══════════════════ RISKS ══════════════════ -->
+  <div id="sec-risks" class="section">
+    <div class="page-title">Risk Register</div>
+    <div class="page-sub">Key risks identified and N2P Systems' mitigation approach</div>
+    <hr class="rule"/>
+    <table>
+      <thead><tr><th>Risk</th><th>Likelihood</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr class="risk-h"><td class="td-label">Data loss or corruption during Vidyalaya migration</td><td><span class="gap-sev gap-crit">HIGH</span></td><td>Full Vidyalaya database backup before any migration activity; staging environment migration validated before production cutover</td></tr>
+        <tr class="risk-h"><td class="td-label">Undocumented business logic in Vidyalaya</td><td><span class="gap-sev gap-crit">HIGH</span></td><td>Phase 1 structured interviews with power users at each campus; all logic documented and tested against real scenarios before Vidyalaya is decommissioned</td></tr>
+        <tr class="risk-m"><td class="td-label">Bengaluru / Hyderabad on different system</td><td><span class="gap-sev gap-high">MEDIUM</span></td><td>Phase 1 discovery will confirm; scope and timeline adjusted accordingly before Phase 2 commitment</td></tr>
+        <tr class="risk-m"><td class="td-label">Staff resistance to new ERP</td><td><span class="gap-sev gap-high">MEDIUM</span></td><td>Change management programme baked into Phase 4; campus champions identified and trained first to drive peer adoption</td></tr>
+        <tr><td class="td-label">Academic calendar disruption during go-live</td><td><span class="gap-sev gap-med">LOW</span></td><td>Go-live scheduled outside term-end and fee-collection windows; parallel run ensures continuity throughout</td></tr>
+        <tr><td class="td-label">TIPS Microsoft Custom ERP Solution licence cost overrun</td><td><span class="gap-sev gap-med">LOW</span></td><td>Licence model confirmed in Phase 1 scoping; cost passed through at actual Microsoft pricing with no markup</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════ SIGNOFF ══════════════════ -->
+  <div id="sec-signoff" class="section">
+    <div class="page-title">Proposal Acceptance</div>
+    <div class="page-sub">Formalise the Phase 1 engagement and commence discovery</div>
+    <hr class="rule"/>
+
+    <p class="body">Acceptance of this proposal authorises N2P Systems Pvt. Ltd. to commence Phase 1 — the Discovery &amp; As-Is Audit — under the commercial terms to be finalised in the accompanying Statement of Work. Full pricing for Phases 2–5 will be confirmed and presented for separate approval upon delivery of the Phase 1 output.</p>
+
+    <div class="card card-sky" style="margin-bottom:24px">
+      <div class="card-title">What happens next</div>
+      <div class="card-body">
+        1. Both parties sign the Phase 1 SOW &nbsp;→&nbsp;
+        2. N2P kick-off meeting within 5 business days &nbsp;→&nbsp;
+        3. Phase 1 audit commences (Weeks 1–4) &nbsp;→&nbsp;
+        4. Phase 1 output: full scoping brief + confirmed Phases 2–5 pricing presented for approval
+      </div>
+    </div>
+
+    <div class="sign-grid">
+      <div class="sign-box">
+        <div class="sign-label">For N2P Systems Pvt. Ltd.</div>
+        <div class="sign-line"></div>
+        <div class="sign-name">Authorised Signatory · Date</div>
+      </div>
+      <div class="sign-box">
+        <div class="sign-label">For TIPS Globeducate India</div>
+        <div class="sign-line"></div>
+        <div class="sign-name">Authorised Signatory · Date</div>
+      </div>
+    </div>
+
+    <button class="btn-accept" onclick="acceptProposal()">Proceed to Phase 1 — Confirm Acceptance</button>
+
+    <p style="font-size:11px;color:var(--gray4);text-align:center;margin-top:16px">Acceptance of this proposal constitutes agreement to proceed with Phase 1 under a formal Statement of Work. All prices exclusive of GST. This document is confidential and intended solely for TIPS Globeducate India.</p>
+  </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+const sections = {
+  cover:       { id:'sec-cover',       label:'Cover &amp; Summary' },
+  context:     { id:'sec-context',     label:'Context &amp; Objectives' },
+  asis:        { id:'sec-asis',        label:'As-Is IT Landscape' },
+  gaps:        { id:'sec-gaps',        label:'Gaps &amp; Opportunities' },
+  scope:       { id:'sec-scope',       label:'Scope of Services' },
+  phases:      { id:'sec-phases',      label:'Delivery Phases' },
+  credentials: { id:'sec-credentials', label:'N2P Credentials' },
+  commercial:  { id:'sec-commercial',  label:'Pricing &amp; Terms' },
+  risks:       { id:'sec-risks',       label:'Risk Register' },
+  signoff:     { id:'sec-signoff',     label:'Proposal Acceptance' },
+};
+function show(key, el) {
+  Object.values(sections).forEach(s => document.getElementById(s.id).classList.remove('active'));
+  document.getElementById(sections[key].id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('breadcrumb').innerHTML = sections[key].label;
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+function acceptProposal() {
+  const btn = document.querySelector('.btn-accept');
+  btn.textContent = '✓  Accepted — N2P Systems will be in touch within 1 business day';
+  btn.style.background = 'var(--green)';
+  btn.disabled = true;
+}
+</script>
+</body>
+</html>
