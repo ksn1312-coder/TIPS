@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#1a365d">
+    <title>TIPS ICMS Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --primary-light: #2d5a8c;
+            --secondary: #f59e0b;
+            --accent: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-light: #f8fafc;
+            --text-dark: #0f172a;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body.dark-mode {
+            background: var(--bg-dark);
+            color: var(--text-light);
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--secondary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.25rem;
+        }
+
+        .icon-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: sticky;
+            top: 72px;
+            z-index: 999;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        body.dark-mode .nav-container {
+            background: var(--bg-card);
+            border-bottom-color: var(--border);
+        }
+
+        .nav {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            white-space: nowrap;
+        }
+
+        .nav-btn {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        body.dark-mode .nav-btn {
+            border-color: var(--border);
+            color: var(--text-light);
+        }
+
+        .nav-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px var(--shadow);
+            border: 1px solid #e2e8f0;
+        }
+
+        body.dark-mode .card {
+            background: var(--bg-card);
+            border-color: var(--border);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        body.dark-mode .card-header {
+            border-bottom-color: var(--border);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--gradient-1);
+            color: white;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        body.dark-mode .card-title {
+            color: var(--text-light);
+        }
+
+        .card-content h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--primary-light);
+        }
+
+        body.dark-mode .card-content h3 {
+            color: var(--secondary);
+        }
+
+        .card-content p {
+            margin-bottom: 1rem;
+            color: #475569;
+        }
+
+        body.dark-mode .card-content p {
+            color: #cbd5e1;
+        }
+
+        .card-content ul, .card-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-content li {
+            margin-bottom: 0.5rem;
+            color: #475569;
+        }
+
+        body.dark-mode .card-content li {
+            color: #cbd5e1;
+        }
+
+        /* Module Grid */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .module-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        body.dark-mode .module-card {
+            background: var(--bg-card);
+            border-color: var(--border);
+        }
+
+        .module-card:active {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .module-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        body.dark-mode .module-card h4 {
+            color: var(--text-light);
+        }
+
+        .module-card p {
+            font-size: 0.875rem;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        body.dark-mode .module-card p {
+            color: #94a3b8;
+        }
+
+        .module-emoji {
+            font-size: 1.5rem;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin: 0.25rem;
+        }
+
+        .status-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        body.dark-mode .status-info {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+        }
+
+        body.dark-mode .status-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+        }
+
+        body.dark-mode .status-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+
+        body.dark-mode .status-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* Feature List */
+        .feature-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        body.dark-mode .feature-item {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-content h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--primary);
+        }
+
+        body.dark-mode .feature-content h4 {
+            color: var(--text-light);
+        }
+
+        .feature-content p {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        body.dark-mode .feature-content p {
+            color: #94a3b8;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        body.dark-mode .table-container {
+            border-color: var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--primary);
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        body.dark-mode th {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-light);
+            border-bottom-color: var(--border);
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+        }
+
+        body.dark-mode td {
+            border-bottom-color: var(--border);
+            color: #cbd5e1;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Search */
+        .search-container {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .search-input {
+            background: var(--bg-card);
+            border-color: var(--border);
+            color: var(--text-light);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 54, 93, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.25rem;
+        }
+
+        /* Accordion */
+        .accordion-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+
+        body.dark-mode .accordion-item {
+            border-color: var(--border);
+        }
+
+        .accordion-header {
+            padding: 1rem;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .accordion-header {
+            background: var(--bg-card);
+            color: var(--text-light);
+        }
+
+        .accordion-header:active {
+            background: #f8fafc;
+        }
+
+        body.dark-mode .accordion-header:active {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .accordion-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+        }
+
+        body.dark-mode .accordion-content {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .accordion-item.active .accordion-content {
+            max-height: 2000px;
+        }
+
+        .accordion-body {
+            padding: 1rem;
+            color: #475569;
+        }
+
+        body.dark-mode .accordion-body {
+            color: #cbd5e1;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem;
+            box-shadow: 0 -2px 10px var(--shadow);
+            z-index: 1000;
+        }
+
+        body.dark-mode .bottom-nav {
+            background: var(--bg-card);
+            border-top-color: var(--border);
+        }
+
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 80px;
+            border-radius: 8px;
+        }
+
+        .bottom-nav-item:active {
+            background: #f8fafc;
+            transform: scale(0.95);
+        }
+
+        body.dark-mode .bottom-nav-item:active {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .bottom-nav-item.active {
+            color: var(--primary);
+        }
+
+        .bottom-nav-icon {
+            font-size: 1.5rem;
+        }
+
+        .bottom-nav-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Padding for bottom nav */
+        .content-wrapper {
+            padding-bottom: 80px;
+        }
+
+        /* Code Block */
+        code {
+            background: #f1f5f9;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.875rem;
+            color: #e11d48;
+        }
+
+        body.dark-mode code {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fda4af;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .bottom-nav {
+                display: none;
+            }
+
+            .content-wrapper {
+                padding-bottom: 1rem;
+            }
+
+            .module-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Highlight */
+        .highlight {
+            background: linear-gradient(120deg, #fef3c7 0%, #fef3c7 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 90%;
+            padding: 0 0.25rem;
+        }
+
+        body.dark-mode .highlight {
+            background: linear-gradient(120deg, rgba(245, 158, 11, 0.3) 0%, rgba(245, 158, 11, 0.3) 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 90%;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-dark);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">TI</div>
+                <span>TIPS ICMS</span>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="toggleSearch()" title="Search">
+                    🔍
+                </button>
+                <button class="icon-btn" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+                    🌓
+                </button>
+                <button class="icon-btn" onclick="shareDoc()" title="Share">
+                    📤
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <div class="nav-container">
+        <div class="nav">
+            <button class="nav-btn active" onclick="showSection('overview')">Overview</button>
+            <button class="nav-btn" onclick="showSection('modules')">Modules</button>
+            <button class="nav-btn" onclick="showSection('call-mgmt')">Call Management</button>
+            <button class="nav-btn" onclick="showSection('features')">Features</button>
+            <button class="nav-btn" onclick="showSection('technical')">Technical</button>
+            <button class="nav-btn" onclick="showSection('best-practices')">Best Practices</button>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Search (Initially Hidden) -->
+            <div class="search-container" id="searchContainer" style="display: none;">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search documentation..." oninput="handleSearch()">
+            </div>
+
+            <!-- Overview Section -->
+            <section id="overview" class="section active">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🎯</div>
+                        <h2 class="card-title">Executive Summary</h2>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>TIPS ICMS (Integrated Campus Management System)</strong> is a comprehensive enterprise solution designed for educational institutions to manage all aspects of campus operations.</p>
+                        
+                        <div class="feature-list">
+                            <div class="feature-item">
+                                <div class="feature-icon">📊</div>
+                                <div class="feature-content">
+                                    <h4>Centralized Management</h4>
+                                    <p>Single source of truth for all campus information and operations</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">⚡</div>
+                                <div class="feature-content">
+                                    <h4>Process Automation</h4>
+                                    <p>Streamlined workflows for routine administrative tasks</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">📈</div>
+                                <div class="feature-content">
+                                    <h4>Real-time Tracking</h4>
+                                    <p>Monitor issues, attendance, and activities as they happen</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">🔒</div>
+                                <div class="feature-content">
+                                    <h4>Role-based Security</h4>
+                                    <p>Secure, permission-based system access for all users</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>System Information</h3>
+                        <div class="table-container">
+                            <table>
+                                <tr>
+                                    <td><strong>Version</strong></td>
+                                    <td>Enterprise Edition</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Copyright</strong></td>
+                                    <td>© TIPS, 2012</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Deployment</strong></td>
+                                    <td>Web-based Application</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Access Control</strong></td>
+                                    <td>Role-based Authentication</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-2);">💡</div>
+                        <h2 class="card-title">Key Benefits</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>Unified Platform:</strong> Manage students, staff, academics, and administration from one system</li>
+                            <li><strong>Improved Efficiency:</strong> Reduce manual work through automation and workflows</li>
+                            <li><strong>Better Communication:</strong> Integrated notification system for all stakeholders</li>
+                            <li><strong>Data-Driven Decisions:</strong> Comprehensive reporting and analytics capabilities</li>
+                            <li><strong>Scalable Solution:</strong> Grows with your institution's needs</li>
+                            <li><strong>Mobile Access:</strong> Access from anywhere on any device</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Modules Section -->
+            <section id="modules" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-3);">🧩</div>
+                        <h2 class="card-title">System Modules</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>TIPS ICMS includes <span class="highlight">30+ integrated modules</span> covering all aspects of campus management:</p>
+                    </div>
+                </div>
+
+                <div class="module-grid">
+                    <div class="module-card" onclick="showModuleDetails('hr')">
+                        <h4><span class="module-emoji">👥</span> HR Management</h4>
+                        <p>Employee records, personnel tracking, and performance management</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('cbse')">
+                        <h4><span class="module-emoji">📚</span> CBSE CRMS</h4>
+                        <p>Curriculum planning, academic records, and CBSE compliance</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('account')">
+                        <h4><span class="module-emoji">💰</span> Account</h4>
+                        <p>Financial operations, fee management, and expense tracking</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('staff')">
+                        <h4><span class="module-emoji">👔</span> Staff Management</h4>
+                        <p>Staff profiles, department assignments, and role management</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('admission')">
+                        <h4><span class="module-emoji">🎓</span> Admission</h4>
+                        <p>Application processing, document verification, and workflows</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('call')">
+                        <h4><span class="module-emoji">📞</span> Call Management</h4>
+                        <p>Issue tracking, support tickets, and SLA monitoring</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('reports')">
+                        <h4><span class="module-emoji">📊</span> Reports</h4>
+                        <p>Pre-built templates, custom reports, and analytics</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('assessment')">
+                        <h4><span class="module-emoji">📝</span> Assessment</h4>
+                        <p>Exam scheduling, grade entry, and report cards</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('asset')">
+                        <h4><span class="module-emoji">🏢</span> Asset</h4>
+                        <p>Physical asset tracking, maintenance, and depreciation</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('store')">
+                        <h4><span class="module-emoji">📦</span> Store</h4>
+                        <p>Inventory management, purchase orders, and vendors</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('transport')">
+                        <h4><span class="module-emoji">🚌</span> Transport</h4>
+                        <p>Route management, vehicle tracking, and driver assignment</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('attendance')">
+                        <h4><span class="module-emoji">✅</span> Student Attendance</h4>
+                        <p>Daily attendance, absence tracking, and notifications</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('notification')">
+                        <h4><span class="module-emoji">🔔</span> Notification</h4>
+                        <p>SMS, email, and in-app notifications for stakeholders</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('hostel')">
+                        <h4><span class="module-emoji">🏠</span> Hostel</h4>
+                        <p>Room allocation, mess management, and fee tracking</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('employee')">
+                        <h4><span class="module-emoji">👨‍💼</span> Employee</h4>
+                        <p>Employee records, leave management, and payroll integration</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('fees')">
+                        <h4><span class="module-emoji">💳</span> Fees</h4>
+                        <p>Fee structure, payment collection, and receipt generation</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('class')">
+                        <h4><span class="module-emoji">🎒</span> Class Room</h4>
+                        <p>Room allocation, schedule management, and resource booking</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('alumni')">
+                        <h4><span class="module-emoji">🎉</span> Alumni</h4>
+                        <p>Alumni database, event management, and communication</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('training')">
+                        <h4><span class="module-emoji">📖</span> Staff Training</h4>
+                        <p>Training programs, enrollment, and certifications</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('career')">
+                        <h4><span class="module-emoji">🎯</span> Career CMS</h4>
+                        <p>Career guidance, counseling, and placement tracking</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('eticket')">
+                        <h4><span class="module-emoji">🎫</span> E-Ticket</h4>
+                        <p>Support ticket management and resolution tracking</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('circular')">
+                        <h4><span class="module-emoji">📄</span> Circular Documents</h4>
+                        <p>Document distribution, acknowledgment, and archive</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('social')">
+                        <h4><span class="module-emoji">📱</span> Social Media</h4>
+                        <p>Post scheduling, multi-platform posting, and analytics</p>
+                    </div>
+
+                    <div class="module-card" onclick="showModuleDetails('travel')">
+                        <h4><span class="module-emoji">✈️</span> Travel Portal</h4>
+                        <p>Travel requests, approvals, and expense claims</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Call Management Section -->
+            <section id="call-mgmt" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📞</div>
+                        <h2 class="card-title">Call Management Module</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>The Call Management module is a comprehensive <span class="highlight">issue tracking and resolution system</span> designed to manage student-related issues, queries, and support requests across the institution.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-2);">🎯</div>
+                        <h2 class="card-title">Workflow States</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>✅ Available</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>New issues entered into the system</li>
+                                        <li>Awaiting assignment to staff members</li>
+                                        <li>Visible to administrators and team leads</li>
+                                        <li>Ready for action</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>🎯 Assigned</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>Issue assigned to a specific staff member</li>
+                                        <li>Staff member notified of assignment</li>
+                                        <li>SLA timer begins</li>
+                                        <li>Responsibility transferred</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>📤 Sent</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>Issue forwarded or escalated</li>
+                                        <li>May be sent to different department</li>
+                                        <li>Tracking maintained throughout transfer</li>
+                                        <li>Audit trail preserved</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>✔️ Completed</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>Issue successfully resolved</li>
+                                        <li>Resolution documented</li>
+                                        <li>Closed to further updates</li>
+                                        <li>Can be reopened if needed</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-3);">⏱️</div>
+                        <h2 class="card-title">SLA Status Indicators</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>The system tracks Service Level Agreement compliance with color-coded indicators:</p>
+                        
+                        <div style="margin-top: 1rem;">
+                            <div class="status-badge status-info">
+                                <span class="status-dot"></span>
+                                <span>Information - No action required</span>
+                            </div>
+                            <div class="status-badge status-warning">
+                                <span class="status-dot"></span>
+                                <span>Below 24 hrs - Within first day</span>
+                            </div>
+                            <div class="status-badge status-warning">
+                                <span class="status-dot"></span>
+                                <span>24-48 hrs - Approaching deadline</span>
+                            </div>
+                            <div class="status-badge status-danger">
+                                <span class="status-dot"></span>
+                                <span>SLA Breached - Exceeded response time</span>
+                            </div>
+                            <div class="status-badge status-success">
+                                <span class="status-dot"></span>
+                                <span>Completed - Successfully resolved</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📋</div>
+                        <h2 class="card-title">Issue Tracking Columns</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Column</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Support Number</strong></td>
+                                        <td>Unique ticket identifier</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Campus</strong></td>
+                                        <td>Campus location of the student</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Student Name</strong></td>
+                                        <td>Name of student raising issue</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Grade</strong></td>
+                                        <td>Student's current grade/class</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Request Date</strong></td>
+                                        <td>Date when issue was raised</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Issue Group</strong></td>
+                                        <td>Category of the issue</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Issue Type</strong></td>
+                                        <td>Specific type within group</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>SLA Status</strong></td>
+                                        <td>Service level compliance</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section id="features" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚡</div>
+                        <h2 class="card-title">Core Features</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="feature-list">
+                            <div class="feature-item">
+                                <div class="feature-icon">🔍</div>
+                                <div class="feature-content">
+                                    <h4>Advanced Search & Filter</h4>
+                                    <p>Multi-criteria filtering with date ranges, status selection, and text search capabilities</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">📊</div>
+                                <div class="feature-content">
+                                    <h4>Comprehensive Reporting</h4>
+                                    <p>Pre-built templates, custom report builder, and export to PDF, Excel, CSV formats</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">🔄</div>
+                                <div class="feature-content">
+                                    <h4>Workflow Automation</h4>
+                                    <p>Status-based workflows with automatic notifications and escalation processes</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">💬</div>
+                                <div class="feature-content">
+                                    <h4>Multi-Channel Communication</h4>
+                                    <p>Email integration, SMS capabilities, in-app messaging, and bulk communications</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">📱</div>
+                                <div class="feature-content">
+                                    <h4>Mobile Responsive</h4>
+                                    <p>Full functionality on smartphones and tablets with native-like experience</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">🔐</div>
+                                <div class="feature-content">
+                                    <h4>Security & Access Control</h4>
+                                    <p>Role-based permissions, audit trails, and secure credential management</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">🎯</div>
+                                <div class="feature-content">
+                                    <h4>SLA Management</h4>
+                                    <p>Automatic tracking of service levels with visual indicators and alerts</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">📈</div>
+                                <div class="feature-content">
+                                    <h4>Real-time Analytics</h4>
+                                    <p>Dashboard with live data, trend analysis, and performance metrics</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-2);">🔗</div>
+                        <h2 class="card-title">System Integration</h2>
+                    </div>
+                    <div class="card-content">
+                        <h3>Internal Integration</h3>
+                        <p>All modules share common data including:</p>
+                        <ul>
+                            <li>Student master data</li>
+                            <li>Staff master data</li>
+                            <li>Academic calendar</li>
+                            <li>Fee structures</li>
+                            <li>Communication logs</li>
+                        </ul>
+
+                        <h3>External Integration Points</h3>
+                        <ul>
+                            <li>Email servers (SMTP)</li>
+                            <li>SMS gateways</li>
+                            <li>Payment gateways</li>
+                            <li>CBSE systems</li>
+                            <li>Document management systems</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Technical Section -->
+            <section id="technical" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚙️</div>
+                        <h2 class="card-title">Technical Specifications</h2>
+                    </div>
+                    <div class="card-content">
+                        <h3>System Architecture</h3>
+                        <div class="table-container">
+                            <table>
+                                <tr>
+                                    <td><strong>Deployment Model</strong></td>
+                                    <td>Web-based Application</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Browser Support</strong></td>
+                                    <td>Chrome, Firefox, Safari, Edge</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mobile Support</strong></td>
+                                    <td>iOS, Android (Responsive Web)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Authentication</strong></td>
+                                    <td>Session-based with timeout</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Authorization</strong></td>
+                                    <td>Role-based Access Control (RBAC)</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <h3>Security Features</h3>
+                        <div class="feature-list">
+                            <div class="feature-item">
+                                <div class="feature-icon">🔐</div>
+                                <div class="feature-content">
+                                    <h4>Authentication</h4>
+                                    <p>User login system with session management and timeout controls</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">👤</div>
+                                <div class="feature-content">
+                                    <h4>Authorization</h4>
+                                    <p>Role-based access with module and feature-level permissions</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">📝</div>
+                                <div class="feature-content">
+                                    <h4>Audit Trails</h4>
+                                    <p>Complete logging of all user actions and system changes</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">🔒</div>
+                                <div class="feature-content">
+                                    <h4>Data Security</h4>
+                                    <p>Secure credential handling and data encryption</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-3);">👥</div>
+                        <h2 class="card-title">User Roles</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Admin-COOR (Coordinator)</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>Full module access across all systems</li>
+                                        <li>System configuration and settings</li>
+                                        <li>User management and role assignment</li>
+                                        <li>Complete report access</li>
+                                        <li>Audit log review</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Staff Members</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>Module-specific access based on assignment</li>
+                                        <li>Issue assignment and resolution capability</li>
+                                        <li>Student data access (restricted)</li>
+                                        <li>Department-level reporting access</li>
+                                        <li>Communication tools</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Students</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>Personal portal access</li>
+                                        <li>Issue submission and tracking</li>
+                                        <li>Status monitoring</li>
+                                        <li>Document access (own records)</li>
+                                        <li>Survey participation</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Parents</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>Limited portal access</li>
+                                        <li>Student information view (read-only)</li>
+                                        <li>Survey participation</li>
+                                        <li>Communication access</li>
+                                        <li>Fee payment interface</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Best Practices Section -->
+            <section id="best-practices" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">✨</div>
+                        <h2 class="card-title">Best Practices</h2>
+                    </div>
+                    <div class="card-content">
+                        <h3>For Administrators</h3>
+                        <div class="feature-list">
+                            <div class="feature-item">
+                                <div class="feature-icon">📊</div>
+                                <div class="feature-content">
+                                    <h4>Regular Monitoring</h4>
+                                    <p>Check SLA breaches daily, monitor unassigned issues, review completion rates</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">🧹</div>
+                                <div class="feature-content">
+                                    <h4>Data Hygiene</h4>
+                                    <p>Regular cleanup, archive old records, maintain master data, update user accounts</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">👥</div>
+                                <div class="feature-content">
+                                    <h4>User Management</h4>
+                                    <p>Review permissions quarterly, deactivate inactive accounts, conduct training</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>For Staff Users</h3>
+                        <div class="feature-list">
+                            <div class="feature-item">
+                                <div class="feature-icon">📋</div>
+                                <div class="feature-content">
+                                    <h4>Issue Management</h4>
+                                    <p>Check assigned issues daily, update status promptly, document resolutions clearly</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">💬</div>
+                                <div class="feature-content">
+                                    <h4>Communication</h4>
+                                    <p>Keep students informed, document interactions, use standard templates</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">⏱️</div>
+                                <div class="feature-content">
+                                    <h4>SLA Compliance</h4>
+                                    <p>Prioritize by SLA status, address breached items first, request help when needed</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>For System Health</h3>
+                        <div class="feature-list">
+                            <div class="feature-item">
+                                <div class="feature-icon">⚡</div>
+                                <div class="feature-content">
+                                    <h4>Performance</h4>
+                                    <p>Regular database maintenance, archive historical data, monitor system load</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">🔒</div>
+                                <div class="feature-content">
+                                    <h4>Security</h4>
+                                    <p>Regular password changes, access review, audit log monitoring, security patches</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">💾</div>
+                                <div class="feature-content">
+                                    <h4>Backup & Recovery</h4>
+                                    <p>Daily automated backups, test restore procedures, maintain backup logs</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-2);">💡</div>
+                        <h2 class="card-title">Quick Tips</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>Daily Routine:</strong> Start each day by reviewing pending issues and SLA breaches</li>
+                            <li><strong>Prioritization:</strong> Always address SLA-breached items first</li>
+                            <li><strong>Documentation:</strong> Document all actions and resolutions for future reference</li>
+                            <li><strong>Communication:</strong> Keep all stakeholders informed of progress</li>
+                            <li><strong>Escalation:</strong> Don't hesitate to escalate complex issues</li>
+                            <li><strong>Training:</strong> Regular training sessions improve system adoption</li>
+                            <li><strong>Feedback:</strong> Collect user feedback for continuous improvement</li>
+                            <li><strong>Updates:</strong> Stay informed about system updates and new features</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation (Mobile Only) -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-item active" onclick="showSectionMobile('overview')">
+            <div class="bottom-nav-icon">🏠</div>
+            <div class="bottom-nav-label">Home</div>
+        </div>
+        <div class="bottom-nav-item" onclick="showSectionMobile('modules')">
+            <div class="bottom-nav-icon">🧩</div>
+            <div class="bottom-nav-label">Modules</div>
+        </div>
+        <div class="bottom-nav-item" onclick="showSectionMobile('call-mgmt')">
+            <div class="bottom-nav-icon">📞</div>
+            <div class="bottom-nav-label">Calls</div>
+        </div>
+        <div class="bottom-nav-item" onclick="showSectionMobile('features')">
+            <div class="bottom-nav-icon">⚡</div>
+            <div class="bottom-nav-label">Features</div>
+        </div>
+        <div class="bottom-nav-item" onclick="showSectionMobile('best-practices')">
+            <div class="bottom-nav-icon">✨</div>
+            <div class="bottom-nav-label">Tips</div>
+        </div>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+            showToast(isDark ? '🌙 Dark mode enabled' : '☀️ Light mode enabled');
+        }
+
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Section Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Update nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mobile Bottom Nav
+        function showSectionMobile(sectionId) {
+            showSection(sectionId);
+
+            // Update bottom nav
+            document.querySelectorAll('.bottom-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Update top nav
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            const sectionIndex = {
+                'overview': 0,
+                'modules': 1,
+                'call-mgmt': 2,
+                'features': 3,
+                'technical': 4,
+                'best-practices': 5
+            };
+            if (navButtons[sectionIndex[sectionId]]) {
+                navButtons[sectionIndex[sectionId]].classList.add('active');
+            }
+        }
+
+        // Accordion Toggle
+        function toggleAccordion(element) {
+            const item = element.parentElement;
+            const wasActive = item.classList.contains('active');
+            
+            // Close all accordions
+            document.querySelectorAll('.accordion-item').forEach(acc => {
+                acc.classList.remove('active');
+            });
+
+            // Toggle current
+            if (!wasActive) {
+                item.classList.add('active');
+            }
+        }
+
+        // Search Toggle
+        function toggleSearch() {
+            const searchContainer = document.getElementById('searchContainer');
+            const isVisible = searchContainer.style.display !== 'none';
+            
+            if (isVisible) {
+                searchContainer.style.display = 'none';
+            } else {
+                searchContainer.style.display = 'block';
+                document.getElementById('searchInput').focus();
+            }
+        }
+
+        // Search Handler
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (query.length < 2) return;
+
+            // Simple search through content
+            const sections = document.querySelectorAll('.section');
+            let found = false;
+
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    found = true;
+                    // Could highlight results here
+                }
+            });
+
+            if (!found) {
+                showToast('No results found');
+            }
+        }
+
+        // Module Details
+        function showModuleDetails(moduleId) {
+            showToast('Module details would open here');
+        }
+
+        // Share Functionality
+        async function shareDoc() {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'TIPS ICMS Documentation',
+                        text: 'Check out this comprehensive TIPS ICMS documentation',
+                        url: window.location.href
+                    });
+                    showToast('✅ Shared successfully');
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        copyToClipboard(window.location.href);
+                    }
+                }
+            } else {
+                copyToClipboard(window.location.href);
+            }
+        }
+
+        // Copy to Clipboard
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('📋 Link copied to clipboard');
+                });
+            } else {
+                showToast('Share feature not available');
+            }
+        }
+
+        // Toast Notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Install PWA prompt (if applicable)
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Could show install button here
+        });
+
+        // Service Worker registration (if needed)
+        if ('serviceWorker' in navigator) {
+            // navigator.serviceWorker.register('/sw.js');
+        }
+
+        // Performance: Lazy load images
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // Add touch feedback for better mobile UX
+        document.querySelectorAll('.module-card, .feature-item').forEach(element => {
+            element.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+            });
+            
+            element.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
