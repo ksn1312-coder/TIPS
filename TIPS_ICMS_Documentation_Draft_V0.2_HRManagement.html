@@ -1,0 +1,2058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#1a365d">
+    <title>TIPS ICMS - Complete Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --primary-light: #2d5a8c;
+            --secondary: #f59e0b;
+            --accent: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-light: #f8fafc;
+            --text-dark: #0f172a;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-hr: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body.dark-mode {
+            background: var(--bg-dark);
+            color: var(--text-light);
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--secondary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.25rem;
+        }
+
+        .icon-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: sticky;
+            top: 72px;
+            z-index: 999;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        body.dark-mode .nav-container {
+            background: var(--bg-card);
+            border-bottom-color: var(--border);
+        }
+
+        .nav {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            white-space: nowrap;
+        }
+
+        .nav-btn {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        body.dark-mode .nav-btn {
+            border-color: var(--border);
+            color: var(--text-light);
+        }
+
+        .nav-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px var(--shadow);
+            border: 1px solid #e2e8f0;
+        }
+
+        body.dark-mode .card {
+            background: var(--bg-card);
+            border-color: var(--border);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        body.dark-mode .card-header {
+            border-bottom-color: var(--border);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--gradient-1);
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            flex: 1;
+        }
+
+        body.dark-mode .card-title {
+            color: var(--text-light);
+        }
+
+        .card-content h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--primary-light);
+        }
+
+        body.dark-mode .card-content h3 {
+            color: var(--secondary);
+        }
+
+        .card-content h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 1rem 0 0.5rem;
+            color: var(--primary);
+        }
+
+        body.dark-mode .card-content h4 {
+            color: var(--text-light);
+        }
+
+        .card-content p {
+            margin-bottom: 1rem;
+            color: #475569;
+        }
+
+        body.dark-mode .card-content p {
+            color: #cbd5e1;
+        }
+
+        .card-content ul, .card-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-content li {
+            margin-bottom: 0.5rem;
+            color: #475569;
+        }
+
+        body.dark-mode .card-content li {
+            color: #cbd5e1;
+        }
+
+        /* Sub-module cards */
+        .submodule-card {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.75rem 0;
+            border-left: 4px solid var(--secondary);
+        }
+
+        body.dark-mode .submodule-card {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .submodule-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        body.dark-mode .submodule-title {
+            color: var(--secondary);
+        }
+
+        .submodule-desc {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        body.dark-mode .submodule-desc {
+            color: #94a3b8;
+        }
+
+        /* Workflow steps */
+        .workflow-step {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        body.dark-mode .workflow-step {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--primary);
+        }
+
+        body.dark-mode .step-title {
+            color: var(--text-light);
+        }
+
+        .step-desc {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        body.dark-mode .step-desc {
+            color: #94a3b8;
+        }
+
+        /* Campus badge */
+        .campus-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--gradient-hr);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+
+        /* Accordion */
+        .accordion-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+
+        body.dark-mode .accordion-item {
+            border-color: var(--border);
+        }
+
+        .accordion-header {
+            padding: 1rem;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .accordion-header {
+            background: var(--bg-card);
+            color: var(--text-light);
+        }
+
+        .accordion-header:active {
+            background: #f8fafc;
+        }
+
+        body.dark-mode .accordion-header:active {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .accordion-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+        }
+
+        body.dark-mode .accordion-content {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .accordion-item.active .accordion-content {
+            max-height: 3000px;
+        }
+
+        .accordion-body {
+            padding: 1rem;
+            color: #475569;
+        }
+
+        body.dark-mode .accordion-body {
+            color: #cbd5e1;
+        }
+
+        /* Search */
+        .search-container {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .search-input {
+            background: var(--bg-card);
+            border-color: var(--border);
+            color: var(--text-light);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 54, 93, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.25rem;
+        }
+
+        /* Feature List */
+        .feature-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        body.dark-mode .feature-item {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-content h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--primary);
+        }
+
+        body.dark-mode .feature-content h4 {
+            color: var(--text-light);
+        }
+
+        .feature-content p {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin: 0;
+        }
+
+        body.dark-mode .feature-content p {
+            color: #94a3b8;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        body.dark-mode .table-container {
+            border-color: var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--primary);
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        body.dark-mode th {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-light);
+            border-bottom-color: var(--border);
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+        }
+
+        body.dark-mode td {
+            border-bottom-color: var(--border);
+            color: #cbd5e1;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem;
+            box-shadow: 0 -2px 10px var(--shadow);
+            z-index: 1000;
+        }
+
+        body.dark-mode .bottom-nav {
+            background: var(--bg-card);
+            border-top-color: var(--border);
+        }
+
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 80px;
+            border-radius: 8px;
+        }
+
+        .bottom-nav-item:active {
+            background: #f8fafc;
+            transform: scale(0.95);
+        }
+
+        body.dark-mode .bottom-nav-item:active {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .bottom-nav-item.active {
+            color: var(--primary);
+        }
+
+        .bottom-nav-icon {
+            font-size: 1.5rem;
+        }
+
+        .bottom-nav-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Content wrapper padding for bottom nav */
+        .content-wrapper {
+            padding-bottom: 80px;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+
+        .badge-primary {
+            background: rgba(26, 54, 93, 0.1);
+            color: var(--primary);
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        body.dark-mode .badge-primary {
+            background: rgba(45, 90, 140, 0.2);
+            color: #93c5fd;
+        }
+
+        body.dark-mode .badge-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+        }
+
+        body.dark-mode .badge-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+        }
+
+        /* Highlight */
+        .highlight {
+            background: linear-gradient(120deg, #fef3c7 0%, #fef3c7 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 90%;
+            padding: 0 0.25rem;
+        }
+
+        body.dark-mode .highlight {
+            background: linear-gradient(120deg, rgba(245, 158, 11, 0.3) 0%, rgba(245, 158, 11, 0.3) 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 90%;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-dark);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .bottom-nav {
+                display: none;
+            }
+
+            .content-wrapper {
+                padding-bottom: 1rem;
+            }
+        }
+
+        /* Grid column display */
+        .grid-cols {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .grid-item {
+            padding: 0.75rem;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+
+        body.dark-mode .grid-item {
+            background: var(--bg-card);
+            border-color: var(--border);
+        }
+
+        .grid-label {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        body.dark-mode .grid-label {
+            color: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">TI</div>
+                <span>TIPS ICMS</span>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="toggleSearch()" title="Search">
+                    🔍
+                </button>
+                <button class="icon-btn" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+                    🌓
+                </button>
+                <button class="icon-btn" onclick="shareDoc()" title="Share">
+                    📤
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <div class="nav-container">
+        <div class="nav">
+            <button class="nav-btn active" onclick="showSection('overview')">Overview</button>
+            <button class="nav-btn" onclick="showSection('hr-management')">HR Management</button>
+            <button class="nav-btn" onclick="showSection('modules')">All Modules</button>
+            <button class="nav-btn" onclick="showSection('call-mgmt')">Call Management</button>
+            <button class="nav-btn" onclick="showSection('technical')">Technical</button>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Search (Initially Hidden) -->
+            <div class="search-container" id="searchContainer" style="display: none;">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search documentation..." oninput="handleSearch()">
+            </div>
+
+            <!-- Overview Section -->
+            <section id="overview" class="section active">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🎯</div>
+                        <h2 class="card-title">TIPS ICMS Overview</h2>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>TIPS ICMS (Integrated Campus Management System)</strong> is a comprehensive enterprise solution for educational institutions covering all operational aspects.</p>
+                        
+                        <div class="feature-list">
+                            <div class="feature-item">
+                                <div class="feature-icon">👥</div>
+                                <div class="feature-content">
+                                    <h4>HR Management</h4>
+                                    <p>Complete employee lifecycle from recruitment to exit with 18 sub-modules</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">📞</div>
+                                <div class="feature-content">
+                                    <h4>Call Management</h4>
+                                    <p>Issue tracking with SLA monitoring and workflow states</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">📊</div>
+                                <div class="feature-content">
+                                    <h4>39 Integrated Modules</h4>
+                                    <p>Covering academics, finance, administration, and student services</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">🏢</div>
+                                <div class="feature-content">
+                                    <h4>Multi-Campus Support</h4>
+                                    <p>15 campus locations across South India with centralized management</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>System Information</h3>
+                        <div class="table-container">
+                            <table>
+                                <tr>
+                                    <td><strong>Version</strong></td>
+                                    <td>Enterprise Edition</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Copyright</strong></td>
+                                    <td>© TIPS, 2012</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Deployment</strong></td>
+                                    <td>Web-based Application</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total Modules</strong></td>
+                                    <td>39 Modules</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HR Management Section (NEW - DETAILED) -->
+            <section id="hr-management" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-hr);">👥</div>
+                        <h2 class="card-title">HR Management Module</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>Comprehensive human resource management covering the <span class="highlight">complete employee lifecycle</span> from recruitment to exit.</p>
+                        
+                        <div class="badge-primary badge">18 Sub-Modules</div>
+                        <div class="badge-success badge">15 Campuses</div>
+                        <div class="badge-warning badge">Multi-Level Workflows</div>
+                    </div>
+                </div>
+
+                <!-- HR Dashboard -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-1);">📊</div>
+                        <h2 class="card-title">1. HR Dashboard</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>Centralized dashboard with campus-wise HR data access and metrics.</p>
+                        
+                        <h3>Campus Locations (15)</h3>
+                        <div style="margin: 1rem 0;">
+                            <div class="campus-badge">IB MAIN</div>
+                            <div class="campus-badge">IB KG</div>
+                            <div class="campus-badge">CBSE MAIN</div>
+                            <div class="campus-badge">KARUR</div>
+                            <div class="campus-badge">KARUR KG</div>
+                            <div class="campus-badge">TIRUPUR</div>
+                            <div class="campus-badge">TIRUPUR KG</div>
+                            <div class="campus-badge">CHENNAI MAIN</div>
+                            <div class="campus-badge">CHENNAI CITY</div>
+                            <div class="campus-badge">CHENNAI NORTH</div>
+                            <div class="campus-badge">ERNAKULAM</div>
+                            <div class="campus-badge">MADURAI</div>
+                            <div class="campus-badge">CBE SWC</div>
+                            <div class="campus-badge">CHENNAI SWC</div>
+                            <div class="campus-badge">CHENNAI OLC</div>
+                        </div>
+
+                        <h3>Dashboard Features</h3>
+                        <ul>
+                            <li>Click-through navigation to campus-specific HR data</li>
+                            <li>Regional grouping for better organization</li>
+                            <li>Consolidated institutional view</li>
+                            <li>Quick access to campus-wise reports</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Recruitment Section -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-2);">📝</div>
+                        <h2 class="card-title">Recruitment Management</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>Complete recruitment workflow from job requisition to appointment.</p>
+
+                        <!-- Job Requisition -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>2. Job Requisition</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <h4>Search Fields</h4>
+                                    <div class="grid-cols">
+                                        <div class="grid-item">
+                                            <div class="grid-label">Domain</div>
+                                            Functional area categorization
+                                        </div>
+                                        <div class="grid-item">
+                                            <div class="grid-label">Campus</div>
+                                            Position location
+                                        </div>
+                                        <div class="grid-item">
+                                            <div class="grid-label">Job Request No</div>
+                                            Unique identifier
+                                        </div>
+                                        <div class="grid-item">
+                                            <div class="grid-label">Position Title</div>
+                                            Job position name
+                                        </div>
+                                        <div class="grid-item">
+                                            <div class="grid-label">Programme</div>
+                                            Academic/admin programme
+                                        </div>
+                                        <div class="grid-item">
+                                            <div class="grid-label">Position Status</div>
+                                            Active/Filled/Cancelled
+                                        </div>
+                                    </div>
+
+                                    <h4>Workflow Process</h4>
+                                    <div class="workflow-step">
+                                        <div class="step-number">1</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Requisition Creation</div>
+                                            <div class="step-desc">Department raises job requisition with details</div>
+                                        </div>
+                                    </div>
+                                    <div class="workflow-step">
+                                        <div class="step-number">2</div>
+                                        <div class="step-content">
+                                            <div class="step-title">MD Approval</div>
+                                            <div class="step-desc">Managing Director reviews and approves</div>
+                                        </div>
+                                    </div>
+                                    <div class="workflow-step">
+                                        <div class="step-number">3</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Position Activation</div>
+                                            <div class="step-desc">Approved position becomes active for recruitment</div>
+                                        </div>
+                                    </div>
+                                    <div class="workflow-step">
+                                        <div class="step-number">4</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Candidate Mapping</div>
+                                            <div class="step-desc">Begin candidate search and mapping</div>
+                                        </div>
+                                    </div>
+
+                                    <h4>Grid Columns (9)</h4>
+                                    <p>Job Req.Number, Campus, Position Title, Programme, Position Raised By, MD Approval Status, Job Position Status, View</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Job Requisition Approval -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>3. Job Requisition Approval</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p>MD approval interface for reviewing and approving job position requests.</p>
+
+                                    <h4>Action Buttons</h4>
+                                    <ul>
+                                        <li><strong>Search</strong> - Filter by criteria</li>
+                                        <li><strong>Reset</strong> - Clear filters</li>
+                                        <li><strong>Candidate Approved</strong> - Bulk approve</li>
+                                    </ul>
+
+                                    <h4>Approval Grid Columns (11)</h4>
+                                    <div class="grid-cols">
+                                        <div class="grid-item">Job Req.Number</div>
+                                        <div class="grid-item">MD Approval Status</div>
+                                        <div class="grid-item">Job Position Status</div>
+                                        <div class="grid-item">Campus</div>
+                                        <div class="grid-item">Position Category</div>
+                                        <div class="grid-item">Position Title</div>
+                                        <div class="grid-item">Programme</div>
+                                        <div class="grid-item">Person Last In Position</div>
+                                        <div class="grid-item">Reason</div>
+                                        <div class="grid-item">Job Req. Date</div>
+                                    </div>
+
+                                    <h4>Approval Workflow</h4>
+                                    <ul>
+                                        <li>Review counselling report and exit interview</li>
+                                        <li>Check budget and organizational need</li>
+                                        <li>Approve, reject, or request more info</li>
+                                        <li>Automatic status updates and notifications</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Candidate Mapping -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>4. Candidate Mapping Details</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p>Map approved job requisitions to HR personnel for recruitment execution.</p>
+
+                                    <h4>Dual-Section Grid</h4>
+                                    <div class="submodule-card">
+                                        <div class="submodule-title">📋 Job Requisition Details</div>
+                                        <div class="submodule-desc">Campus, Job Req.Number, Position Category, Position Title, Programme, TCD</div>
+                                    </div>
+                                    <div class="submodule-card">
+                                        <div class="submodule-title">👤 Mapping To HR</div>
+                                        <div class="submodule-desc">Assigned To, IdNumber, Revised TCD, HR Assigned Status</div>
+                                    </div>
+
+                                    <h4>Key Features</h4>
+                                    <ul>
+                                        <li>HR workload distribution</li>
+                                        <li>Timeline management (TCD/Revised TCD)</li>
+                                        <li>Status tracking</li>
+                                        <li>MD approval workflow integration</li>
+                                        <li>Bulk operations support</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Offer & Appointment Letter -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>5. Offer & Appointment Letter</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p>Generate and manage offer letters and appointment letters for selected candidates.</p>
+
+                                    <h4>Document Workflow</h4>
+                                    <div class="workflow-step">
+                                        <div class="step-number">1</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Offer Letter Generation</div>
+                                            <div class="step-desc">System generates with position details, salary, joining date</div>
+                                        </div>
+                                    </div>
+                                    <div class="workflow-step">
+                                        <div class="step-number">2</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Digital Delivery</div>
+                                            <div class="step-desc">Email to candidate with portal download option</div>
+                                        </div>
+                                    </div>
+                                    <div class="workflow-step">
+                                        <div class="step-number">3</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Acceptance Tracking</div>
+                                            <div class="step-desc">Track: Draft → Sent → Accepted/Declined</div>
+                                        </div>
+                                    </div>
+                                    <div class="workflow-step">
+                                        <div class="step-number">4</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Appointment Letter</div>
+                                            <div class="step-desc">Final employment confirmation after acceptance</div>
+                                        </div>
+                                    </div>
+
+                                    <h4>Grid Columns (12)</h4>
+                                    <p>Job Req.Number, Campus, Name, Gender, DOB, Programme, Position Title, Candidate Status, Offer Letter Status, Appointment Letter Status, Appointment Letter</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recruitment Survey -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>9. Recruitment Survey Report</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p>Collect feedback from interview candidates about recruitment process.</p>
+
+                                    <h4>Feedback Areas</h4>
+                                    <ul>
+                                        <li><strong>Interview Experience</strong> - Professionalism, relevance, communication</li>
+                                        <li><strong>Recruitment Process</strong> - Application ease, response time, transparency</li>
+                                        <li><strong>Campus/Facilities</strong> - Infrastructure, location, environment</li>
+                                        <li><strong>Overall Satisfaction</strong> - Rating and recommendations</li>
+                                    </ul>
+
+                                    <h4>Survey Grid</h4>
+                                    <p>Columns: Candidate Name, Campus, Position, Interview Date, Score</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Appraisal Section -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-3);">⭐</div>
+                        <h2 class="card-title">6. Appraisal System</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>Comprehensive performance appraisal with customizable frameworks and multi-level evaluations.</p>
+
+                        <!-- Question Title Master -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>6.1 Question Title Master</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p>Master configuration for appraisal evaluation categories and weightage.</p>
+
+                                    <h4>Appraisal Categories (8 Titles - 87 Total Points)</h4>
+                                    <div class="table-container">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Title</th>
+                                                    <th>Marks</th>
+                                                    <th>%</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Planning and Preparation</td>
+                                                    <td>18</td>
+                                                    <td>20.7%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Learning Environment</td>
+                                                    <td>15</td>
+                                                    <td>17.2%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Leadership</td>
+                                                    <td>12</td>
+                                                    <td>13.8%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Instruction</td>
+                                                    <td>12</td>
+                                                    <td>13.8%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Contributing Member of TIPS</td>
+                                                    <td>12</td>
+                                                    <td>13.8%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Parent Interactions</td>
+                                                    <td>6</td>
+                                                    <td>6.9%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Professional Growth</td>
+                                                    <td>6</td>
+                                                    <td>6.9%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Attendance and Punctuality</td>
+                                                    <td>6</td>
+                                                    <td>6.9%</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <h4>Features</h4>
+                                    <ul>
+                                        <li>Customizable evaluation framework</li>
+                                        <li>Flexible weightage system</li>
+                                        <li>Status management (Active/Inactive)</li>
+                                        <li>Version control for cycles</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Question Master -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>6.2 Question Master</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p>Detailed question repository linked to appraisal title categories.</p>
+                                    <ul>
+                                        <li>Build comprehensive question bank</li>
+                                        <li>Link questions to evaluation categories</li>
+                                        <li>Support multiple appraisal types</li>
+                                        <li>Version control for questions</li>
+                                    </ul>
+                                    <p><strong>Grid:</strong> Title Name, Question, Question Status</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Appraisal Mapping -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>6.3 Appraisal Mapping Form</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p>Map appraisers (Reporting Heads/Coordinators) to staff members.</p>
+
+                                    <h4>Dual-Panel Layout</h4>
+                                    <div class="submodule-card">
+                                        <div class="submodule-title">👥 Staff List (Left)</div>
+                                        <div class="submodule-desc">Available staff for mapping with campus, name, ID</div>
+                                    </div>
+                                    <div class="submodule-card">
+                                        <div class="submodule-title">✓ Selected Staff (Right)</div>
+                                        <div class="submodule-desc">Confirmed selections ready for appraiser assignment</div>
+                                    </div>
+
+                                    <h4>Use Cases</h4>
+                                    <p>Annual appraisal setup, Mid-year review, Probation appraisal, Department-wise appraisal</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Appraisal Details -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>6.4 Appraisal Details List</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p>Comprehensive listing of all appraisal records with status tracking.</p>
+
+                                    <h4>Appraisal Types</h4>
+                                    <ul>
+                                        <li><strong>Annual</strong> - Comprehensive yearly evaluation</li>
+                                        <li><strong>Mid-Year</strong> - Six-month checkpoint</li>
+                                        <li><strong>Probation</strong> - New employee confirmation</li>
+                                        <li><strong>Special</strong> - Project-based or promotion consideration</li>
+                                    </ul>
+
+                                    <h4>Status Flow</h4>
+                                    <p>Not Started → In Progress → Pending Review → Completed → Acknowledged</p>
+
+                                    <p><strong>Grid:</strong> Campus, Staff Name, IdNumber, Appraisal Type, Appraisal Status, Created Date, View</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reporting Head Mapping -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>6.5 Reporting Head Mapped Staff</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p>View and manage reporting structure for appraisals.</p>
+
+                                    <h4>Hierarchical Reporting</h4>
+                                    <p>Staff → Reporting Head → Coordinator (optional)</p>
+
+                                    <h4>Example Flows</h4>
+                                    <ul>
+                                        <li>Teacher → Department Head → Academic Coordinator</li>
+                                        <li>Admin Staff → Office Manager → HR Manager</li>
+                                        <li>Support Staff → Supervisor → Admin Head</li>
+                                    </ul>
+
+                                    <p><strong>Grid:</strong> Academic Year, Campus, Staff Name, IdNumber, Appraisal Type, Status</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Staff Exit Process -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-2);">🚪</div>
+                        <h2 class="card-title">7. Staff Exit Process</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>Comprehensive exit management from resignation to final clearance.</p>
+
+                        <!-- Exit Counselling Form -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>7.1 Employee Relieving Counselling Form</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p>Initial form for staff resignation with exit interview details.</p>
+
+                                    <h4>Counselling Purpose</h4>
+                                    <ul>
+                                        <li><strong>Retention Attempt</strong> - Understand reasons, address grievances</li>
+                                        <li><strong>Knowledge Transfer</strong> - Document responsibilities, handover planning</li>
+                                        <li><strong>Feedback Collection</strong> - Exit interview, improvement suggestions</li>
+                                        <li><strong>Relationship Management</strong> - Maintain positive relations, alumni network</li>
+                                    </ul>
+
+                                    <p><strong>Grid:</strong> Campus, Staff Name, IdNumber, Staff Type, Programme, Designation, Department</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Counselling Form List -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>7.2 Counselling Form List</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p>List of staff who underwent exit counselling with status tracking.</p>
+
+                                    <h4>Status Options</h4>
+                                    <ul>
+                                        <li><strong>Scheduled</strong> - Session planned</li>
+                                        <li><strong>Completed</strong> - Form filled</li>
+                                        <li><strong>MD Approved</strong> - Managing Director approved</li>
+                                        <li><strong>Pending</strong> - Awaiting completion</li>
+                                    </ul>
+
+                                    <p><strong>Grid:</strong> Campus, Staff Name, IdNumber, Type, Programme, Designation, Department, Status, Rpt/Coor Name, PDF</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MD Approval -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>7.3 Staff Counselling MD Approval</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p>MD approval interface for staff exit counselling forms.</p>
+
+                                    <h4>Approval Workflow</h4>
+                                    <div class="workflow-step">
+                                        <div class="step-number">1</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Review Report</div>
+                                            <div class="step-desc">Read exit interview and reasons</div>
+                                        </div>
+                                    </div>
+                                    <div class="workflow-step">
+                                        <div class="step-number">2</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Decision</div>
+                                            <div class="step-desc">Approve, counter-offer, or request info</div>
+                                        </div>
+                                    </div>
+                                    <div class="workflow-step">
+                                        <div class="step-number">3</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Action Items</div>
+                                            <div class="step-desc">Set notice period, initiate no-dues</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- No Dues -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>7.4 No Due Staff List</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p>No-dues clearance tracking across departments.</p>
+
+                                    <h4>Departments Involved</h4>
+                                    <ul>
+                                        <li><strong>Academic</strong> - Lesson plans, grade books, assessments</li>
+                                        <li><strong>Library</strong> - Books returned, fines cleared</li>
+                                        <li><strong>IT</strong> - Equipment returned, access revoked</li>
+                                        <li><strong>Finance</strong> - Salary adjustments, loan clearance</li>
+                                        <li><strong>HR</strong> - ID returned, exit interview, service certificate</li>
+                                        <li><strong>Administration</strong> - Keys, workspace, access cards</li>
+                                        <li><strong>Hostel</strong> - Room vacated, dues cleared (if applicable)</li>
+                                    </ul>
+
+                                    <p><strong>Grid:</strong> Campus, Staff Name, IdNumber, Type, Programme, Designation, Department, View, No Dues PDF</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payroll Section -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-1);">💰</div>
+                        <h2 class="card-title">8. Pay Roll</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>Payroll management with department-wise tracking and processing.</p>
+
+                        <!-- Payroll Details List -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>8.1 Payroll Details List</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p>Department-wise payroll staff listing for processing.</p>
+
+                                    <h4>Payroll Form Statuses</h4>
+                                    <ul>
+                                        <li><strong>Pending</strong> - Not yet processed</li>
+                                        <li><strong>In Progress</strong> - Under review</li>
+                                        <li><strong>Approved</strong> - Ready for payment</li>
+                                        <li><strong>Processed</strong> - Payment executed</li>
+                                        <li><strong>On Hold</strong> - Requires action</li>
+                                    </ul>
+
+                                    <p><strong>Grid:</strong> Campus, Staff Name, IdNumber, Staff Type, Programme, Designation, Department, Payroll Form Status, View</p>
+                                    <p><strong>Export:</strong> Excel, PDF</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payroll Staff Details -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>8.2 Payroll Staff Details</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p>Detailed payroll information with assignment capabilities.</p>
+
+                                    <h4>Status Flow</h4>
+                                    <div class="workflow-step">
+                                        <div class="step-number">1</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Draft</div>
+                                            <div class="step-desc">Initial data entry</div>
+                                        </div>
+                                    </div>
+                                    <div class="workflow-step">
+                                        <div class="step-number">2</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Assigned</div>
+                                            <div class="step-desc">Sent to department head</div>
+                                        </div>
+                                    </div>
+                                    <div class="workflow-step">
+                                        <div class="step-number">3</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Verified</div>
+                                            <div class="step-desc">Department confirmation</div>
+                                        </div>
+                                    </div>
+                                    <div class="workflow-step">
+                                        <div class="step-number">4</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Approved</div>
+                                            <div class="step-desc">HR and Finance clearance</div>
+                                        </div>
+                                    </div>
+                                    <div class="workflow-step">
+                                        <div class="step-number">5</div>
+                                        <div class="step-content">
+                                            <div class="step-title">Processed</div>
+                                            <div class="step-desc">Payment executed</div>
+                                        </div>
+                                    </div>
+
+                                    <h4>Action Buttons</h4>
+                                    <p>Assign, Multi Assign, View Dept Status</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HR Summary -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-3);">📈</div>
+                        <h2 class="card-title">HR Module Summary</h2>
+                    </div>
+                    <div class="card-content">
+                        <h3>Complete Coverage</h3>
+                        <div class="feature-list">
+                            <div class="feature-item">
+                                <div class="feature-icon">📊</div>
+                                <div class="feature-content">
+                                    <h4>18 Sub-Modules</h4>
+                                    <p>From recruitment to exit with complete lifecycle management</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">🏢</div>
+                                <div class="feature-content">
+                                    <h4>15 Campus Locations</h4>
+                                    <p>Multi-campus support across South India</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">🔄</div>
+                                <div class="feature-content">
+                                    <h4>Multi-Level Workflows</h4>
+                                    <p>Approval chains, status tracking, automated notifications</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">📱</div>
+                                <div class="feature-content">
+                                    <h4>Mobile Accessible</h4>
+                                    <p>Full functionality on smartphones and tablets</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>Integration Points</h3>
+                        <ul>
+                            <li><strong>Finance Module</strong> - Payroll, salary processing, settlements</li>
+                            <li><strong>Admin Module</strong> - User access, permissions, notifications</li>
+                            <li><strong>Reports Module</strong> - HR analytics, custom reports, exports</li>
+                            <li><strong>Email/SMS</strong> - Offer letters, approvals, alerts</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- All Modules Section (Existing) -->
+            <section id="modules" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-3);">🧩</div>
+                        <h2 class="card-title">All 39 System Modules</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>TIPS ICMS includes <span class="highlight">39 integrated modules</span> covering all aspects of campus management.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📚</div>
+                        <h2 class="card-title">Complete Module List</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Academic Management (8 modules)</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li><strong>CBSE CRMS</strong> - Curriculum and records management</li>
+                                        <li><strong>Assessment</strong> - Exam scheduling and grade entry</li>
+                                        <li><strong>Student Reports</strong> - Academic transcripts and progress</li>
+                                        <li><strong>Student Attendance</strong> - Daily attendance tracking</li>
+                                        <li><strong>Class Room Management</strong> - Room allocation and scheduling</li>
+                                        <li><strong>Career CMS</strong> - Career guidance and counseling</li>
+                                        <li><strong>Admission</strong> - Application processing workflows</li>
+                                        <li><strong>Students Distribution</strong> - Class/section allocation</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>HR & Staff Management (6 modules)</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li><strong>HR Management</strong> - Complete HR lifecycle (18 sub-modules)</li>
+                                        <li><strong>Staff</strong> - Staff profiles and assignments</li>
+                                        <li><strong>Employee</strong> - Employee records and leave</li>
+                                        <li><strong>Staff Entity Transfer</strong> - Kinder Care transfers</li>
+                                        <li><strong>Staff Training</strong> - Professional development</li>
+                                        <li><strong>Staff Attendance</strong> - Faculty attendance tracking</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Student Services (8 modules)</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li><strong>Call Management</strong> - Issue tracking with SLA</li>
+                                        <li><strong>Student FAQ</strong> - Self-service knowledge base</li>
+                                        <li><strong>Student Survey</strong> - Feedback collection</li>
+                                        <li><strong>Hostel</strong> - Residential facility management</li>
+                                        <li><strong>Transport</strong> - Route and vehicle management</li>
+                                        <li><strong>Notification</strong> - Multi-channel communication</li>
+                                        <li><strong>Alumni</strong> - Alumni relations management</li>
+                                        <li><strong>SIMUN</strong> - Model UN event management</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Financial (3 modules)</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li><strong>Account</strong> - Financial operations and reporting</li>
+                                        <li><strong>Fees</strong> - Fee structure and payment collection</li>
+                                        <li><strong>E-Ticket</strong> - Support ticket management</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Administrative (7 modules)</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li><strong>Admin</strong> - Central administration dashboard</li>
+                                        <li><strong>Reports</strong> - Comprehensive reporting system</li>
+                                        <li><strong>Asset</strong> - Physical asset tracking</li>
+                                        <li><strong>Store</strong> - Inventory management</li>
+                                        <li><strong>Common Master</strong> - Reference data management</li>
+                                        <li><strong>Circular Documents</strong> - Document distribution</li>
+                                        <li><strong>Travel Portal</strong> - Staff travel management</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Communication & Engagement (4 modules)</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li><strong>Email Credential Setting</strong> - Email configuration</li>
+                                        <li><strong>Social Media Updates</strong> - Social media management</li>
+                                        <li><strong>Credential Communication</strong> - Secure credential distribution</li>
+                                        <li><strong>Parent Survey</strong> - Parent feedback system</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Recruitment & Assessment (3 modules)</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li><strong>Candidate Online Assessment</strong> - Online testing platform</li>
+                                        <li><strong>Job Satisfaction Survey</strong> - Employee engagement</li>
+                                        <li><strong>Employment</strong> - Recruitment and staffing</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Call Management Section (Existing - kept for reference) -->
+            <section id="call-mgmt" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📞</div>
+                        <h2 class="card-title">Call Management Module</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>Comprehensive issue tracking and resolution system for student-related issues and support requests.</p>
+                        
+                        <h3>Workflow States</h3>
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>✅ Available</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>New issues entered into the system</li>
+                                        <li>Awaiting assignment to staff members</li>
+                                        <li>Visible to administrators and team leads</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>🎯 Assigned</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>Issue assigned to specific staff member</li>
+                                        <li>Staff member notified</li>
+                                        <li>SLA timer begins</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>SLA Status Indicators</h3>
+                        <div class="badge badge-primary">🔵 Information</div>
+                        <div class="badge badge-warning">🟡 Below 24 hrs</div>
+                        <div class="badge badge-warning">🟠 24-48 hrs</div>
+                        <div class="badge" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">🔴 SLA Breached</div>
+                        <div class="badge badge-success">🟢 Completed</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Technical Section -->
+            <section id="technical" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚙️</div>
+                        <h2 class="card-title">Technical Specifications</h2>
+                    </div>
+                    <div class="card-content">
+                        <h3>System Architecture</h3>
+                        <div class="table-container">
+                            <table>
+                                <tr>
+                                    <td><strong>Deployment</strong></td>
+                                    <td>Web-based Application</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Browser Support</strong></td>
+                                    <td>Chrome, Firefox, Safari, Edge</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mobile Support</strong></td>
+                                    <td>iOS, Android (Responsive)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Authentication</strong></td>
+                                    <td>Session-based with RBAC</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <h3>Support Contact</h3>
+                        <ul>
+                            <li>📧 tipsics@tipsglobal.org</li>
+                            <li>📧 supportdesk@tipsglobal.org</li>
+                            <li>📞 +91-422-647-3333</li>
+                            <li>📱 +918144932019</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation (Mobile Only) -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-item active" onclick="showSectionMobile('overview')">
+            <div class="bottom-nav-icon">🏠</div>
+            <div class="bottom-nav-label">Home</div>
+        </div>
+        <div class="bottom-nav-item" onclick="showSectionMobile('hr-management')">
+            <div class="bottom-nav-icon">👥</div>
+            <div class="bottom-nav-label">HR</div>
+        </div>
+        <div class="bottom-nav-item" onclick="showSectionMobile('modules')">
+            <div class="bottom-nav-icon">🧩</div>
+            <div class="bottom-nav-label">Modules</div>
+        </div>
+        <div class="bottom-nav-item" onclick="showSectionMobile('call-mgmt')">
+            <div class="bottom-nav-icon">📞</div>
+            <div class="bottom-nav-label">Calls</div>
+        </div>
+        <div class="bottom-nav-item" onclick="showSectionMobile('technical')">
+            <div class="bottom-nav-icon">⚙️</div>
+            <div class="bottom-nav-label">Tech</div>
+        </div>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+            showToast(isDark ? '🌙 Dark mode enabled' : '☀️ Light mode enabled');
+        }
+
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Section Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Update nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mobile Bottom Nav
+        function showSectionMobile(sectionId) {
+            showSection(sectionId);
+
+            // Update bottom nav
+            document.querySelectorAll('.bottom-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Update top nav
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            const sectionIndex = {
+                'overview': 0,
+                'hr-management': 1,
+                'modules': 2,
+                'call-mgmt': 3,
+                'technical': 4
+            };
+            if (navButtons[sectionIndex[sectionId]]) {
+                navButtons[sectionIndex[sectionId]].classList.add('active');
+            }
+        }
+
+        // Accordion Toggle
+        function toggleAccordion(element) {
+            const item = element.parentElement;
+            const wasActive = item.classList.contains('active');
+            
+            // Close all accordions in the same card
+            const card = element.closest('.card');
+            if (card) {
+                card.querySelectorAll('.accordion-item').forEach(acc => {
+                    acc.classList.remove('active');
+                });
+            }
+
+            // Toggle current
+            if (!wasActive) {
+                item.classList.add('active');
+            }
+        }
+
+        // Search Toggle
+        function toggleSearch() {
+            const searchContainer = document.getElementById('searchContainer');
+            const isVisible = searchContainer.style.display !== 'none';
+            
+            if (isVisible) {
+                searchContainer.style.display = 'none';
+            } else {
+                searchContainer.style.display = 'block';
+                document.getElementById('searchInput').focus();
+            }
+        }
+
+        // Search Handler
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (query.length < 2) return;
+
+            // Simple search through content
+            const sections = document.querySelectorAll('.section');
+            let found = false;
+
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    found = true;
+                }
+            });
+
+            if (!found) {
+                showToast('No results found');
+            }
+        }
+
+        // Share Functionality
+        async function shareDoc() {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'TIPS ICMS Complete Documentation',
+                        text: 'Comprehensive TIPS ICMS documentation with HR Management',
+                        url: window.location.href
+                    });
+                    showToast('✅ Shared successfully');
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        copyToClipboard(window.location.href);
+                    }
+                }
+            } else {
+                copyToClipboard(window.location.href);
+            }
+        }
+
+        // Copy to Clipboard
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('📋 Link copied to clipboard');
+                });
+            } else {
+                showToast('Share feature not available');
+            }
+        }
+
+        // Toast Notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
